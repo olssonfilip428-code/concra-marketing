@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concra — Säljprospekt</title>
+  <style>
+    @media print{
+      *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+      body{margin:0}
+      .cover{min-height:100vh;page-break-after:always}
+      .section,.oneliner,.contact-section{page-break-inside:avoid}
+      @page{margin:0;size:A4 portrait}
+      .no-print{display:none!important}
+    }
+  </style>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --black:#0d0c0b;
+      --ink:#1a1816;
+      --mid:#6e6860;
+      --soft:#9e9589;
+      --line:#e0dbd5;
+      --bg:#f7f3ee;
+      --white:#ffffff;
+      --d:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;
+      --b:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;
+    }
+    html{background:var(--white);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;font-size:16px}
+
+    /* ── COVER ── */
+    .cover{background:var(--black);color:var(--bg);min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:64px 72px;page-break-after:always}
+    .cover-top{display:flex;justify-content:space-between;align-items:flex-start}
+    .cover-logo{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:22px;letter-spacing:.2em;text-transform:uppercase;color:var(--bg)}
+    .cover-label{font-size:11px;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,238,.35);border:1px solid rgba(247,243,238,.15);padding:8px 18px}
+    .cover-main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:80px 0}
+    .cover-eyebrow{font-size:11px;font-weight:300;letter-spacing:.24em;text-transform:uppercase;color:rgba(247,243,238,.35);margin-bottom:32px;display:flex;align-items:center;gap:16px}
+    .cover-eyebrow::before{content:'';width:28px;height:1px;background:rgba(247,243,238,.2)}
+    .cover-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:clamp(56px,8vw,100px);text-transform:uppercase;letter-spacing:-.02em;line-height:.88;margin-bottom:40px}
+    .cover-h em{color:rgba(247,243,238,.28);font-style:normal}
+    .cover-desc{font-size:18px;font-weight:300;color:rgba(247,243,238,.55);line-height:1.75;max-width:560px}
+    .cover-footer{display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid rgba(247,243,238,.08);padding-top:32px}
+    .cover-footer-text{font-size:12px;font-weight:300;color:rgba(247,243,238,.3);letter-spacing:.06em}
+    .cover-date{font-size:12px;font-weight:300;color:rgba(247,243,238,.25);letter-spacing:.06em}
+
+    /* ── SECTIONS ── */
+    .section{padding:72px 72px;border-bottom:1px solid var(--line)}
+    .section:last-child{border-bottom:none}
+    .section-alt{background:var(--bg)}
+
+    .sec-label{font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--soft);margin-bottom:36px;display:flex;align-items:center;gap:14px}
+    .sec-label::before{content:'';width:24px;height:1px;background:var(--line)}
+    .sec-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:clamp(36px,4.5vw,56px);text-transform:uppercase;letter-spacing:-.02em;line-height:.9;margin-bottom:28px;color:var(--black)}
+    .sec-p{font-size:16px;font-weight:300;color:var(--mid);line-height:1.8;max-width:680px;margin-bottom:0}
+
+    /* ── ONE-LINER ── */
+    .oneliner{background:var(--black);color:var(--bg);padding:72px;text-align:center}
+    .ol-text{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:clamp(32px,4vw,52px);text-transform:uppercase;letter-spacing:-.01em;line-height:1.1}
+    .ol-text em{color:rgba(247,243,238,.3);font-style:normal}
+
+    /* ── PROBLEM ── */
+    .prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px}
+    .prob-card{background:var(--bg);padding:36px 32px;position:relative}
+    .prob-num{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:48px;color:var(--line);position:absolute;top:20px;right:20px;line-height:1}
+    .prob-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:10px;color:var(--black)}
+    .prob-p{font-size:14px;font-weight:300;color:var(--mid);line-height:1.7}
+    .prob-cost{margin-top:14px;font-size:12px;font-weight:600;color:var(--ink);letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+    .prob-cost::before{content:'→';color:var(--soft)}
+
+    /* ── SOLUTION ── */
+    .sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:48px;border:1px solid var(--line)}
+    .sol-card{padding:40px 32px;border-right:1px solid var(--line)}
+    .sol-card:last-child{border-right:none}
+    .sol-icon{width:40px;height:40px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+    .sol-num{font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--soft)}
+    .sol-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:12px;color:var(--black);line-height:1}
+    .sol-p{font-size:14px;font-weight:300;color:var(--mid);line-height:1.7;margin-bottom:16px}
+    .sol-result{font-size:12px;font-weight:500;color:var(--ink);letter-spacing:.05em;padding-top:16px;border-top:1px solid var(--line)}
+
+    /* ── TARGET ── */
+    .target-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:48px}
+    .target-col h3{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:20px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:20px;color:var(--black);padding-bottom:12px;border-bottom:2px solid var(--black)}
+    .target-list{display:flex;flex-direction:column;gap:12px}
+    .target-item{display:flex;align-items:flex-start;gap:12px;font-size:14px;font-weight:300;color:var(--mid);line-height:1.6}
+    .target-item::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ink);flex-shrink:0;margin-top:7px}
+    .target-item strong{color:var(--ink);font-weight:500}
+
+    /* ── OPENING SCRIPT ── */
+    .script{background:var(--bg);border-left:3px solid var(--black);padding:28px 32px;margin-top:16px;font-size:15px;font-weight:300;color:var(--ink);line-height:1.75;font-style:italic}
+    .script-label{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin-bottom:10px;font-style:normal}
+
+    /* ── PRICING ── */
+    .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:48px;border:1px solid var(--line)}
+    .price-card{padding:40px 32px;border-right:1px solid var(--line)}
+    .price-card:last-child{border-right:none}
+    .price-card.featured{background:var(--black);color:var(--bg)}
+    .price-tier{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);margin-bottom:16px}
+    .price-card.featured .price-tier{color:rgba(247,243,238,.4)}
+    .price-name{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:32px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:8px}
+    .price-card.featured .price-name{color:var(--bg)}
+    .price-target{font-size:13px;font-weight:300;color:var(--mid);margin-bottom:28px;line-height:1.5}
+    .price-card.featured .price-target{color:rgba(247,243,238,.45)}
+    .price-amount{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:44px;line-height:1;color:var(--black)}
+    .price-card.featured .price-amount{color:var(--bg)}
+    .price-unit{font-size:12px;font-weight:300;color:var(--soft);margin-top:6px}
+    .price-card.featured .price-unit{color:rgba(247,243,238,.4)}
+    .price-badge{display:inline-block;background:var(--bg);color:var(--black);font-size:10px;font-weight:700;letter-spacing:.1em;padding:5px 12px;text-transform:uppercase;margin-bottom:16px}
+
+    /* ── ROI ── */
+    .roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px}
+    .roi-card{background:var(--bg);padding:36px 32px}
+    .roi-card.dark{background:var(--black);color:var(--bg)}
+    .roi-label{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--soft);margin-bottom:16px}
+    .roi-card.dark .roi-label{color:rgba(247,243,238,.35)}
+    .roi-value{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:clamp(36px,4vw,52px);line-height:1;margin-bottom:12px;color:var(--black)}
+    .roi-card.dark .roi-value{color:var(--bg)}
+    .roi-desc{font-size:13px;font-weight:300;color:var(--mid);line-height:1.65}
+    .roi-card.dark .roi-desc{color:rgba(247,243,238,.45)}
+
+    /* ── OBJECTIONS ── */
+    .obj-grid{display:flex;flex-direction:column;gap:0;margin-top:40px}
+    .obj-row{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--line);padding:28px 0}
+    .obj-row:first-child{border-top:1px solid var(--line)}
+    .obj-q{font-size:14px;font-weight:500;color:var(--black);padding-right:40px;display:flex;align-items:flex-start;gap:12px}
+    .obj-q::before{content:'"';font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:28px;color:var(--line);line-height:1;flex-shrink:0;margin-top:-4px}
+    .obj-a{font-size:14px;font-weight:300;color:var(--mid);line-height:1.7;padding-left:28px;border-left:1px solid var(--line)}
+
+    /* ── PROCESS ── */
+    .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:48px;border-top:2px solid var(--black)}
+    .ps{padding:32px 28px 32px 0;border-right:1px solid var(--line)}
+    .ps:last-child{border-right:none;padding-right:0}
+    .ps:not(:first-child){padding-left:28px}
+    .ps-n{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:36px;color:var(--line);line-height:1;margin-bottom:16px}
+    .ps-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;color:var(--black)}
+    .ps-p{font-size:13px;font-weight:300;color:var(--mid);line-height:1.65}
+
+    /* ── CONTACT CARD ── */
+    .contact-section{background:var(--black);color:var(--bg);padding:72px}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+    .contact-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:clamp(40px,5vw,64px);text-transform:uppercase;letter-spacing:-.02em;line-height:.9;margin-bottom:20px}
+    .contact-p{font-size:16px;font-weight:300;color:rgba(247,243,238,.5);line-height:1.75}
+    .contact-details{display:flex;flex-direction:column;gap:28px}
+    .cd-label{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,238,.3);margin-bottom:6px}
+    .cd-val{font-size:17px;font-weight:300;color:rgba(247,243,238,.8)}
+    .cd-val a{color:rgba(247,243,238,.8);text-decoration:none}
+
+    /* ── PRINT ── */
+    @media print{
+      .cover{min-height:100vh}
+      .section,.oneliner,.contact-section{page-break-inside:avoid}
+      @page{margin:0;size:A4}
+    }
+    @media(max-width:768px){
+      .cover,.section,.oneliner,.contact-section{padding:40px 28px}
+      .prob-grid,.sol-grid,.price-grid,.roi-grid,.target-grid,.contact-grid,.process-steps{grid-template-columns:1fr}
+      .sol-card,.price-card{border-right:none;border-bottom:1px solid var(--line)}
+      .ps{border-right:none;padding:28px 0;border-bottom:1px solid var(--line)}
+      .ps:not(:first-child){padding-left:0}
+      .obj-row{grid-template-columns:1fr}
+      .obj-a{padding-left:0;border-left:none;margin-top:12px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-logo">Concra</div>
+    <div class="cover-label">Säljprospekt 2026</div>
+  </div>
+  <div class="cover-main">
+    <div class="cover-eyebrow">Konfidentiellt — internt säljdokument</div>
+    <h1 class="cover-h">Betong&shy;branschen.<br><em>Digitaliserad.</em></h1>
+    <p class="cover-desc">Allt du behöver för att sälja Concra — vem du pratar med, vad du säger, hur du stänger affären. Ingen branschkunskap krävs.</p>
+  </div>
+  <div class="cover-footer">
+    <div class="cover-footer-text">concra.online &nbsp;·&nbsp; info@concra.se</div>
+    <div class="cover-date">Mars 2026</div>
+  </div>
+</div>
+
+<!-- ONE-LINER -->
+<div class="oneliner">
+  <div class="ol-text">Concra är <em>operativsystemet</em> för betongbranschen —<br>realtidsspårning, automatisk fakturering <em>och</em> SMS till kunden.</div>
+</div>
+
+<!-- PROBLEMET -->
+<div class="section">
+  <div class="sec-label">Varför vi finns</div>
+  <h2 class="sec-h">Problemet vi löser</h2>
+  <p class="sec-p">Varje betongbolag i Sverige brottas med samma fyra problem dagligen. De vet om dem. De har accepterat dem. Concra löser dem alla på en gång.</p>
+  <div class="prob-grid">
+    <div class="prob-card">
+      <div class="prob-num">01</div>
+      <div class="prob-h">Kunden vet ingenting</div>
+      <p class="prob-p">Leveransen är på väg men kunden på byggarbetsplatsen vet inte när. De ringer disponenten. Disponenten ringer chauffören. Alla tappar tid.</p>
+      <div class="prob-cost">Kostar: kundfrustration + 15–30 min per leverans</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num">02</div>
+      <div class="prob-h">Fakturan stämmer inte</div>
+      <p class="prob-p">Manuell registrering av levererade kubikmeter leder till fel. Kunden bestrider fakturan. Det tar dagar att lösa och skadar relationen.</p>
+      <div class="prob-cost">Kostar: 1–3% faktureringsfel, kreditnotor, relationskapital</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num">03</div>
+      <div class="prob-h">Ingen vet var bilarna är</div>
+      <p class="prob-p">Utan live-spårning planerar disponenten i blindo. Förseningar märks för sent. Nästa kund på kö vet inte att de ska vänta.</p>
+      <div class="prob-cost">Kostar: ineffektiv ruttplanering, missnöjda kunder</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-num">04</div>
+      <div class="prob-h">Administration äter tid</div>
+      <p class="prob-p">Sedlar, Excel-ark, manuell inmatning i Fortnox. Varje leverans kräver handpåläggning som egentligen borde ske automatiskt.</p>
+      <div class="prob-cost">Kostar: 1–2 timmar administration per dag per bolag</div>
+    </div>
+  </div>
+</div>
+
+<!-- LÖSNINGEN -->
+<div class="section section-alt">
+  <div class="sec-label">Vad Concra gör</div>
+  <h2 class="sec-h">Lösningen</h2>
+  <p class="sec-p">Tre saker som hänger ihop. Inte tre separata produkter — ett sammanhängande system.</p>
+  <div class="sol-grid">
+    <div class="sol-card">
+      <div class="sol-icon"><div class="sol-num">01</div></div>
+      <div class="sol-h">Realtids&shy;spårning</div>
+      <p class="sol-p">Alla fordon visas live på karta. Kunden får en länk och ser bilen röra sig mot platsen i realtid. Ingen behöver ringa.</p>
+      <div class="sol-result">Kunden vet alltid var leveransen är</div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon"><div class="sol-num">02</div></div>
+      <div class="sol-h">Automatisk fakturering</div>
+      <p class="sol-p">Leveransen signeras digitalt av kunden på plats. Fakturan skapas automatiskt och skickas direkt till Fortnox. Noll manuellt arbete.</p>
+      <div class="sol-result">Fortnox-integration — fungerar direkt</div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon"><div class="sol-num">03</div></div>
+      <div class="sol-h">SMS till kunden</div>
+      <p class="sol-p">Automatiska SMS skickas när bilen lämnar stationen, när den är 10 minuter bort och när leveransen är klar. Allt utan att någon gör något.</p>
+      <div class="sol-result">Kunden slipper ringa — ni slipper svara</div>
+    </div>
+  </div>
+</div>
+
+<!-- VEM MAN RINGER -->
+<div class="section">
+  <div class="sec-label">Prospektering</div>
+  <h2 class="sec-h">Vem du ringer</h2>
+  <p class="sec-p">Du behöver inte kunna något om betong. Du behöver veta vem som fattar beslut och vad de bryr sig om.</p>
+  <div class="target-grid">
+    <div class="target-col">
+      <h3>Rätt kund</h3>
+      <div class="target-list">
+        <div class="target-item"><strong>Betongstationer</strong> — bolag som producerar och levererar betong, t.ex. Swerock, Cementa-återförsäljare och fristående producenter</div>
+        <div class="target-item"><strong>3–50 lastbilar</strong> — tillräckligt stora för att ha problemet, tillräckligt små för att fatta beslut snabbt</div>
+        <div class="target-item"><strong>Kör Fortnox</strong> — integrationen är en stark säljpunkt, bekräfta tidigt att de använder Fortnox</div>
+        <div class="target-item"><strong>Levererar till byggen</strong> — inte fabriksbetong, utan betong till byggarbetsplatser med scheman att hålla</div>
+      </div>
+    </div>
+    <div class="target-col">
+      <h3>Rätt person</h3>
+      <div class="target-list">
+        <div class="target-item"><strong>VD eller ägare</strong> — i mindre bolag fattar de alla beslut. Prata om pengar och tid, inte teknik.</div>
+        <div class="target-item"><strong>Disponent / trafikledare</strong> — den som hanterar bilarna dagligen. De känner problemet bäst och kan driva beslut uppåt.</div>
+        <div class="target-item"><strong>Ekonomiansvarig</strong> — om du nämner "automatisk Fortnox-integration" är de intresserade direkt.</div>
+        <div class="target-item"><strong>Undvik:</strong> IT-avdelning (finns sällan), mellanledning utan budgetansvar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ÖPPNINGSSRIPTET -->
+<div class="section section-alt">
+  <div class="sec-label">Vad du säger</div>
+  <h2 class="sec-h">Öppnings&shy;manuset</h2>
+  <p class="sec-p">Tre varianter beroende på vem du pratar med. Börja alltid med problemet — aldrig med produkten.</p>
+
+  <div style="margin-top:40px;display:flex;flex-direction:column;gap:28px">
+    <div>
+      <div class="script-label">Till VD / ägare:</div>
+      <div class="script">"Hej, jag heter [namn] och jobbar med Concra. Vi jobbar med betongbolag i Sverige och hjälper dem ta bort den administrativa bördan runt leveranser — automatisk fakturering till Fortnox, live-spårning av bilarna och SMS till kunderna automatiskt. Ni betalar 70 kr per lass, ingenting annat. De flesta vi pratar med sparar 1–2 timmar per dag. Har du 20 minuter för en snabb demo?"</div>
+    </div>
+    <div>
+      <div class="script-label">Till disponent / trafikledare:</div>
+      <div class="script">"Hej, jag heter [namn]. Jag pratar med disponenter på betongbolag om ett problem jag hör om hela tiden — kunder som ringer och frågar var bilen är, fakturor som inte stämmer och massa manuell administration. Vi har ett system som löser exakt det. Känner du igen dig i det? Har du lust att titta på det?"</div>
+    </div>
+    <div>
+      <div class="script-label">Till ekonomiansvarig:</div>
+      <div class="script">"Hej, jag heter [namn] och ringer från Concra. Vi integrerar direkt med Fortnox och automatiserar faktureringsflödet för betongbolag — leveransen signeras digitalt på plats och fakturan skapas och skickas automatiskt. Ingen manuell inmatning. Är det något du kan tänka dig att titta på?"</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRISER -->
+<div class="section">
+  <div class="sec-label">Affärsmodell</div>
+  <h2 class="sec-h">Vad det kostar</h2>
+  <p class="sec-p">Ingen månadsavgift. Ingen bindningstid. Du betalar bara när du kör — 70 kr per levererat lass. Kör ni inga lass en dag betalar ni ingenting.</p>
+
+  <div style="margin-top:48px;background:var(--black);color:var(--bg);padding:56px 52px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center">
+    <div>
+      <div style="font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,238,.35);margin-bottom:16px">Priset</div>
+      <div style="font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:clamp(72px,10vw,120px);line-height:.85;color:var(--bg)">70<span style="font-size:.45em;color:rgba(247,243,238,.5)"> kr</span></div>
+      <div style="font-size:16px;font-weight:300;color:rgba(247,243,238,.5);margin-top:12px;letter-spacing:.04em">per levererat lass</div>
+      <div style="margin-top:32px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;font-weight:300;color:rgba(247,243,238,.45);display:flex;align-items:center;gap:10px"><span style="color:rgba(247,243,238,.2)">→</span> Ingen uppstartskostnad</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(247,243,238,.45);display:flex;align-items:center;gap:10px"><span style="color:rgba(247,243,238,.2)">→</span> Ingen månadsavgift</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(247,243,238,.45);display:flex;align-items:center;gap:10px"><span style="color:rgba(247,243,238,.2)">→</span> Ingen bindningstid</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(247,243,238,.45);display:flex;align-items:center;gap:10px"><span style="color:rgba(247,243,238,.2)">→</span> Alla funktioner ingår alltid</div>
+      </div>
+    </div>
+    <div style="border-left:1px solid rgba(247,243,238,.08);padding-left:64px">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,238,.35);margin-bottom:28px">Räkneexempel</div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(247,243,238,.06);padding-bottom:16px">
+          <div>
+            <div style="font-size:14px;font-weight:400;color:rgba(247,243,238,.7)">Litet bolag</div>
+            <div style="font-size:11px;font-weight:300;color:rgba(247,243,238,.3);margin-top:2px">20 lass/dag · 20 dagar/mån</div>
+          </div>
+          <div style="font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:22px;color:var(--bg)">2 800 kr<span style="font-size:.55em;font-weight:300;color:rgba(247,243,238,.4)">/mån</span></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(247,243,238,.06);padding-bottom:16px">
+          <div>
+            <div style="font-size:14px;font-weight:400;color:rgba(247,243,238,.7)">Medelstort bolag</div>
+            <div style="font-size:11px;font-weight:300;color:rgba(247,243,238,.3);margin-top:2px">50 lass/dag · 22 dagar/mån</div>
+          </div>
+          <div style="font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:22px;color:var(--bg)">7 700 kr<span style="font-size:.55em;font-weight:300;color:rgba(247,243,238,.4)">/mån</span></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div>
+            <div style="font-size:14px;font-weight:400;color:rgba(247,243,238,.7)">Stort bolag</div>
+            <div style="font-size:11px;font-weight:300;color:rgba(247,243,238,.3);margin-top:2px">120 lass/dag · 22 dagar/mån</div>
+          </div>
+          <div style="font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:22px;color:var(--bg)">18 480 kr<span style="font-size:.55em;font-weight:300;color:rgba(247,243,238,.4)">/mån</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:2px;background:var(--bg);padding:28px 52px;display:flex;align-items:center;gap:16px">
+    <div style="font-size:13px;font-weight:300;color:var(--mid);line-height:1.65;max-width:680px">
+      <strong style="color:var(--ink);font-weight:500">Varför det här är en fördel för kunden:</strong> Istället för att betala fast varje månad oavsett hur mycket de kör betalar de exakt i proportion till sin verksamhet. Går det dåligt en månad kostar Concra mindre automatiskt. Säljargument: "Ni betalar bara när ni tjänar pengar."
+    </div>
+  </div>
+</div>
+
+<!-- ROI -->
+<div class="section section-alt">
+  <div class="sec-label">Argument för kunden</div>
+  <h2 class="sec-h">Vad de tjänar</h2>
+  <p class="sec-p">Konkreta siffror att använda i samtalet. Räkna ihop vad det kostar att inte ha Concra.</p>
+  <div class="roi-grid">
+    <div class="roi-card dark">
+      <div class="roi-label">Kostnad vs. lasskostnad</div>
+      <div class="roi-value">&lt; 1%</div>
+      <p class="roi-desc">Ett genomsnittligt betonglass faktureras till 6 000–12 000 kr. Concra kostar 70 kr — under 1% av intäkten. Det är försäkringen mot att tappa lass i administrations-brus.</p>
+    </div>
+    <div class="roi-card">
+      <div class="roi-label">Tid sparad per dag</div>
+      <div class="roi-value">1–2 tim</div>
+      <p class="roi-desc">Manuell administration, svar på kundsamtal och fakturakontroll försvinner. Vid 20 lass/dag sparas ca 1 timme. Räkna på 400 kr/tim → 2 000 kr/dag i frigjord tid.</p>
+    </div>
+    <div class="roi-card">
+      <div class="roi-label">Faktureringsfel eliminerade</div>
+      <div class="roi-value">~98%</div>
+      <p class="roi-desc">Digital signering kopplas direkt till fakturan. Inga handskrivna sedlar, inga avrundningar. Rätt kubikmeter faktureras varje gång — inga kreditnotor.</p>
+    </div>
+    <div class="roi-card dark">
+      <div class="roi-label">CO₂-krav uppfyllt</div>
+      <div class="roi-value">Direkt</div>
+      <p class="roi-desc">NCC, Skanska och Peab kräver CO₂-rapportering av sina leverantörer. Rapporten genereras automatiskt i Concra — inga separata system behövs.</p>
+    </div>
+  </div>
+</div>
+
+<!-- INVÄNDNINGAR -->
+<div class="section">
+  <div class="sec-label">Vanliga invändningar</div>
+  <h2 class="sec-h">Vad de säger — och vad du svarar</h2>
+  <div class="obj-grid">
+    <div class="obj-row">
+      <div class="obj-q">Vi har redan ett system för det här.</div>
+      <div class="obj-a">Bra. Vad kostar det och kopplar det ihop spårning, fakturering och kundnotiser i ett? De flesta system vi möter gör en av de tre sakerna. Concra gör alla tre och integrerar direkt med Fortnox — utan extra steg.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">Vi kör Excel och det funkar.</div>
+      <div class="obj-a">Det förstår jag. Men vad händer när en kund ringer och frågar var bilen är? Eller när en faktura bestrids? Excel löser inte realtid. Det är exakt den luckan Concra fyller.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">Det låter dyrt för vad det är.</div>
+      <div class="obj-a">Det kostar 70 kr per lass. Ett genomsnittligt lass faktureras till 6 000–12 000 kr. Det är under 1% av intäkten — och det täcks mer än väl av den tid som sparas in per leverans i administration och kundsamtal.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">Chaufförerna vill inte ha en app.</div>
+      <div class="obj-a">Det är den vanligaste oron och den brukar lösa sig snabbt. Appen kräver ett knapptryck — starta leverans, avsluta leverans. Inget mer. De flesta chauffören föredrar det framför att fylla i sedlar.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">Vi behöver tänka på det.</div>
+      <div class="obj-a">Självklart. Vad är det som gör att ni behöver tänka? Om det handlar om kostnad eller teknik kan vi ta det direkt — annars bokar vi en demo så att rätt person ser systemet live innan ni bestämmer er.</div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-q">Vi kör inte Fortnox.</div>
+      <div class="obj-a">Fortnox-integrationen är ett plus, men Concra fungerar fristående också. Spårning, kundnotiser och digital signering kräver ingen koppling till ekonomisystemet. Det kan vi addera när ni är redo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SÄLJPROCESSEN -->
+<div class="section section-alt">
+  <div class="sec-label">Din process</div>
+  <h2 class="sec-h">Fyra steg till stängd affär</h2>
+  <div class="process-steps">
+    <div class="ps">
+      <div class="ps-n">01</div>
+      <div class="ps-h">Första samtalet</div>
+      <p class="ps-p">Identifiera problemet, bekräfta Fortnox-användning, boka demo. Mål: 15 minuter, inget mer.</p>
+    </div>
+    <div class="ps">
+      <div class="ps-n">02</div>
+      <div class="ps-h">Demo</div>
+      <p class="ps-p">30 minuter via video med rätt person (VD eller disponent). Vi kör systemet live — ni ser kartan, fakturan, SMS:et. Allt på riktigt.</p>
+    </div>
+    <div class="ps">
+      <div class="ps-n">03</div>
+      <div class="ps-h">Offert</div>
+      <p class="ps-p">Rätt plan skickas samma dag som demod. Enkel, tydlig, inga dolda kostnader. Svarstid max 48 timmar.</p>
+    </div>
+    <div class="ps">
+      <div class="ps-n">04</div>
+      <div class="ps-h">Onboarding</div>
+      <p class="ps-p">Kunden är igång samma dag som de signerar. Fortnox kopplas, fordon läggs in. Vi hanterar allt — ingen IT-avdelning behövs.</p>
+    </div>
+  </div>
+</div>
+
+<!-- KONTAKT -->
+<div class="contact-section">
+  <div class="contact-grid">
+    <div>
+      <h2 class="contact-h">Boka demo.<br>Vi fixar resten.</h2>
+      <p class="contact-p">Du bokar mötet — vi sköter demon och stänger tekniken. Din uppgift är att ta det första samtalet och boka in rätt person.</p>
+    </div>
+    <div class="contact-details">
+      <div>
+        <div class="cd-label">Kontakt för demos och frågor</div>
+        <div class="cd-val"><a href="mailto:info@concra.se">info@concra.se</a></div>
+      </div>
+      <div>
+        <div class="cd-label">Webbplats</div>
+        <div class="cd-val"><a href="https://concra.online">concra.online</a></div>
+      </div>
+      <div>
+        <div class="cd-label">Svarstid</div>
+        <div class="cd-val">Samma dag, vardagar</div>
+      </div>
+      <div>
+        <div class="cd-label">Provisionsmodell</div>
+        <div class="cd-val">Kontakta oss — vi betalar för stängda affärer</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

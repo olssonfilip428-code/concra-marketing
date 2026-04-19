@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Betongkalkylator — räkna ut m³ betong | Concra</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Gratis betongkalkylator. Räkna ut exakt hur många m³ betong du behöver för platta, vägg, pelare, trappa eller fundament. Inkl. spillmarginal och vikt.">
+  <meta name="keywords" content="betongkalkylator, räkna betong, m3 betong, betong kalkylator, hur mycket betong, betong platta, betong vägg, betong trappa">
+  <link rel="canonical" href="https://concra.se/kalkylator">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:#080808;
+      --s1:#0e0e0e;
+      --s2:#131313;
+      --white:#f2f2f0;
+      --mid:#aaa;
+      --dim:#555;
+      --border:rgba(255,255,255,0.07);
+      --border2:rgba(255,255,255,0.13);
+      --accent:#c8a96e;
+    }
+    html{background:var(--bg);color:var(--white);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity:.022}
+
+    nav{position:fixed;inset:0 0 auto;z-index:900;padding:24px 52px;display:flex;justify-content:space-between;align-items:center;background:rgba(8,8,8,.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-links{display:flex;gap:32px;align-items:center}
+    .nav-links a{font-size:13px;font-weight:300;color:rgba(255,255,255,.4);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--white)}
+    .nbtn{font-size:13px;font-weight:300;letter-spacing:.06em;color:var(--white);background:transparent;border:1px solid rgba(255,255,255,.2);padding:8px 20px;text-decoration:none;display:inline-block;transition:all .2s}
+    .nbtn:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.3)}
+    .mob-btn{display:none;background:none;border:none;cursor:pointer;padding:4px;line-height:1}
+    .mob-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(8,8,8,.97);flex-direction:column;justify-content:center;align-items:center;gap:0}
+    .mob-overlay.open{display:flex}
+    .mob-overlay a{font-size:26px;font-weight:200;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55);text-decoration:none;padding:18px 0;width:100%;text-align:center;transition:color .15s;border-bottom:1px solid rgba(255,255,255,.04)}
+    .mob-overlay a:last-of-type{border-bottom:none}
+    .mob-overlay a:hover{color:rgba(255,255,255,.9)}
+    .mob-close{position:absolute;top:28px;right:28px;background:none;border:none;cursor:pointer;padding:4px}
+    @media(max-width:768px){.nav-links{display:none}.nbtn{display:none}.mob-btn{display:block}}
+
+    /* HERO */
+    .hero{padding:160px 52px 72px;border-bottom:1px solid var(--border)}
+    .hero-tag{font-size:11px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:32px;display:flex;align-items:center;gap:14px}
+    .hero-tag::before{content:'';width:24px;height:1px;background:rgba(255,255,255,.18)}
+    .hero-h{font-weight:200;font-size:clamp(48px,7vw,96px);letter-spacing:.03em;line-height:.92;text-transform:uppercase;margin-bottom:24px}
+    .hero-p{font-size:clamp(14px,1.4vw,17px);font-weight:300;color:rgba(255,255,255,.42);line-height:1.8;max-width:580px}
+
+    /* CALCULATOR */
+    .calc-wrap{padding:72px 52px 100px;display:grid;grid-template-columns:1fr 400px;gap:64px;align-items:start}
+
+    /* TYPE TABS */
+    .type-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+    .tab-btn{font-size:12px;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);background:transparent;border:1px solid var(--border);padding:10px 20px;cursor:pointer;transition:all .2s}
+    .tab-btn:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+    .tab-btn.active{color:var(--white);border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.04)}
+
+    /* FORM */
+    .form-section{display:none}
+    .form-section.active{display:block}
+    .form-title{font-weight:200;font-size:28px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+    .form-desc{font-size:13px;font-weight:300;color:rgba(255,255,255,.35);line-height:1.7;margin-bottom:40px}
+
+    .field-group{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+    .field-group.one{grid-template-columns:1fr}
+    .field-group.three{grid-template-columns:1fr 1fr 1fr}
+    .field{display:flex;flex-direction:column;gap:8px}
+    .field label{font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+    .field input{background:var(--s2);border:1px solid var(--border);color:var(--white);font-family:inherit;font-size:16px;font-weight:200;padding:14px 16px;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none;border-radius:0}
+    .field input:focus{border-color:rgba(255,255,255,.3)}
+    .field input::placeholder{color:rgba(255,255,255,.15)}
+    .field-unit{font-size:11px;color:rgba(255,255,255,.2);margin-top:4px;letter-spacing:.06em}
+
+    /* ILLUSTRATION */
+    .shape-vis{margin-bottom:40px;padding:32px;background:var(--s1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;min-height:140px}
+    .shape-vis svg{opacity:.5}
+
+    /* RESULT */
+    .result-card{background:var(--s1);border:1px solid var(--border2);padding:0;position:sticky;top:108px}
+    .result-header{padding:28px 32px;border-bottom:1px solid var(--border)}
+    .result-label{font-size:11px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:8px}
+    .result-vol{font-weight:200;font-size:clamp(48px,6vw,72px);letter-spacing:.02em;line-height:1;color:var(--white)}
+    .result-unit{font-size:18px;font-weight:300;color:rgba(255,255,255,.4);margin-left:4px}
+
+    .result-rows{padding:0 32px}
+    .result-row{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--border)}
+    .result-row:last-child{border-bottom:none}
+    .rr-label{font-size:13px;font-weight:300;color:rgba(255,255,255,.42)}
+    .rr-val{font-size:14px;font-weight:300;color:var(--white)}
+    .rr-accent{color:var(--accent)}
+
+    .result-note{padding:20px 32px;border-top:1px solid var(--border);font-size:12px;font-weight:300;color:rgba(255,255,255,.22);line-height:1.7}
+
+    .result-cta{padding:24px 32px;border-top:1px solid var(--border)}
+    .cta-small{display:block;text-align:center;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--white);background:transparent;border:1px solid rgba(255,255,255,.2);padding:14px 24px;text-decoration:none;transition:all .2s}
+    .cta-small:hover{background:var(--white);color:#080808}
+
+    /* FAQ / INFO */
+    .info-section{padding:80px 52px;background:var(--s1);border-top:1px solid var(--border)}
+    .info-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid var(--border);margin-top:56px}
+    .info-item{padding:40px 36px;border-right:1px solid var(--border)}
+    .info-item:last-child{border-right:none}
+    .info-h{font-weight:300;font-size:16px;letter-spacing:.04em;margin-bottom:12px}
+    .info-p{font-size:13px;font-weight:300;color:rgba(255,255,255,.4);line-height:1.8}
+
+    /* OPENINGS */
+    .openings-section{margin-top:28px;padding-top:24px;border-top:1px solid var(--border)}
+    .openings-label{font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:16px}
+    .opening-row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px}
+    .opening-row input{background:var(--s2);border:1px solid var(--border);color:var(--white);font-family:inherit;font-size:15px;font-weight:200;padding:11px 14px;outline:none;border-radius:0;-webkit-appearance:none;transition:border-color .2s}
+    .opening-row input:focus{border-color:rgba(255,255,255,.3)}
+    .opening-row input::placeholder{color:rgba(255,255,255,.15)}
+    .opening-row label{font-size:10px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.25);display:block;margin-bottom:6px}
+    .remove-btn{background:transparent;border:1px solid var(--border);color:rgba(255,255,255,.3);font-size:16px;width:42px;height:42px;cursor:pointer;transition:all .2s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .remove-btn:hover{border-color:rgba(255,80,80,.4);color:rgba(255,100,100,.7)}
+    .add-opening-btn{background:transparent;border:1px dashed var(--border);color:rgba(255,255,255,.35);font-family:inherit;font-size:11px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;padding:10px 18px;cursor:pointer;transition:all .2s;margin-top:4px}
+    .add-opening-btn:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6)}
+    .deduction-line{font-size:12px;font-weight:300;color:rgba(255,100,100,.5);margin-top:6px;letter-spacing:.04em}
+
+    /* CTA SECTION */
+    .cta-section{background:var(--white);color:#080808;padding:120px 52px;text-align:center}
+    .cta-tag{font-size:11px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:#888;margin-bottom:32px}
+    .cta-h{font-weight:200;font-size:clamp(40px,6vw,80px);letter-spacing:.04em;text-transform:uppercase;line-height:.9;margin-bottom:20px;color:#080808}
+    .cta-p{font-size:clamp(14px,1.4vw,16px);font-weight:300;color:#666;margin-bottom:48px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
+    .btn-b{background:#080808;color:var(--white);border:none;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;padding:17px 48px;text-decoration:none;display:inline-block;transition:opacity .2s}
+    .btn-b:hover{opacity:.8}
+
+    footer{background:var(--bg);padding:40px 52px;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+    .f-links{display:flex;gap:24px}
+    .f-links a{font-size:12px;font-weight:300;color:rgba(255,255,255,.52);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+    .f-links a:hover{color:var(--white)}
+    .f-r{font-size:12px;color:rgba(255,255,255,.42);font-weight:300}
+
+    @media(max-width:1000px){
+      nav{padding:20px 24px}
+      .hero{padding:140px 24px 56px}
+      .calc-wrap{grid-template-columns:1fr;gap:48px;padding:48px 24px 72px}
+      .result-card{position:static}
+      .info-grid{grid-template-columns:1fr}
+      .info-item{border-right:none;border-bottom:1px solid var(--border)}
+      .info-item:last-child{border-bottom:none}
+      .info-section{padding:60px 24px}
+      .cta-section{padding:80px 24px}
+      footer{padding:28px 24px}
+      .field-group.three{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:600px){
+      .field-group,.field-group.three{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <svg width="18" height="18" viewBox="0 0 54 54" fill="none"><polyline points="40,2 2,2 2,52 52,52 52,14" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" fill="none" stroke-linecap="square" stroke-linejoin="miter"/><rect x="21" y="21" width="12" height="12" fill="rgba(255,255,255,0.6)"/></svg>
+    <span style="font-weight:200;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:#f2f2f0;">Concra</span>
+  </a>
+  <div class="nav-links">
+    <a href="/produkt">Produkt</a>
+    <a href="/priser">Priser</a>
+    <a href="/kontakt">Kontakt</a>
+  </div>
+  <a class="nbtn" href="/kontakt">Boka demo</a>
+  <button class="mob-btn" aria-label="Meny" onclick="document.getElementById('mob-overlay').classList.add('open')"><svg width="22" height="14" viewBox="0 0 22 14" fill="none"><line x1="0" y1="1" x2="22" y2="1" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="7" x2="22" y2="7" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="13" x2="22" y2="13" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/></svg></button>
+</nav>
+<div class="mob-overlay" id="mob-overlay">
+  <button class="mob-close" aria-label="Stäng" onclick="document.getElementById('mob-overlay').classList.remove('open')"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="1" y1="1" x2="19" y2="19" stroke="rgba(242,242,240,.45)" stroke-width="1.5"/><line x1="19" y1="1" x2="1" y2="19" stroke="rgba(242,242,240,.45)" stroke-width="1.5"/></svg></button>
+  <a href="/produkt">Produkt</a>
+  <a href="/priser">Priser</a>
+  <a href="/kontakt">Kontakt</a>
+  <a href="/kontakt" style="margin-top:16px;font-size:13px;letter-spacing:.18em;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);padding:14px 48px;border-bottom:none">Boka demo</a>
+</div>
+
+<section class="hero">
+  <div class="hero-tag">Gratis verktyg</div>
+  <h1 class="hero-h">Betong&shy;kalkylator</h1>
+  <p class="hero-p">Räkna ut exakt hur mycket betong du behöver — i m³. Välj konstruktionstyp, mata in måtten och få volymen direkt. Inkluderar spillmarginal och CO₂-estimat.</p>
+</section>
+
+<div class="calc-wrap">
+  <!-- LEFT: form -->
+  <div>
+    <div class="type-tabs">
+      <button class="tab-btn active" onclick="setType('platta')">Platta</button>
+      <button class="tab-btn" onclick="setType('vagg')">Vägg</button>
+      <button class="tab-btn" onclick="setType('pelare-fyr')">Pelare (fyr.)</button>
+      <button class="tab-btn" onclick="setType('pelare-rund')">Pelare (rund)</button>
+      <button class="tab-btn" onclick="setType('trappa')">Trappa</button>
+      <button class="tab-btn" onclick="setType('fundament')">Fundament</button>
+    </div>
+
+    <!-- PLATTA -->
+    <div id="form-platta" class="form-section active">
+      <div class="shape-vis">
+        <svg width="180" height="80" viewBox="0 0 180 80">
+          <rect x="10" y="20" width="160" height="50" fill="none" stroke="white" stroke-width="1.2"/>
+          <line x1="10" y1="20" x2="10" y2="10" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="170" y1="20" x2="170" y2="10" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="10" y1="10" x2="170" y2="10" stroke="white" stroke-width="1"/>
+          <text x="90" y="7" fill="white" font-size="9" text-anchor="middle" font-family="Helvetica Neue">Längd</text>
+          <line x1="175" y1="20" x2="185" y2="20" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="175" y1="70" x2="185" y2="70" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="180" y1="20" x2="180" y2="70" stroke="white" stroke-width="1"/>
+          <text x="187" y="47" fill="white" font-size="9" text-anchor="start" font-family="Helvetica Neue">Tjocklek</text>
+          <text x="90" y="50" fill="white" font-size="9" text-anchor="middle" font-family="Helvetica Neue" opacity=".4">Bredd</text>
+        </svg>
+      </div>
+      <div class="form-title">Platta</div>
+      <p class="form-desc">Husgrunder, garage, uteplats, industrigolv. Ange mått i meter.</p>
+      <div class="field-group">
+        <div class="field">
+          <label>Längd (m)</label>
+          <input type="number" id="platta-l" placeholder="10.0" min="0" step="0.1" oninput="calc()">
+        </div>
+        <div class="field">
+          <label>Bredd (m)</label>
+          <input type="number" id="platta-b" placeholder="8.0" min="0" step="0.1" oninput="calc()">
+        </div>
+      </div>
+      <div class="field-group one">
+        <div class="field">
+          <label>Tjocklek (m)</label>
+          <input type="number" id="platta-t" placeholder="0.15" min="0" step="0.01" oninput="calc()">
+          <div class="field-unit">Vanligt: husgrund 0,15–0,20 m · industrigolv 0,20–0,30 m</div>
+        </div>
+      </div>
+      <div class="openings-section">
+        <div class="openings-label">Dra av öppningar (håltagningar, pelare etc.)</div>
+        <div id="openings-platta"></div>
+        <button class="add-opening-btn" onclick="addOpening('platta')">+ Lägg till öppning</button>
+      </div>
+    </div>
+
+    <!-- VÄGG -->
+    <div id="form-vagg" class="form-section">
+      <div class="shape-vis">
+        <svg width="180" height="100" viewBox="0 0 180 100">
+          <rect x="40" y="10" width="40" height="80" fill="none" stroke="white" stroke-width="1.2"/>
+          <line x1="85" y1="10" x2="95" y2="10" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="85" y1="90" x2="95" y2="90" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="90" y1="10" x2="90" y2="90" stroke="white" stroke-width="1"/>
+          <text x="93" y="53" fill="white" font-size="9" text-anchor="start" font-family="Helvetica Neue">Höjd</text>
+          <line x1="40" y1="95" x2="40" y2="103" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="80" y1="95" x2="80" y2="103" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="40" y1="99" x2="80" y2="99" stroke="white" stroke-width="1"/>
+          <text x="60" y="108" fill="white" font-size="9" text-anchor="middle" font-family="Helvetica Neue">Tjocklek</text>
+          <text x="5" y="53" fill="white" font-size="9" text-anchor="start" font-family="Helvetica Neue" opacity=".4">Längd →</text>
+        </svg>
+      </div>
+      <div class="form-title">Vägg</div>
+      <p class="form-desc">Källarväggar, stödmurar, källarytterväggar. Ange mått i meter.</p>
+      <div class="field-group">
+        <div class="field">
+          <label>Längd (m)</label>
+          <input type="number" id="vagg-l" placeholder="12.0" min="0" step="0.1" oninput="calc()">
+        </div>
+        <div class="field">
+          <label>Höjd (m)</label>
+          <input type="number" id="vagg-h" placeholder="2.4" min="0" step="0.1" oninput="calc()">
+        </div>
+      </div>
+      <div class="field-group one">
+        <div class="field">
+          <label>Tjocklek (m)</label>
+          <input type="number" id="vagg-t" placeholder="0.20" min="0" step="0.01" oninput="calc()">
+          <div class="field-unit">Vanligt: källarvägg 0,20–0,30 m · stödmur 0,25–0,40 m</div>
+        </div>
+      </div>
+      <div class="openings-section">
+        <div class="openings-label">Dra av öppningar (dörrar, fönster etc.)</div>
+        <div id="openings-vagg"></div>
+        <button class="add-opening-btn" onclick="addOpening('vagg')">+ Lägg till öppning</button>
+      </div>
+    </div>
+
+    <!-- PELARE FYRKANT -->
+    <div id="form-pelare-fyr" class="form-section">
+      <div class="shape-vis">
+        <svg width="180" height="100" viewBox="0 0 180 100">
+          <rect x="65" y="10" width="50" height="80" fill="none" stroke="white" stroke-width="1.2"/>
+          <line x1="65" y1="95" x2="65" y2="103" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="115" y1="95" x2="115" y2="103" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="65" y1="99" x2="115" y2="99" stroke="white" stroke-width="1"/>
+          <text x="90" y="108" fill="white" font-size="9" text-anchor="middle" font-family="Helvetica Neue">Sida</text>
+          <line x1="120" y1="10" x2="128" y2="10" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="120" y1="90" x2="128" y2="90" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="124" y1="10" x2="124" y2="90" stroke="white" stroke-width="1"/>
+          <text x="127" y="53" fill="white" font-size="9" text-anchor="start" font-family="Helvetica Neue">Höjd</text>
+        </svg>
+      </div>
+      <div class="form-title">Pelare — fyrkant</div>
+      <p class="form-desc">Rektangulära betongpelare, pyloner och fundament. Ange mått i meter.</p>
+      <div class="field-group three">
+        <div class="field">
+          <label>Bredd (m)</label>
+          <input type="number" id="pfyr-b" placeholder="0.30" min="0" step="0.01" oninput="calc()">
+        </div>
+        <div class="field">
+          <label>Djup (m)</label>
+          <input type="number" id="pfyr-d" placeholder="0.30" min="0" step="0.01" oninput="calc()">
+        </div>
+        <div class="field">
+          <label>Höjd (m)</label>
+          <input type="number" id="pfyr-h" placeholder="3.0" min="0" step="0.1" oninput="calc()">
+        </div>
+      </div>
+      <div class="field-group one">
+        <div class="field">
+          <label>Antal pelare</label>
+          <input type="number" id="pfyr-n" placeholder="4" min="1" step="1" oninput="calc()">
+        </div>
+      </div>
+    </div>
+
+    <!-- PELARE RUND -->
+    <div id="form-pelare-rund" class="form-section">
+      <div class="shape-vis">
+        <svg width="180" height="100" viewBox="0 0 180 100">
+          <ellipse cx="90" cy="22" rx="30" ry="8" fill="none" stroke="white" stroke-width="1.2"/>
+          <line x1="60" y1="22" x2="60" y2="88" stroke="white" stroke-width="1.2"/>
+          <line x1="120" y1="22" x2="120" y2="88" stroke="white" stroke-width="1.2"/>
+          <ellipse cx="90" cy="88" rx="30" ry="8" fill="none" stroke="white" stroke-width="1.2"/>
+          <line x1="90" y1="22" x2="120" y2="22" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="105" y="19" fill="white" font-size="9" text-anchor="middle" font-family="Helvetica Neue">r</text>
+          <line x1="125" y1="22" x2="133" y2="22" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="125" y1="88" x2="133" y2="88" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="129" y1="22" x2="129" y2="88" stroke="white" stroke-width="1"/>
+          <text x="132" y="58" fill="white" font-size="9" text-anchor="start" font-family="Helvetica Neue">Höjd</text>
+        </svg>
+      </div>
+      <div class="form-title">Pelare — rund</div>
+      <p class="form-desc">Cirkulära betongpelare, pålar och runda fundament. Ange mått i meter.</p>
+      <div class="field-group">
+        <div class="field">
+          <label>Diameter (m)</label>
+          <input type="number" id="prund-d" placeholder="0.40" min="0" step="0.01" oninput="calc()">
+          <div class="field-unit">Radie = diameter / 2</div>
+        </div>
+        <div class="field">
+          <label>Höjd (m)</label>
+          <input type="number" id="prund-h" placeholder="3.0" min="0" step="0.1" oninput="calc()">
+        </div>
+      </div>
+      <div class="field-group one">
+        <div class="field">
+          <label>Antal pelare</label>
+          <input type="number" id="prund-n" placeholder="6" min="1" step="1" oninput="calc()">
+        </div>
+      </div>
+    </div>
+
+    <!-- TRAPPA -->
+    <div id="form-trappa" class="form-section">
+      <div class="shape-vis">
+        <svg width="200" height="100" viewBox="0 0 200 100">
+          <!-- stair steps -->
+          <polyline points="20,90 20,70 50,70 50,50 80,50 80,30 110,30 110,10 160,10 160,90 20,90"
+            fill="rgba(255,255,255,0.04)" stroke="white" stroke-width="1.2" stroke-linejoin="miter"/>
+          <!-- step height arrows -->
+          <line x1="165" y1="10" x2="173" y2="10" stroke="white" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="165" y1="90" x2="173" y2="90" stroke="white" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="169" y1="10" x2="169" y2="90" stroke="white" stroke-width="1"/>
+          <text x="172" y="53" fill="white" font-size="9" text-anchor="start" font-family="Helvetica Neue">Höjd</text>
+          <!-- width arrow -->
+          <text x="90" y="75" fill="white" font-size="9" text-anchor="middle" font-family="Helvetica Neue" opacity=".4">Bredd →</text>
+        </svg>
+      </div>
+      <div class="form-title">Trappa</div>
+      <p class="form-desc">Raka massiva betongtrappor. Volymen beräknas som en triangulär prism — standard för gjutna trappor.</p>
+      <div class="field-group">
+        <div class="field">
+          <label>Antal steg</label>
+          <input type="number" id="trappa-n" placeholder="12" min="1" step="1" oninput="calc()">
+        </div>
+        <div class="field">
+          <label>Bredd (m)</label>
+          <input type="number" id="trappa-b" placeholder="1.20" min="0" step="0.1" oninput="calc()">
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field">
+          <label>Stegdjup (m)</label>
+          <input type="number" id="trappa-d" placeholder="0.28" min="0" step="0.01" oninput="calc()">
+          <div class="field-unit">Standard 0,25–0,30 m</div>
+        </div>
+        <div class="field">
+          <label>Steghöjd (m)</label>
+          <input type="number" id="trappa-h" placeholder="0.175" min="0" step="0.005" oninput="calc()">
+          <div class="field-unit">Standard 0,15–0,18 m</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUNDAMENT -->
+    <div id="form-fundament" class="form-section">
+      <div class="shape-vis">
+        <svg width="200" height="90" viewBox="0 0 200 90">
+          <!-- footing -->
+          <rect x="20" y="50" width="160" height="30" fill="none" stroke="white" stroke-width="1.2"/>
+          <!-- column stub -->
+          <rect x="80" y="20" width="40" height="30" fill="none" stroke="white" stroke-width="1" stroke-dasharray="4,3"/>
+          <!-- labels -->
+          <line x1="20" y1="85" x2="20" y2="90" stroke="white" stroke-width="1"/>
+          <line x1="180" y1="85" x2="180" y2="90" stroke="white" stroke-width="1"/>
+          <line x1="20" y1="88" x2="180" y2="88" stroke="white" stroke-width="1"/>
+          <text x="100" y="96" fill="white" font-size="9" text-anchor="middle" font-family="Helvetica Neue">Längd</text>
+          <line x1="185" y1="50" x2="193" y2="50" stroke="white" stroke-width="1"/>
+          <line x1="185" y1="80" x2="193" y2="80" stroke="white" stroke-width="1"/>
+          <line x1="189" y1="50" x2="189" y2="80" stroke="white" stroke-width="1"/>
+          <text x="192" y="68" fill="white" font-size="9" text-anchor="start" font-family="Helvetica Neue">Tj.</text>
+        </svg>
+      </div>
+      <div class="form-title">Fundament / Sulor</div>
+      <p class="form-desc">Punktfundament, sulor under väggar och pelare. Ange mått i meter.</p>
+      <div class="field-group three">
+        <div class="field">
+          <label>Längd (m)</label>
+          <input type="number" id="fund-l" placeholder="1.20" min="0" step="0.1" oninput="calc()">
+        </div>
+        <div class="field">
+          <label>Bredd (m)</label>
+          <input type="number" id="fund-b" placeholder="1.20" min="0" step="0.1" oninput="calc()">
+        </div>
+        <div class="field">
+          <label>Tjocklek (m)</label>
+          <input type="number" id="fund-t" placeholder="0.40" min="0" step="0.05" oninput="calc()">
+        </div>
+      </div>
+      <div class="field-group one">
+        <div class="field">
+          <label>Antal fundament</label>
+          <input type="number" id="fund-n" placeholder="8" min="1" step="1" oninput="calc()">
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /left -->
+
+  <!-- RIGHT: result -->
+  <div class="result-card">
+    <div class="result-header">
+      <div class="result-label">Beräknad volym</div>
+      <div>
+        <span class="result-vol" id="res-vol">—</span>
+        <span class="result-unit" id="res-unit">m³</span>
+      </div>
+    </div>
+    <div class="result-rows">
+      <div class="result-row">
+        <span class="rr-label">Exakt volym</span>
+        <span class="rr-val" id="res-exact">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Med 10% spill</span>
+        <span class="rr-val rr-accent" id="res-spill">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rr-label">Vikt (ca)</span>
+        <span class="rr-val" id="res-vikt">—</span>
+      </div>
+    </div>
+    <div class="result-note">
+      Spill på 10% rekommenderas alltid vid beställning. Vikt beräknad på 2 400 kg/m³.
+    </div>
+    <div class="result-cta">
+      <a class="cta-small" href="/kontakt">Planerar du ett projekt? Prata med oss →</a>
+    </div>
+  </div>
+</div>
+
+<!-- INFO SECTION -->
+<section class="info-section">
+  <div class="sec-tag" style="font-size:11px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:48px;display:flex;align-items:center;gap:14px">
+    <span style="display:inline-block;width:24px;height:1px;background:rgba(255,255,255,.18)"></span>
+    Bra att veta
+  </div>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="info-h">Varför 10% spill?</div>
+      <p class="info-p">Betong beställs i hela m³ och gjutformar är sällan perfekt exakta. 5–10% överskott täcker svinn, ojämnheter och rester i lastbil. Hellre lite för mycket än att behöva kompletteringsbeställa.</p>
+    </div>
+    <div class="info-item">
+      <div class="info-h">Öppningar och avdrag</div>
+      <p class="info-p">För plattor och väggar kan du lägga till öppningar direkt i kalkylatorn — dörrar, fönster, håltagningar. Varje öppning dras av automatiskt. För trappor och pelare räknas alltid solid volym.</p>
+    </div>
+    <div class="info-item">
+      <div class="info-h">Vilken betongklass?</div>
+      <p class="info-p">Fel klass kan ge frostskador, sprickor eller underkänd besiktning. Husgrund = C25/30. Garage = C30/37 med luftporbildning. Utomhus = minst C28/35. <a href="/betongklasser" style="color:rgba(255,255,255,.6);text-decoration:underline;text-underline-offset:3px">Se vår guide →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-tag">Logistiksystem för betongfabriker</div>
+  <h2 class="cta-h">Concra hanterar<br>leveransen.</h2>
+  <p class="cta-p">GPS-spårning, automatisk fakturering och CO₂-rapportering — allt i ett system byggt för betongbranschen.</p>
+  <a class="btn-b" href="/kontakt">Boka demo</a>
+</section>
+
+<footer>
+  <a href="/" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+    <svg width="14" height="14" viewBox="0 0 54 54" fill="none"><polyline points="40,2 2,2 2,52 52,52 52,14" stroke="rgba(255,255,255,0.22)" stroke-width="1.8" fill="none" stroke-linecap="square" stroke-linejoin="miter"/><rect x="21" y="21" width="12" height="12" fill="rgba(255,255,255,0.22)"/></svg>
+    <span style="font-weight:200;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,0.22);">Concra</span>
+  </a>
+  <div class="f-links">
+    <a href="/produkt">Produkt</a>
+    <a href="/priser">Kom igång</a>
+    <a href="/kalkylator">Kalkylator</a>
+    <a href="/betongklasser">Betongklasser</a>
+    <a href="/kontakt">Kontakt</a>
+  </div>
+  <div class="f-r">© 2026 Concra</div>
+</footer>
+
+<script>
+  const CO2_PER_M3 = 220;   // kg CO₂e per m³ (Boverket C25/30)
+  const DENSITY    = 2400;  // kg per m³
+  const SPILL      = 1.10;
+
+  let currentType = 'platta';
+
+  function setType(type) {
+    currentType = type;
+    document.querySelectorAll('.form-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('form-' + type).classList.add('active');
+    event.target.classList.add('active');
+    calc();
+  }
+
+  function v(id) {
+    const val = parseFloat(document.getElementById(id)?.value);
+    return isNaN(val) || val < 0 ? 0 : val;
+  }
+
+  // Opening rows: {type, rows:[{w,h}]}
+  const openings = { platta: [], vagg: [] };
+  let openingCounter = 0;
+
+  function addOpening(type) {
+    const id = openingCounter++;
+    openings[type].push({ id });
+    const container = document.getElementById('openings-' + type);
+    const thickness = type === 'vagg' ? 'vagg-t' : 'platta-t';
+    const row = document.createElement('div');
+    row.className = 'opening-row';
+    row.id = 'opening-row-' + id;
+    row.innerHTML = `
+      <div><label>Bredd (m)</label><input type="number" id="ow-${id}" placeholder="1.0" min="0" step="0.01" oninput="calc()"></div>
+      <div><label>${type === 'vagg' ? 'Höjd (m)' : 'Längd (m)'}</label><input type="number" id="oh-${id}" placeholder="${type === 'vagg' ? '2.1' : '1.0'}" min="0" step="0.01" oninput="calc()"></div>
+      <button class="remove-btn" onclick="removeOpening('${type}',${id})">×</button>`;
+    container.appendChild(row);
+    // Prevent negative on new inputs
+    row.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('keydown', e => { if (e.key === '-' || e.key === 'e') e.preventDefault(); });
+    });
+    calc();
+  }
+
+  function removeOpening(type, id) {
+    openings[type] = openings[type].filter(o => o.id !== id);
+    const row = document.getElementById('opening-row-' + id);
+    if (row) row.remove();
+    calc();
+  }
+
+  function getOpeningsVolume(type, thickness) {
+    return openings[type].reduce((sum, o) => {
+      const w = parseFloat(document.getElementById('ow-' + o.id)?.value) || 0;
+      const h = parseFloat(document.getElementById('oh-' + o.id)?.value) || 0;
+      return sum + w * h * thickness;
+    }, 0);
+  }
+
+  function calcVolume() {
+    switch (currentType) {
+      case 'platta': {
+        const base = v('platta-l') * v('platta-b') * v('platta-t');
+        const deduct = getOpeningsVolume('platta', v('platta-t'));
+        return Math.max(0, base - deduct);
+      }
+      case 'vagg': {
+        const base = v('vagg-l') * v('vagg-h') * v('vagg-t');
+        const deduct = getOpeningsVolume('vagg', v('vagg-t'));
+        return Math.max(0, base - deduct);
+      }
+      case 'pelare-fyr':
+        return v('pfyr-b') * v('pfyr-d') * v('pfyr-h') * Math.max(1, v('pfyr-n') || 1);
+      case 'pelare-rund': {
+        const r = v('prund-d') / 2;
+        return Math.PI * r * r * v('prund-h') * Math.max(1, v('prund-n') || 1);
+      }
+      case 'trappa': {
+        const n = v('trappa-n'), b = v('trappa-b'), d = v('trappa-d'), h = v('trappa-h');
+        // Triangulär prism (underramp) + stegblock
+        const ramp   = 0.5 * (n * d) * (n * h) * b;
+        const blocks = n * d * h * b * 0.5; // genomsnittliga stegblock på toppen
+        return ramp + blocks;
+      }
+      case 'fundament':
+        return v('fund-l') * v('fund-b') * v('fund-t') * Math.max(1, v('fund-n') || 1);
+      default:
+        return 0;
+    }
+  }
+
+  function fmt(n, dec = 2) {
+    if (n === 0) return '—';
+    return n.toFixed(dec).replace('.', ',');
+  }
+
+  function calc() {
+    const vol = calcVolume();
+    const spill = vol * SPILL;
+    const co2 = vol * CO2_PER_M3;
+    const vikt = vol * DENSITY;
+
+    document.getElementById('res-vol').textContent   = vol > 0 ? fmt(spill, 2) : '—';
+    document.getElementById('res-unit').textContent  = vol > 0 ? ' m³' : '';
+    document.getElementById('res-exact').textContent = vol > 0 ? fmt(vol, 3) + ' m³' : '—';
+    document.getElementById('res-spill').textContent = vol > 0 ? fmt(spill, 2) + ' m³' : '—';
+    document.getElementById('res-vikt').textContent  = vol > 0 ? fmt(vikt / 1000, 1) + ' ton' : '—';
+  }
+
+  // Prevent negative input
+  document.querySelectorAll('input[type=number]').forEach(inp => {
+    inp.addEventListener('keydown', e => {
+      if (e.key === '-' || e.key === 'e') e.preventDefault();
+    });
+  });
+</script>
+
+</body>
+</html>

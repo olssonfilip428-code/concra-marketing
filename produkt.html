@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produkt — Concra</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Realtidsspårning, automatisk fakturering och SMS-notifieringar. Allt du behöver för att driva ett modernt betongföretag.">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --black:#09090b;
+      --dark:#18181b;
+      --z7:#3f3f46;
+      --z5:#71717a;
+      --z4:#a1a1aa;
+      --z2:#e4e4e7;
+      --z1:#f4f4f5;
+      --white:#ffffff;
+      --d:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;
+      --b:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    }
+    html{background:var(--black);color:var(--white);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+    /* grain — static, no animation */
+
+    /* ── NAV ── */
+    nav{position:fixed;inset:0 0 auto;z-index:900;padding:24px 52px;display:flex;justify-content:space-between;align-items:center;background:rgba(9,9,11,.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.07)}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .logo-word{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:200;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:#f2f2f0}
+    .nav-links{display:flex;gap:32px;align-items:center}
+    .nav-links a{font-size:13px;font-weight:300;color:rgba(255,255,255,.4);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--white)}
+    .nbtn{font-size:13px;font-weight:300;letter-spacing:.06em;color:var(--white);background:transparent;border:1px solid rgba(255,255,255,.2);padding:8px 20px;text-decoration:none;display:inline-block;transition:all .2s}
+    .nbtn:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.3)}
+    .mob-btn{display:none;background:none;border:none;cursor:pointer;padding:4px;line-height:1}
+    .mob-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(8,8,8,.97);flex-direction:column;justify-content:center;align-items:center;gap:0}
+    .mob-overlay.open{display:flex}
+    .mob-overlay a{font-size:26px;font-weight:200;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55);text-decoration:none;padding:18px 0;width:100%;text-align:center;transition:color .15s;border-bottom:1px solid rgba(255,255,255,.04)}
+    .mob-overlay a:last-of-type{border-bottom:none}
+    .mob-overlay a:hover{color:rgba(255,255,255,.9)}
+    .mob-close{position:absolute;top:28px;right:28px;background:none;border:none;cursor:pointer;padding:4px}
+    @media(max-width:768px){.nav-links{display:none}.nbtn{display:none}.mob-btn{display:block}}
+
+    /* ── PAGE HERO ── */
+    .page-hero{padding:180px 52px 100px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .ph-tag{font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:28px;display:flex;align-items:center;gap:14px}
+    .ph-tag::before{content:'';width:24px;height:1px;background:rgba(255,255,255,.2)}
+    .ph-h{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:200;font-size:clamp(48px,7vw,96px);letter-spacing:.04em;line-height:1.1;max-width:900px}
+    .ph-h em{color:rgba(255,255,255,.3);font-style:normal}
+    .ph-sub{font-size:clamp(15px,1.5vw,18px);font-weight:300;color:rgba(255,255,255,.5);line-height:1.7;max-width:480px;margin-top:36px}
+
+    /* ── FEATURES ── */
+    .features{padding:0 52px 120px}
+
+    .feat{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid rgba(255,255,255,.07);padding:100px 0}
+    .feat:first-child{border-top:none}
+    .feat.rev .feat-vis{order:-1}
+
+    .feat-text{padding-right:80px;display:flex;flex-direction:column;justify-content:center}
+    .feat.rev .feat-text{padding-right:0;padding-left:80px}
+
+    .feat-num{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:300;font-size:11px;letter-spacing:.28em;color:rgba(255,255,255,.35);margin-bottom:28px}
+    .feat-h{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:200;font-size:clamp(36px,4.5vw,60px);letter-spacing:.04em;line-height:1.1;margin-bottom:24px}
+    .feat-p{font-size:clamp(14px,1.4vw,16px);font-weight:300;color:rgba(255,255,255,.5);line-height:1.75;max-width:380px}
+    .feat-list{margin-top:36px;display:flex;flex-direction:column;gap:14px}
+    .feat-list li{font-size:13px;font-weight:400;color:rgba(255,255,255,.55);list-style:none;display:flex;align-items:flex-start;gap:12px;letter-spacing:.02em}
+    .feat-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);flex-shrink:0;margin-top:6px}
+
+    .feat-vis{background:var(--dark);border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden;min-height:420px;display:flex;align-items:center;justify-content:center}
+
+    /* SVG mock UIs */
+    .mock{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:36px}
+
+    /* ── MAP MOCK ── */
+    .map-mock{width:100%;height:100%;background:#111113;position:relative;overflow:hidden}
+    .map-roads{position:absolute;inset:0}
+    .map-road{stroke:rgba(255,255,255,.07);stroke-width:1.5;fill:none}
+    .map-road-main{stroke:rgba(255,255,255,.13);stroke-width:2.5}
+    .pulse-dot{position:absolute;width:12px;height:12px;border-radius:50%;background:#fff}
+    .pulse-dot::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1.5px solid rgba(255,255,255,.4);animation:ping 2s ease-out infinite}
+    @keyframes ping{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(2.5)}}
+    .map-dot1{top:38%;left:30%}
+    .map-dot2{top:55%;left:58%}
+    .map-dot3{top:25%;left:65%}
+    .map-info{position:absolute;bottom:20px;left:20px;background:rgba(9,9,11,.85);border:1px solid rgba(255,255,255,.1);padding:12px 16px;font-size:11px;backdrop-filter:blur(8px)}
+    .map-info-row{display:flex;gap:24px}
+    .map-info-val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:18px;font-weight:700;color:#fff;display:block}
+    .map-info-lbl{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase}
+
+    /* ── INVOICE MOCK ── */
+    .inv-mock{width:100%;background:#f4f4f5;color:#09090b;padding:32px;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
+    .inv-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid #e4e4e7}
+    .inv-brand{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:200;font-size:18px;letter-spacing:.18em;text-transform:uppercase}
+    .inv-meta{font-size:11px;color:#71717a;text-align:right;line-height:1.6}
+    .inv-rows{display:flex;flex-direction:column;gap:0}
+    .inv-row{display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:10px 0;border-bottom:1px solid #e4e4e7;font-size:12px}
+    .inv-row.head{font-weight:500;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#71717a}
+    .inv-row-price{text-align:right;font-weight:500}
+    .inv-total{display:grid;grid-template-columns:1fr auto;gap:16px;padding:16px 0 0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:300;font-size:18px}
+    .inv-badge{display:inline-block;background:#09090b;color:#fff;font-size:9px;font-weight:600;letter-spacing:.1em;padding:4px 10px;text-transform:uppercase;margin-top:8px}
+
+    /* ── SMS MOCK ── */
+    .sms-mock{width:100%;max-width:280px}
+    .phone{background:#1c1c22;border-radius:32px;padding:20px 16px;border:1px solid rgba(255,255,255,.1);position:relative}
+    .phone-notch{width:80px;height:6px;background:rgba(255,255,255,.12);border-radius:3px;margin:0 auto 20px}
+    .msg-bubble{background:#2a2a2e;border-radius:4px 16px 16px 16px;padding:12px 14px;margin-bottom:8px}
+    .msg-sender{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px}
+    .msg-text{font-size:13px;color:rgba(255,255,255,.85);line-height:1.5}
+    .msg-time{font-size:10px;color:rgba(255,255,255,.25);text-align:right;margin-top:6px}
+    .msg-bubble2{background:#fff;color:#09090b;border-radius:16px 16px 4px 16px;padding:12px 14px;margin-left:auto;max-width:85%}
+    .msg2-text{font-size:13px;line-height:1.5}
+    .msg2-time{font-size:10px;color:#71717a;text-align:right;margin-top:6px}
+
+    /* ── REPORT MOCK ── */
+    .report-mock{width:100%;padding:28px;background:var(--dark)}
+    .rep-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+    .rep-title{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:300;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+    .rep-period{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.06em}
+    .rep-bars{display:flex;gap:8px;align-items:flex-end;height:100px;margin-bottom:20px}
+    .rep-bar{flex:1;background:rgba(255,255,255,.06);border-radius:2px;position:relative;transition:background .3s}
+    .rep-bar-fill{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.25);border-radius:2px;animation:barIn 1s ease-out forwards}
+    @keyframes barIn{from{height:0}to{height:var(--h)}}
+    .rep-legend{display:flex;gap:20px}
+    .rep-leg-item{font-size:11px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:6px}
+    .rep-leg-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3)}
+    .rep-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06);border-top:1px solid rgba(255,255,255,.06);margin-top:20px}
+    .rep-kpi{background:var(--dark);padding:16px 12px}
+    .rep-kpi-val{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:200;font-size:28px;color:#fff}
+    .rep-kpi-lbl{font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+
+    /* ── HOW IT WORKS ── */
+    .hiw{background:var(--white);color:var(--black);padding:120px 52px}
+    .hiw-ey{font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--z5);margin-bottom:48px;display:flex;align-items:center;gap:14px}
+    .hiw-ey::before{content:'';width:24px;height:1px;background:var(--z4)}
+    .hiw-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:200;font-size:clamp(40px,6vw,72px);letter-spacing:.04em;line-height:.92;max-width:640px;margin-bottom:80px}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--z2)}
+    .step{padding:48px 36px 48px 0;border-right:1px solid var(--z2)}
+    .step:last-child{border-right:none;padding-right:0;padding-left:0}
+    .step:not(:first-child){padding-left:36px}
+    .step-n{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:200;font-size:48px;color:var(--z2);line-height:1;margin-bottom:24px}
+    .step-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:300;font-size:18px;letter-spacing:.06em;margin-bottom:12px;color:var(--black)}
+    .step-p{font-size:14px;font-weight:300;color:var(--z5);line-height:1.7}
+
+    /* ── CTA ── */
+    .cta{background:var(--black);padding:140px 52px;text-align:center;border-top:1px solid rgba(255,255,255,.05)}
+    .c-ey{font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--z5);margin-bottom:40px}
+    .c-h{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-weight:200;font-size:clamp(48px,7vw,96px);letter-spacing:.04em;line-height:.9;margin-bottom:48px}
+    .c-acts{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap}
+    .btn-w{background:var(--white);color:var(--black);border:none;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:17px 48px;cursor:pointer;transition:opacity .2s;text-decoration:none;display:inline-block}
+    .btn-w:hover{opacity:.88}
+    .btn-o{background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.7);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .btn-o:hover{border-color:rgba(255,255,255,.6);color:var(--white)}
+
+    /* ── FOOTER ── */
+    footer{background:var(--black);padding:40px 52px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+    .f-r{font-size:12px;color:rgba(255,255,255,.42)}
+    .f-links{display:flex;gap:24px}
+    .f-links a{font-size:12px;color:rgba(255,255,255,.52);text-decoration:none;transition:color .2s}
+    .f-links a:hover{color:var(--white)}
+
+    @media(max-width:900px){
+      nav{padding:20px 24px}
+      .page-hero{padding:140px 24px 72px}
+      .features{padding:0 24px 80px}
+      .feat{grid-template-columns:1fr;gap:40px;padding:64px 0}
+      .feat.rev .feat-vis{order:0}
+      .feat-text,.feat.rev .feat-text{padding:0}
+      .feat-vis{min-height:280px}
+      .hiw{padding:80px 24px}
+      .steps{grid-template-columns:1fr 1fr;gap:0}
+      .step{border-bottom:1px solid var(--z2);padding:36px 24px 36px 0}
+      .step:nth-child(2n){border-right:none;padding-right:0;padding-left:24px}
+      .step:nth-child(3),.step:nth-child(4){border-bottom:none}
+      .cta{padding:80px 24px}
+      footer{padding:28px 24px}
+    }
+    /* ── AMBER THEME ── */
+    :root{--amber:rgba(255,200,80,.9);--amber-dim:rgba(255,200,80,.18);--amber-faint:rgba(255,200,80,.05)}
+
+    /* Hero — subtle amber glow */
+    .page-hero{
+      background:radial-gradient(ellipse 70% 60% at 50% 100%,rgba(255,200,80,.05) 0%,transparent 65%),var(--black);
+      position:relative;
+    }
+    .page-hero::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--amber-dim),transparent)}
+
+    /* Feature numbers → amber */
+    .feat-num{color:var(--amber) !important}
+
+    /* Bullet dots → amber */
+    .feat-list li::before{background:var(--amber) !important;opacity:.7}
+
+    /* Feat vis — amber border glow on hover */
+    .feat-vis{transition:border-color .3s}
+    .feat:hover .feat-vis{border-color:rgba(255,200,80,.12) !important}
+
+    /* How it works — amber step numbers */
+    .step-n{
+      background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,rgba(255,200,80,.25) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    /* HIW section tag line */
+    .hiw-ey::before{background:var(--amber-dim) !important}
+
+    /* CTA glow */
+    .cta{position:relative;overflow:hidden}
+    .cta::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(ellipse,rgba(255,200,80,.06) 0%,transparent 65%);pointer-events:none}
+    .c-h,.c-ey{position:relative;z-index:1}
+    .c-acts{position:relative;z-index:1}
+
+    @media(max-width:500px){
+      .steps{grid-template-columns:1fr}
+      .step{border-right:none;padding:36px 0;border-bottom:1px solid var(--z2)}
+      .step:last-child{border-bottom:none}
+      .step:not(:first-child){padding-left:0}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="/">
+    <svg width="18" height="18" viewBox="0 0 54 54" fill="none"><polyline points="40,2 2,2 2,52 52,52 52,14" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" fill="none" stroke-linecap="square" stroke-linejoin="miter"/><rect x="21" y="21" width="12" height="12" fill="rgba(255,255,255,0.6)"/></svg>
+    <span class="logo-word">Concra</span>
+  </a>
+  <div class="nav-links">
+    <a href="/produkt" class="active">Produkt</a>
+    <a href="/priser">Priser</a>
+    <a href="/kontakt">Kontakt</a>
+  </div>
+  <a class="nbtn" href="/#cta">Boka demo</a>
+  <button class="mob-btn" aria-label="Meny" onclick="document.getElementById('mob-overlay').classList.add('open')"><svg width="22" height="14" viewBox="0 0 22 14" fill="none"><line x1="0" y1="1" x2="22" y2="1" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="7" x2="22" y2="7" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="13" x2="22" y2="13" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/></svg></button>
+</nav>
+<div class="mob-overlay" id="mob-overlay">
+  <button class="mob-close" aria-label="Stäng" onclick="document.getElementById('mob-overlay').classList.remove('open')"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="1" y1="1" x2="19" y2="19" stroke="rgba(242,242,240,.45)" stroke-width="1.5"/><line x1="19" y1="1" x2="1" y2="19" stroke="rgba(242,242,240,.45)" stroke-width="1.5"/></svg></button>
+  <a href="/produkt">Produkt</a>
+  <a href="/priser">Priser</a>
+  <a href="/kontakt">Kontakt</a>
+  <a href="/#cta" style="margin-top:16px;font-size:13px;letter-spacing:.18em;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);padding:14px 48px;border-bottom:none">Boka demo</a>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="ph-tag">Allt du behöver — inget du inte behöver</div>
+  <h1 class="ph-h">Byggd för<br><em>betong.</em><br>Inte för allt.</h1>
+  <p class="ph-sub">Concra löser de tre problemen som kostar betongföretag mest: tid, pengar och kundupplevelse.</p>
+</section>
+
+<!-- FEATURES -->
+<div class="features">
+
+  <!-- 01 Realtidsspårning -->
+  <div class="feat">
+    <div class="feat-text">
+      <div class="feat-num">01 — Spårning</div>
+      <h2 class="feat-h">Vet var varje bil är. Nu.</h2>
+      <p class="feat-p">Live-karta med alla fordon, uppdaterad i realtid. Kunden ser sin leverans röra sig mot platsen. Du ser flottan — alltid.</p>
+      <ul class="feat-list">
+        <li>GPS i realtid</li>
+        <li>Automatisk ETA beräknad på rutten</li>
+        <li>Historik per leverans och fordon</li>
+        <li>Dedikerad 10" pekskärm i varje bil — alltid online, alltid på</li>
+      </ul>
+    </div>
+    <div class="feat-vis" style="padding:0; overflow:hidden;">
+      <img src="/img/screenshot-aktiva.jpg" alt="Aktiva ordrar — 5 pågående leveranser" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;">
+    </div>
+  </div>
+
+  <!-- 02 Automatisk fakturering -->
+  <div class="feat rev">
+    <div class="feat-text">
+      <div class="feat-num">02 — Fakturering</div>
+      <h2 class="feat-h">Fakturan skrivs när bilen lämnar.</h2>
+      <p class="feat-p">Leveransdata omvandlas automatiskt till en korrekt faktura i ert bokföringssystem. Inga manuella justeringar, inga glömda debiteringar.</p>
+      <ul class="feat-list">
+        <li>Direktintegration med Fortnox, Visma och Kleer</li>
+        <li>Automatisk prissättning per zon och kund</li>
+        <li>CO₂-rapportering ingår</li>
+        <li>PDF-leveransspecifikation per order</li>
+      </ul>
+    </div>
+    <div class="feat-vis" style="padding:0; overflow:hidden;">
+      <img src="/img/screenshot-invoice.jpg" alt="Automatisk faktura" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;">
+    </div>
+  </div>
+
+  <!-- 03 Chaufförsvyn -->
+  <div class="feat">
+    <div class="feat-text">
+      <div class="feat-num">03 — Chaufför</div>
+      <h2 class="feat-h">Chauffören kör. Systemet sköter resten.</h2>
+      <p class="feat-p">Leveransdetaljer, navigation och statusuppdateringar i ett flöde. Varje steg loggas i realtid — kunden informeras automatiskt längs vägen.</p>
+      <ul class="feat-list">
+        <li>Leveransadress, kontakt och betonggiva direkt vid start</li>
+        <li>Inbyggd navigation mot leveransplatsen</li>
+        <li>Statusflöde: Lastar → På väg → Framme → Lossar → Klar</li>
+        <li>Väntetid registreras automatiskt — inga manuella anteckningar</li>
+        <li>SMS till kunden skickas i rätt steg utan att chauffören gör något</li>
+      </ul>
+    </div>
+    <div class="feat-vis" style="padding:0; overflow:hidden; display:grid; grid-template-columns:1fr 1fr; gap:0;">
+      <img src="/img/screenshot-chauf-order.jpg" alt="Chaufförsvyn — leveransdetaljer" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;border-right:1px solid rgba(255,255,255,0.06);">
+      <img src="/img/screenshot-chauf-status.jpg" alt="Chaufförsvyn — statusflöde" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;">
+    </div>
+  </div>
+
+  <!-- 04 Rapportering -->
+  <div class="feat rev">
+    <div class="feat-text">
+      <div class="feat-num">04 — Analys</div>
+      <h2 class="feat-h">Siffror du faktiskt fattar beslut på.</h2>
+      <p class="feat-p">Månadsrapporter, leveranshistorik och CO₂-data genereras automatiskt. Exportera till Excel eller låt Concra skicka dem direkt.</p>
+      <ul class="feat-list">
+        <li>Automatisk månadsrapport per organisation</li>
+        <li>CO₂-rapport per projekt och kund</li>
+        <li>CSV-export för Excel med ett klick</li>
+        <li>Automatiska insikter och beslutsstöd</li>
+      </ul>
+    </div>
+    <div class="feat-vis" style="padding:0; overflow:hidden;">
+      <img src="/img/screenshot-rapporter.jpg" alt="Concra rapporter — volym per kund" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;">
+    </div>
+  </div>
+
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="hiw">
+  <div class="hiw-ey">Så fungerar det</div>
+  <h2 class="hiw-h">Igång på en dag. Inte en vecka.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">01</div>
+      <div class="step-h">Anslut</div>
+      <p class="step-p">Koppla ihop Concra med ert bokföringssystem och lägg in era fordon. Det tar 30 minuter.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">02</div>
+      <div class="step-h">Konfigurera</div>
+      <p class="step-p">Sätt priszoner, artiklar och SMS-mallar. Allt anpassas efter hur ni jobbar — inte tvärtom.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">03</div>
+      <div class="step-h">Kör</div>
+      <p class="step-p">Chauffören öppnar appen. Kunden får SMS. Fakturan skapas. Ni ser allt på kartan i realtid.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">04</div>
+      <div class="step-h">Optimera</div>
+      <p class="step-p">Månatliga insikter hjälper er hitta ineffektivitet och förbättra lönsamhet per rutt och kund.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="c-ey">Redo att testa?</div>
+  <h2 class="c-h">Se det live.</h2>
+  <div class="c-acts">
+    <a class="btn-w" href="/kontakt">Boka demo</a>
+    <a class="btn-o" href="/priser">Se priser</a>
+  </div>
+</section>
+
+<footer>
+  <a class="logo" href="/">
+    <svg width="14" height="14" viewBox="0 0 54 54" fill="none"><polyline points="40,2 2,2 2,52 52,52 52,14" stroke="rgba(255,255,255,0.3)" stroke-width="1.8" fill="none" stroke-linecap="square" stroke-linejoin="miter"/><rect x="21" y="21" width="12" height="12" fill="rgba(255,255,255,0.3)"/></svg>
+    <span class="logo-word" style="color:rgba(255,255,255,0.35)">Concra</span>
+  </a>
+  <div class="f-links">
+    <a href="/produkt">Produkt</a>
+    <a href="/kalkylator">Kalkylator</a>
+    <a href="/betongklasser">Betongklasser</a>
+    <a href="/kontakt">Kontakt</a>
+  </div>
+  <div class="f-r">© 2026 Concra</div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concra — Betonglogistik i realtid</title>
+<style>
+  @media print {
+    *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    body { margin: 0; }
+    @page { margin: 0; size: A4 portrait; }
+    .pb { page-break-after: always; }
+    .no-print { display: none !important; }
+  }
+</style>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0d0c0b;
+    --ink: #1a1816;
+    --mid: #6b6560;
+    --soft: #9e9589;
+    --line: #ddd8d2;
+    --bg: #f7f3ee;
+    --white: #ffffff;
+    --gold: #8a7040;
+  }
+
+  html {
+    background: var(--white);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--black);
+    color: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 64px 72px;
+  }
+
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+
+  .logo { font-size: 18px; font-weight: 200; letter-spacing: 0.32em; text-transform: uppercase; color: var(--bg); }
+
+  .cover-tag {
+    font-size: 11px; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(247,243,238,0.28); border: 1px solid rgba(247,243,238,0.1); padding: 8px 16px;
+  }
+
+  .cover-main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 72px 0 56px; }
+
+  .cover-eyebrow {
+    font-size: 11px; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(247,243,238,0.28); margin-bottom: 28px; display: flex; align-items: center; gap: 14px;
+  }
+  .cover-eyebrow::before { content: ''; width: 22px; height: 1px; background: rgba(247,243,238,0.18); }
+
+  .cover-h1 {
+    font-size: clamp(48px, 9vw, 90px); font-weight: 700; letter-spacing: -0.03em;
+    line-height: 0.92; margin-bottom: 36px; color: var(--bg);
+  }
+  .cover-h1 em { font-style: normal; color: rgba(247,243,238,0.22); }
+
+  .cover-desc { font-size: 17px; font-weight: 300; color: rgba(247,243,238,0.48); line-height: 1.75; max-width: 520px; }
+
+  .cover-bottom {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-top: 1px solid rgba(247,243,238,0.07); padding-top: 28px;
+  }
+  .cover-url { font-size: 12px; font-weight: 300; color: rgba(247,243,238,0.22); letter-spacing: 0.05em; }
+  .cover-date { font-size: 12px; font-weight: 300; color: rgba(247,243,238,0.18); letter-spacing: 0.06em; }
+
+  /* STATEMENT */
+  .statement {
+    background: var(--black); padding: 52px 72px; text-align: center;
+    border-bottom: 1px solid rgba(247,243,238,0.07);
+  }
+  .statement-text {
+    font-size: clamp(18px, 2.8vw, 28px); font-weight: 700; letter-spacing: -0.02em;
+    line-height: 1.4; color: rgba(247,243,238,0.65); max-width: 720px; margin: 0 auto;
+  }
+  .statement-text em { color: var(--bg); font-style: normal; }
+
+  /* SECTIONS */
+  .sec { padding: 64px 72px; border-bottom: 1px solid var(--line); }
+  .sec-light { background: var(--bg); }
+  .sec-dark { background: var(--black); color: var(--bg); border-color: rgba(247,243,238,0.07); }
+  .sec:last-child { border-bottom: none; }
+
+  .lbl {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--soft); margin-bottom: 28px; display: flex; align-items: center; gap: 12px;
+  }
+  .lbl::before { content: ''; width: 20px; height: 1px; background: var(--line); }
+  .sec-dark .lbl { color: rgba(247,243,238,0.28); }
+  .sec-dark .lbl::before { background: rgba(247,243,238,0.1); }
+
+  .sec-h { font-size: clamp(28px, 4.5vw, 48px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.0; margin-bottom: 18px; color: var(--black); }
+  .sec-dark .sec-h { color: var(--bg); }
+
+  .sec-p { font-size: 15px; font-weight: 300; color: var(--mid); line-height: 1.8; max-width: 600px; }
+  .sec-dark .sec-p { color: rgba(247,243,238,0.42); }
+
+  /* FEATURE LIST */
+  .feat-list { margin-top: 44px; border: 1px solid var(--line); display: flex; flex-direction: column; gap: 1px; background: var(--line); }
+  .sec-dark .feat-list { border-color: rgba(247,243,238,0.1); background: rgba(247,243,238,0.06); }
+
+  .feat {
+    background: var(--white); padding: 40px 36px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: flex-start;
+  }
+  .sec-light .feat { background: var(--bg); }
+  .sec-dark .feat { background: var(--black); }
+
+  .feat-kicker { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--soft); margin-bottom: 10px; }
+  .sec-dark .feat-kicker { color: rgba(247,243,238,0.28); }
+
+  .feat-h { font-size: 19px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; color: var(--black); line-height: 1.2; }
+  .sec-dark .feat-h { color: var(--bg); }
+
+  .feat-desc { font-size: 13px; font-weight: 300; color: var(--mid); line-height: 1.7; }
+  .sec-dark .feat-desc { color: rgba(247,243,238,0.42); }
+
+  .feat-right { border-left: 1px solid var(--line); padding-left: 40px; }
+  .sec-dark .feat-right { border-color: rgba(247,243,238,0.1); }
+
+  .feat-value-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+
+  .feat-value-txt { font-size: 13px; font-weight: 300; color: var(--mid); line-height: 1.7; }
+  .feat-value-txt strong { color: var(--black); font-weight: 600; }
+  .sec-dark .feat-value-txt { color: rgba(247,243,238,0.45); }
+  .sec-dark .feat-value-txt strong { color: rgba(247,243,238,0.85); }
+
+  /* PRICING */
+  .price-block { margin-top: 44px; border: 1px solid rgba(247,243,238,0.1); display: grid; grid-template-columns: 1fr 1fr; }
+
+  .price-left { padding: 44px 40px; border-right: 1px solid rgba(247,243,238,0.1); }
+
+  .price-big { font-size: clamp(68px, 11vw, 104px); font-weight: 800; letter-spacing: -0.05em; line-height: 0.85; color: var(--bg); }
+  .price-big sup { font-size: 0.28em; vertical-align: top; line-height: 2.4; color: rgba(247,243,238,0.3); font-weight: 500; letter-spacing: 0.05em; }
+
+  .price-sub { font-size: 13px; font-weight: 300; color: rgba(247,243,238,0.3); margin-top: 12px; letter-spacing: 0.04em; }
+
+  .price-right { padding: 44px 40px; display: flex; flex-direction: column; justify-content: center; gap: 13px; }
+
+  .price-right-title { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(247,243,238,0.28); margin-bottom: 4px; }
+
+  .price-item { font-size: 13px; font-weight: 300; color: rgba(247,243,238,0.5); line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; }
+  .price-item::before { content: '—'; color: rgba(247,243,238,0.16); flex-shrink: 0; }
+
+  .roi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(247,243,238,0.08); border: 1px solid rgba(247,243,238,0.08); margin-top: 44px; }
+
+  .roi-card { background: rgba(247,243,238,0.03); padding: 36px 28px; text-align: center; }
+  .roi-vol { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(247,243,238,0.28); margin-bottom: 12px; }
+  .roi-cost { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -0.03em; color: var(--bg); line-height: 1; margin-bottom: 6px; }
+  .roi-note { font-size: 12px; font-weight: 300; color: rgba(247,243,238,0.28); line-height: 1.5; }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+
+  .contact-h { font-size: clamp(32px, 5vw, 54px); font-weight: 800; letter-spacing: -0.035em; line-height: 0.95; margin-bottom: 18px; color: var(--bg); }
+  .contact-p { font-size: 15px; font-weight: 300; color: rgba(247,243,238,0.42); line-height: 1.75; }
+
+  .cd { display: flex; flex-direction: column; gap: 24px; }
+  .cd-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(247,243,238,0.22); margin-bottom: 4px; }
+  .cd-val { font-size: 17px; font-weight: 300; color: rgba(247,243,238,0.7); }
+  .cd-val a { color: inherit; text-decoration: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .cover, .sec, .statement { padding-left: 28px; padding-right: 28px; }
+    .feat, .price-block, .contact-grid, .roi-row { grid-template-columns: 1fr; }
+    .feat-right { border-left: none; padding-left: 0; border-top: 1px solid var(--line); padding-top: 24px; }
+    .sec-dark .feat-right { border-color: rgba(247,243,238,0.1); }
+    .price-left { border-right: none; border-bottom: 1px solid rgba(247,243,238,0.1); }
+    .price-right { padding-top: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover pb">
+  <div class="cover-top">
+    <div class="logo">Concra</div>
+    <div class="cover-tag">Produktöversikt 2026</div>
+  </div>
+  <div class="cover-main">
+    <div class="cover-eyebrow">Betonglogistik — uppkopplad</div>
+    <h1 class="cover-h1">Full kontroll.<br>Noll<br><em>onödig admin.</em></h1>
+    <p class="cover-desc">Concra är en komplett plattform för betongbolag — GPS-spårning, automatisk fakturering, CO₂-rapportering, kundkreditbedömning och väderdata, allt integrerat i ett system.</p>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-url">concra.online</div>
+    <div class="cover-date">Mars 2026</div>
+  </div>
+</div>
+
+<!-- STATEMENT -->
+<div class="statement">
+  <p class="statement-text">
+    Betongbranschen levererar tusentals lass om dagen i Sverige — med telefon, papper och magkänsla. <em>Concra ger er samma kontroll som stora bolag byggt in, fast utan att det kostar som ett storbolag.</em>
+  </p>
+</div>
+
+<!-- FEATURES -->
+<div class="sec">
+  <div class="lbl">Plattformen</div>
+  <h2 class="sec-h">Allt ni behöver.<br>Inget ni inte behöver.</h2>
+  <p class="sec-p">Sju funktioner som hänger ihop och täcker hela flödet — från att kunden sätts upp i systemet till att fakturan är skickad och CO₂-rapporten sparad.</p>
+
+  <div class="feat-list">
+
+    <div class="feat">
+      <div>
+        <div class="feat-kicker">Flottstyrning & planering</div>
+        <div class="feat-h">Se alla bilar live — hela dagen</div>
+        <p class="feat-desc">Alla fordon visas i realtid på kartan. Blandaren ser var varje bil är och kan planera dagen utan att ringa runt. Kunden får en spårningslänk direkt när bilen avgår och kan följa leveransen på sin telefon.</p>
+      </div>
+      <div class="feat-right">
+        <div class="feat-value-lbl">Affärsnyttan</div>
+        <p class="feat-value-txt">Blandaren planerar flottan på fakta istället för gissningar — <strong>kortare väntetid, fler lass per dag.</strong> Kunden vet när betongen kommer och kan rigga arbetsplatsen i tid. Inga mer "när är ni här"-samtal.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div>
+        <div class="feat-kicker">Chaufförssystem</div>
+        <div class="feat-h">Inbyggd display i hytten</div>
+        <p class="feat-desc">Chauffören har en dedikerad skärm i hytten med aktuell order — kund, adress, kvalitet och beställd volym. Navigering till byggplatsen är inbyggt. Inget att logga in i, ingen telefon att hantera under körning.</p>
+      </div>
+      <div class="feat-right">
+        <div class="feat-value-lbl">Affärsnyttan</div>
+        <p class="feat-value-txt">Chauffören ser jobbet direkt och kör rätt. <strong>Inga missförstånd kring destination eller specifikation.</strong> Det syns att ni kör ett professionellt system — inte en lapp på ratten.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div>
+        <div class="feat-kicker">Fortnox-integration</div>
+        <div class="feat-h">Leveransen klar — fakturan skickad</div>
+        <p class="feat-desc">Systemet registrerar varje leverans automatiskt och skapar fakturan direkt i Fortnox — rätt kund, rätt artikel, rätt volym, rätt pris. Fortnox-integrationen är fullständig: kunder, artiklar, priser och fakturor synkroniseras löpande.</p>
+      </div>
+      <div class="feat-right">
+        <div class="feat-value-lbl">Affärsnyttan</div>
+        <p class="feat-value-txt"><strong>Noll manuell fakturahantering.</strong> Fel försvinner. Fakturor går ut snabbare — vilket förbättrar er likviditet. Det som i dag tar timmar sker automatiskt i bakgrunden, varje dag.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div>
+        <div class="feat-kicker">Klimatdeklaration</div>
+        <div class="feat-h">CO₂-data per leverans — automatiskt</div>
+        <p class="feat-desc">Systemet beräknar och loggar CO₂-utsläpp per leverans baserat på sträcka, fordonstyp och lastvolym. Rapporten finns redo att exportera och lämna till kunden som underlag för klimatdeklarationen.</p>
+      </div>
+      <div class="feat-right">
+        <div class="feat-value-lbl">Affärsnyttan</div>
+        <p class="feat-value-txt">Boverkets klimatdeklarationskrav berör alla byggherrar — och de behöver CO₂-data från er som betongleverantör. <strong>Med Concra kan ni leverera den. Era konkurrenter troligtvis inte.</strong></p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div>
+        <div class="feat-kicker">Kredithantering & kundregister</div>
+        <div class="feat-h">Lägg till kunder och sätt kreditgräns direkt</div>
+        <p class="feat-desc">Lägg till en ny kund och systemet hämtar automatiskt deras kredithistorik. Ni bestämmer kreditgränsen på en gång. Kunden synkroniseras till Fortnox. I kundvyn ser ni kreditbetyg, aktiva projekt och kan tilldela prislista direkt.</p>
+      </div>
+      <div class="feat-right">
+        <div class="feat-value-lbl">Affärsnyttan</div>
+        <p class="feat-value-txt">Ni slipper ta kreditbeslut i blindo. <strong>Sätt rätt gräns från dag ett</strong> — och håll koll på att den respekteras. Allt landar i Fortnox automatiskt, utan dubbel administration.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div>
+        <div class="feat-kicker">Affärsanalys</div>
+        <div class="feat-h">Se hur ert bolag presterar</div>
+        <p class="feat-desc">Varje månad sammanställs era leveranser automatiskt — volymer, intäkter, era bästa kunder och hur det fördelar sig på olika jobb. Ni ser trender och avvikelser utan att behöva plocka fram ett kalkylblad.</p>
+      </div>
+      <div class="feat-right">
+        <div class="feat-value-lbl">Affärsnyttan</div>
+        <p class="feat-value-txt">Vilka kunder driver er omsättning? Vilka perioder är starkast? <strong>Ni fattar bättre beslut</strong> — om prissättning, kapacitet och var det lönar sig att lägga krutet.</p>
+      </div>
+    </div>
+
+    <div class="feat">
+      <div>
+        <div class="feat-kicker">Gjutningsdokumentation</div>
+        <div class="feat-h">Väderdata sparad per leverans</div>
+        <p class="feat-desc">Dashboarden visar aktuellt väder i era leveransområden. När bilen ankommer till byggplatsen hämtas väderdata för den exakta platsen och sparas på jobbet — temperatur, nederbörd och vindförhållanden vid gjutningstillfället.</p>
+      </div>
+      <div class="feat-right">
+        <div class="feat-value-lbl">Affärsnyttan</div>
+        <p class="feat-value-txt">Planera gjutningar med rätt underlag. <strong>Vid reklamationer eller kvalitetsfrågor har ni dokumenterat vad vädret var</strong> — ett konkret stöd i diskussionen med kunden.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="sec" style="background:var(--black);border-color:rgba(247,243,238,0.07);">
+  <div class="lbl">Systemet i verkligheten</div>
+  <h2 class="sec-h" style="color:var(--bg);">Byggt för att användas.<br>Inte demonstreras.</h2>
+  <p class="sec-p" style="color:rgba(247,243,238,0.42);">Concra är ett färdigt system i daglig drift. Disponenten ser alla bilar live, skapar ordrar på sekunder och följer leveranserna i realtid.</p>
+
+  <div style="margin-top:52px;display:flex;flex-direction:column;gap:48px;">
+
+    <!-- Dashboard screenshot -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,243,238,0.3);margin-bottom:6px;">Vy 01</div>
+          <div style="font-size:17px;font-weight:700;color:var(--bg);letter-spacing:-0.01em;">Dashboard — realtidsöversikt</div>
+        </div>
+        <div style="font-size:13px;font-weight:300;color:rgba(247,243,238,0.28);max-width:280px;text-align:right;line-height:1.6;">Live-karta med fordonspositioner, väder per stad och pågående leveranser.</div>
+      </div>
+      <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(247,243,238,0.1);box-shadow:0 32px 80px rgba(0,0,0,0.6);">
+        <div style="background:rgba(247,243,238,0.05);border-bottom:1px solid rgba(247,243,238,0.08);padding:10px 16px;display:flex;align-items:center;gap:6px;">
+          <div style="width:9px;height:9px;border-radius:50%;background:rgba(247,243,238,0.1);"></div>
+          <div style="width:9px;height:9px;border-radius:50%;background:rgba(247,243,238,0.1);"></div>
+          <div style="width:9px;height:9px;border-radius:50%;background:rgba(247,243,238,0.1);"></div>
+          <span style="font-size:11px;color:rgba(247,243,238,0.2);margin-left:12px;letter-spacing:0.04em;">concra.online/dashboard</span>
+        </div>
+        <img src="screenshot-dashboard.png" alt="Concra dashboard" style="width:100%;display:block;">
+      </div>
+    </div>
+
+    <!-- Order screenshot -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,243,238,0.3);margin-bottom:6px;">Vy 02</div>
+          <div style="font-size:17px;font-weight:700;color:var(--bg);letter-spacing:-0.01em;">Skapa order — under 30 sekunder</div>
+        </div>
+        <div style="font-size:13px;font-weight:300;color:rgba(247,243,238,0.28);max-width:280px;text-align:right;line-height:1.6;">Kund, adress, betongkvalitet, fordon och förare. Fakturan skapas automatiskt.</div>
+      </div>
+      <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(247,243,238,0.1);box-shadow:0 32px 80px rgba(0,0,0,0.6);">
+        <div style="background:rgba(247,243,238,0.05);border-bottom:1px solid rgba(247,243,238,0.08);padding:10px 16px;display:flex;align-items:center;gap:6px;">
+          <div style="width:9px;height:9px;border-radius:50%;background:rgba(247,243,238,0.1);"></div>
+          <div style="width:9px;height:9px;border-radius:50%;background:rgba(247,243,238,0.1);"></div>
+          <div style="width:9px;height:9px;border-radius:50%;background:rgba(247,243,238,0.1);"></div>
+          <span style="font-size:11px;color:rgba(247,243,238,0.2);margin-left:12px;letter-spacing:0.04em;">concra.online/planerade</span>
+        </div>
+        <img src="screenshot-order.png" alt="Concra order" style="width:100%;display:block;">
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- PRICING -->
+<div class="sec sec-dark">
+  <div class="lbl">Pris</div>
+  <h2 class="sec-h">Betala per lass.<br>Ingenting annat.</h2>
+  <p class="sec-p">Ingen månadsavgift. Inga bindningstider. Ni betalar bara när ni kör — och allt ovan ingår.</p>
+
+  <div class="price-block">
+    <div class="price-left">
+      <div class="price-big"><sup>kr </sup>70</div>
+      <div class="price-sub">per levererat lass · allt inkluderat</div>
+    </div>
+    <div class="price-right">
+      <div class="price-right-title">Ingår</div>
+      <div class="price-item">GPS-spårning av alla fordon</div>
+      <div class="price-item">Inbyggd display för chauffören</div>
+      <div class="price-item">Automatisk fakturering i Fortnox</div>
+      <div class="price-item">CO₂-rapportering per leverans</div>
+      <div class="price-item">Kredithantering & kundregister</div>
+      <div class="price-item">Månadsinsikter och affärsanalys</div>
+      <div class="price-item">Väderdata per gjutning via SMHI</div>
+      <div class="price-item">Ingen uppstartskostnad · Ingen bindningstid</div>
+    </div>
+  </div>
+
+  <div style="margin-top:44px;">
+    <div class="lbl" style="margin-bottom:20px;">Vad det kostar i praktiken</div>
+    <div class="roi-row">
+      <div class="roi-card">
+        <div class="roi-vol">100 lass / mån</div>
+        <div class="roi-cost">7 000 kr</div>
+        <div class="roi-note">per månad</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-vol">300 lass / mån</div>
+        <div class="roi-cost">21 000 kr</div>
+        <div class="roi-note">per månad</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-vol">500 lass / mån</div>
+        <div class="roi-cost">35 000 kr</div>
+        <div class="roi-note">per månad</div>
+      </div>
+    </div>
+    <p style="font-size:13px;font-weight:300;color:rgba(247,243,238,0.28);margin-top:18px;line-height:1.65;">
+      Ett genomsnittligt betonglass faktureras till 6 000–12 000 kr. Concra kostar under 1% av intäkten — och betalar tillbaka i sparad administrationstid redan den första månaden.
+    </p>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="sec sec-dark">
+  <div class="contact-grid">
+    <div>
+      <div class="lbl">Nästa steg</div>
+      <h2 class="contact-h">Se det<br>i action.</h2>
+      <p class="contact-p">Vi visar systemet live i en 30-minuters genomgång — anpassat till er verksamhet. Ni ser allt från GPS till faktura i Fortnox och CO₂-rapporten som genereras automatiskt.</p>
+    </div>
+    <div class="cd">
+      <div>
+        <div class="cd-lbl">Webb</div>
+        <div class="cd-val"><a href="https://concra.online">concra.online</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

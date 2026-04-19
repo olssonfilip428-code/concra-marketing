@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Komma igång — Concra</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Låg tröskel. Inga startavgifter. Betala för det ni faktiskt levererar.">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:#080808;
+      --s1:#0e0e0e;
+      --white:#f2f2f0;
+      --mid:#aaa;
+      --dim:#555;
+      --border:rgba(255,255,255,0.07);
+      --border2:rgba(255,255,255,0.13);
+    }
+    html{background:var(--bg);color:var(--white);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity:.022}
+
+    /* NAV */
+    nav{position:fixed;inset:0 0 auto;z-index:900;padding:24px 52px;display:flex;justify-content:space-between;align-items:center;background:rgba(8,8,8,.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-links{display:flex;gap:32px;align-items:center}
+    .nav-links a{font-size:13px;font-weight:300;color:rgba(255,255,255,.4);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--white)}
+    .nbtn{font-size:13px;font-weight:300;letter-spacing:.06em;color:var(--white);background:transparent;border:1px solid rgba(255,255,255,.2);padding:8px 20px;text-decoration:none;display:inline-block;transition:all .2s}
+    .nbtn:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.3)}
+    .mob-btn{display:none;background:none;border:none;cursor:pointer;padding:4px;line-height:1}
+    .mob-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(8,8,8,.97);flex-direction:column;justify-content:center;align-items:center;gap:0}
+    .mob-overlay.open{display:flex}
+    .mob-overlay a{font-size:26px;font-weight:200;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55);text-decoration:none;padding:18px 0;width:100%;text-align:center;transition:color .15s;border-bottom:1px solid rgba(255,255,255,.04)}
+    .mob-overlay a:last-of-type{border-bottom:none}
+    .mob-overlay a:hover{color:rgba(255,255,255,.9)}
+    .mob-close{position:absolute;top:28px;right:28px;background:none;border:none;cursor:pointer;padding:4px}
+    @media(max-width:768px){.nav-links{display:none}.nbtn{display:none}.mob-btn{display:block}}
+
+    /* HERO */
+    .hero{padding:180px 52px 100px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end}
+    .hero-left{}
+    .hero-tag{font-size:11px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:36px;display:flex;align-items:center;gap:14px}
+    .hero-tag::before{content:'';width:24px;height:1px;background:rgba(255,255,255,.18)}
+    .hero-h{font-weight:200;font-size:clamp(52px,8vw,112px);letter-spacing:.03em;line-height:.92;text-transform:uppercase;margin-bottom:40px}
+    .hero-h em{color:rgba(255,255,255,.18);font-style:normal}
+    .hero-p{font-size:clamp(14px,1.4vw,17px);font-weight:300;color:rgba(255,255,255,.42);line-height:1.8;max-width:440px}
+    .hero-right{display:flex;flex-direction:column;gap:0;border:1px solid var(--border2)}
+    .hero-stat{padding:36px 40px;border-bottom:1px solid var(--border)}
+    .hero-stat:last-child{border-bottom:none}
+    .hs-val{font-weight:200;font-size:clamp(40px,5vw,64px);letter-spacing:.02em;line-height:1;color:var(--white);margin-bottom:8px}
+    .hs-lbl{font-size:11px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+
+    /* MODEL */
+    .model{padding:100px 52px;border-bottom:1px solid var(--border);background:var(--s1)}
+    .sec-tag{font-size:11px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:48px;display:flex;align-items:center;gap:14px}
+    .sec-tag::before{content:'';width:24px;height:1px;background:rgba(255,255,255,.18)}
+    .sec-h{font-weight:200;font-size:clamp(36px,5vw,64px);letter-spacing:.04em;text-transform:uppercase;line-height:.95;margin-bottom:0}
+    .model-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid var(--border);margin-top:64px}
+    .mg{padding:48px 40px;border-right:1px solid var(--border);position:relative}
+    .mg:last-child{border-right:none}
+    .mg-n{font-weight:200;font-size:80px;color:rgba(255,255,255,.04);line-height:1;position:absolute;top:28px;right:32px;letter-spacing:-.03em}
+    .mg-h{font-weight:200;font-size:22px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;color:var(--white)}
+    .mg-b{font-size:14px;font-weight:300;color:rgba(255,255,255,.42);line-height:1.8}
+
+    /* SCREENSHOT */
+    .visual{padding:0 52px 100px;border-bottom:1px solid var(--border)}
+    .vis-inner{position:relative;border:1px solid var(--border2);overflow:hidden;border-radius:4px}
+    .vis-inner img{width:100%;display:block}
+    .vis-bar{background:var(--s1);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:8px}
+    .vis-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.12)}
+    .vis-url{font-size:11px;color:rgba(255,255,255,.2);letter-spacing:.06em;margin:0 auto}
+
+    /* INCLUDES */
+    .includes{padding:100px 52px;border-bottom:1px solid var(--border)}
+    .inc-cols{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:960px;margin-top:64px}
+    .inc-item{display:flex;align-items:center;gap:24px;padding:20px 0;border-bottom:1px solid var(--border)}
+    .inc-cols .inc-item:nth-last-child(-n+2){border-bottom:none}
+    .inc-check{flex-shrink:0}
+    .inc-text{font-size:14px;font-weight:300;color:rgba(255,255,255,.6);letter-spacing:.02em}
+
+    /* FAQ */
+    .faq{padding:100px 52px;background:var(--s1);border-bottom:1px solid var(--border)}
+    .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:64px}
+    .faq-item{padding:32px 40px 32px 0;border-top:1px solid var(--border)}
+    .faq-item:nth-child(2n){padding-left:40px;padding-right:0;border-left:1px solid var(--border)}
+    .faq-q{font-weight:300;font-size:17px;letter-spacing:.04em;margin-bottom:12px;color:var(--white)}
+    .faq-a{font-size:14px;font-weight:300;color:rgba(255,255,255,.78);line-height:1.8}
+
+    /* CTA */
+    .cta{background:var(--white);color:#080808;padding:140px 52px;text-align:center}
+    .cta-tag{font-size:11px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:#888;margin-bottom:40px}
+    .cta-h{font-weight:200;font-size:clamp(52px,8vw,108px);letter-spacing:.04em;text-transform:uppercase;line-height:.9;margin-bottom:24px;color:#080808}
+    .cta-p{font-size:clamp(14px,1.4vw,17px);font-weight:300;color:#666;margin-bottom:52px;max-width:500px;margin-left:auto;margin-right:auto}
+    .cta-acts{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap}
+    .btn-b{background:#080808;color:var(--white);border:none;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;padding:17px 48px;text-decoration:none;display:inline-block;transition:opacity .2s}
+    .btn-b:hover{opacity:.8}
+    .btn-o{background:transparent;border:1px solid rgba(0,0,0,.15);color:#666;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;padding:16px 40px;text-decoration:none;display:inline-block;transition:all .2s}
+    .btn-o:hover{border-color:#888;color:#080808}
+
+    /* FOOTER */
+    footer{background:var(--bg);padding:40px 52px;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+    .f-links{display:flex;gap:24px}
+    .f-links a{font-size:12px;font-weight:300;color:rgba(255,255,255,.52);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+    .f-links a:hover{color:var(--white)}
+    .f-r{font-size:12px;color:rgba(255,255,255,.42);font-weight:300}
+
+    /* ── AMBER THEME ── */
+    :root{--amber:rgba(255,200,80,.9);--amber-dim:rgba(255,200,80,.18);--amber-faint:rgba(255,200,80,.05)}
+    .hero{background:radial-gradient(ellipse 60% 50% at 50% 100%,rgba(255,200,80,.04) 0%,transparent 65%),var(--bg)}
+    .hs-val{background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sec-tag::before{background:var(--amber)!important;opacity:.6}
+    .mg-n{color:rgba(255,200,80,.06)!important}
+    .inc-check polyline{stroke:rgba(255,200,80,.55)!important}
+    .faq-q{color:var(--white);position:relative}
+    .cta{position:relative;overflow:hidden}
+    .cta::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 60% at 50% 100%,rgba(255,200,80,.06) 0%,transparent 60%)}
+
+    @media(max-width:900px){
+      nav{padding:20px 24px}
+      .hero{grid-template-columns:1fr;gap:48px;padding:140px 24px 72px}
+      .hero-right{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border)}
+      .hero-stat{padding:24px}
+      .model{padding:72px 24px}
+      .model-grid{grid-template-columns:1fr}
+      .mg{border-right:none;border-bottom:1px solid var(--border)}
+      .mg:last-child{border-bottom:none}
+      .visual{padding:0 24px 72px}
+      .includes{padding:72px 24px}
+      .inc-cols{grid-template-columns:1fr}
+      .inc-cols .inc-item:nth-last-child(-n+2){border-bottom:1px solid var(--border)}
+      .inc-cols .inc-item:last-child{border-bottom:none}
+      .faq{padding:72px 24px}
+      .faq-grid{grid-template-columns:1fr}
+      .faq-item:nth-child(2n){padding-left:0;border-left:none}
+      .cta{padding:80px 24px}
+      footer{padding:28px 24px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/">
+    <svg width="18" height="18" viewBox="0 0 54 54" fill="none"><polyline points="40,2 2,2 2,52 52,52 52,14" stroke="rgba(255,255,255,0.6)" stroke-width="1.8" fill="none" stroke-linecap="square" stroke-linejoin="miter"/><rect x="21" y="21" width="12" height="12" fill="rgba(255,255,255,0.6)"/></svg>
+    <span style="font-weight:200;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:#f2f2f0;">Concra</span>
+  </a>
+  <div class="nav-links">
+    <a href="/produkt">Produkt</a>
+    <a href="/priser" class="active">Priser</a>
+    <a href="/kontakt">Kontakt</a>
+  </div>
+  <a class="nbtn" href="/kontakt">Boka demo</a>
+  <button class="mob-btn" aria-label="Meny" onclick="document.getElementById('mob-overlay').classList.add('open')"><svg width="22" height="14" viewBox="0 0 22 14" fill="none"><line x1="0" y1="1" x2="22" y2="1" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="7" x2="22" y2="7" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="13" x2="22" y2="13" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/></svg></button>
+</nav>
+<div class="mob-overlay" id="mob-overlay">
+  <button class="mob-close" aria-label="Stäng" onclick="document.getElementById('mob-overlay').classList.remove('open')"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="1" y1="1" x2="19" y2="19" stroke="rgba(242,242,240,.45)" stroke-width="1.5"/><line x1="19" y1="1" x2="1" y2="19" stroke="rgba(242,242,240,.45)" stroke-width="1.5"/></svg></button>
+  <a href="/produkt">Produkt</a>
+  <a href="/priser">Priser</a>
+  <a href="/kontakt">Kontakt</a>
+  <a href="/kontakt" style="margin-top:16px;font-size:13px;letter-spacing:.18em;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);padding:14px 48px;border-bottom:none">Boka demo</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Kom igång</div>
+    <h1 class="hero-h">Låg<br>tröskel.<br><em>Ingen bindning.</em></h1>
+    <p class="hero-p">Hårdvaran betalas en gång per bil — sedan betalar ni per levererat lass. Ingen bindningstid, inga månadsavgifter. Prissättningen diskuterar vi under demo-samtalet.</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat">
+      <div class="hs-val" style="font-size:clamp(24px,3vw,40px);padding-top:8px">Engångskostnad</div>
+      <div class="hs-lbl">Hårdvara per bil</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-val">1 dag</div>
+      <div class="hs-lbl">Tid till igång</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-val">0</div>
+      <div class="hs-lbl">Månaders bindning</div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL -->
+<section class="model">
+  <div class="sec-tag">Affärsmodell</div>
+  <h2 class="sec-h">Enkelt.<br>Rättvist.</h2>
+  <div class="model-grid">
+    <div class="mg">
+      <div class="mg-n">01</div>
+      <div class="mg-h">Pay as you go</div>
+      <p class="mg-b">Ni betalar per levererat lass. Kör ni lite en månad betalar ni lite. Kör ni mycket betalar ni mer. Precis som det ska vara.</p>
+    </div>
+    <div class="mg">
+      <div class="mg-n">02</div>
+      <div class="mg-h">Allt ingår</div>
+      <p class="mg-b">GPS, fakturering, chaufförsgränssnitt, SMS-notiser, CO₂-data, bokföringsintegration. Inga tilläggsmoduler. Inga surpriser.</p>
+    </div>
+    <div class="mg">
+      <div class="mg-n">03</div>
+      <div class="mg-h">Skalbart</div>
+      <p class="mg-b">1 bil eller 50 — modellen är densamma. Ni betalar inte för kapacitet ni inte använder. Volymen avgör, inte antalet licenser.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENSHOT -->
+<!-- INCLUDES -->
+<section class="includes">
+  <div class="sec-tag">Vad ingår</div>
+  <h2 class="sec-h">Hela plattformen.<br>Från dag ett.</h2>
+  <div class="inc-cols">
+    <div class="inc-item">
+      <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="inc-text">GPS-spårning i realtid</span>
+    </div>
+    <div class="inc-item">
+      <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="inc-text">Automatisk fakturering via ditt bokföringssystem</span>
+    </div>
+    <div class="inc-item">
+      <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="inc-text">Spårningslänk till kund via SMS när bilen lämnar fabriken</span>
+    </div>
+    <div class="inc-item">
+      <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="inc-text">CO₂-data per leverans (Boverket-standard)</span>
+    </div>
+    <div class="inc-item">
+      <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="inc-text">Dedikerat chaufförsgränssnitt med navigation</span>
+    </div>
+    <div class="inc-item">
+      <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="inc-text">Automatiska månadsinsikter och beslutsstöd</span>
+    </div>
+    <div class="inc-item">
+      <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="inc-text">Väder- och gjutdokumentation</span>
+    </div>
+    <div class="inc-item">
+      <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="inc-text">CSV-export och kredithantering</span>
+    </div>
+  </div>
+</section>
+
+<!-- GDPR TRUST -->
+<section style="padding:32px 52px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px">
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0"><path d="M9 1.5L2 4.5V9c0 3.6 2.8 6.9 7 7.5 4.2-.6 7-3.9 7-7.5V4.5L9 1.5z" stroke="rgba(255,255,255,0.3)" stroke-width="1.3" stroke-linejoin="round"/></svg>
+  <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,.58);line-height:1.7;max-width:700px">All data hanteras i enlighet med GDPR. Personuppgifter lagras inom EU och raderas på begäran. Ni äger er leveransdata — alltid.</p>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="sec-tag">Vanliga frågor</div>
+  <h2 class="sec-h">Bra att veta.</h2>
+  <div class="faq-grid">
+    <div class="faq-item">
+      <div class="faq-q">Hur fungerar betalningen?</div>
+      <p class="faq-a">Ni betalar per levererat lass, fakturerat månadsvis. Prissättningen diskuterar vi under demo-samtalet — den är enkel och transparent.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Hur lång är bindningstiden?</div>
+      <p class="faq-a">Ingen. Hårdvaran köper ni en gång — mjukvaran betalar ni per lass, löpande. Vill ni avsluta, avslutar ni. Inga förskottsbetalningar, inga månadsabonnemang.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Vad kostar hårdvaran?</div>
+      <p class="faq-a">En dedikerad terminal per bil — engångskostnad som vi går igenom under demo-samtalet. Vi hanterar konfiguration och driftsättning, ni behöver inte göra något tekniskt.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Fungerar det med mitt bokföringssystem?</div>
+      <p class="faq-a">Ja. Concra integrerar med Fortnox, Visma och Kleer. Artiklar, kunder och fakturor synkroniseras automatiskt.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Hur snabbt kan vi komma igång?</div>
+      <p class="faq-a">Samma dag. Koppla ert bokföringssystem, konfigurera fordon och priszoner — de flesta är igång på under en timme.</p>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Vad händer med vår data?</div>
+      <p class="faq-a">All data lagras i Sverige, krypterad, och delas aldrig med tredje part. Ni äger er data — alltid.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-tag">Nästa steg</div>
+  <h2 class="cta-h">Prata<br>med oss.</h2>
+  <p class="cta-p">30 minuter. Vi visar systemet live och berättar allt om prissättningen. Inga dolda avgifter, inga obehagliga överraskningar.</p>
+  <div class="cta-acts">
+    <a class="btn-b" href="/kontakt">Boka demo</a>
+    <a class="btn-o" href="/produkt">Se produkten</a>
+  </div>
+</section>
+
+<footer>
+  <a href="/" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+    <svg width="14" height="14" viewBox="0 0 54 54" fill="none"><polyline points="40,2 2,2 2,52 52,52 52,14" stroke="rgba(255,255,255,0.22)" stroke-width="1.8" fill="none" stroke-linecap="square" stroke-linejoin="miter"/><rect x="21" y="21" width="12" height="12" fill="rgba(255,255,255,0.22)"/></svg>
+    <span style="font-weight:200;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,0.22);">Concra</span>
+  </a>
+  <div class="f-links">
+    <a href="/produkt">Produkt</a>
+    <a href="/kalkylator">Kalkylator</a>
+    <a href="/betongklasser">Betongklasser</a>
+    <a href="/kontakt">Kontakt</a>
+  </div>
+  <div class="f-r">© 2026 Concra</div>
+</footer>
+
+</body>
+</html>
