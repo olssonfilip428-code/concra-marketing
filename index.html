@@ -755,22 +755,22 @@ footer {
 <!-- SCREENSHOTS -->
 <section id="screenshots" style="max-width:100%; padding:100px 0; border-bottom:1px solid var(--border); background:var(--bg); overflow:hidden;">
   <div style="max-width:1100px; margin:0 auto; padding:0 48px;">
-    <p class="section-label" id="ssLabel" style="text-align:center;">Plattformen</p>
+    <p class="section-label" id="ssLabel" style="text-align:center;">Nyckelfunktioner</p>
     <h2 id="ssHeadline" style="font-size:clamp(28px,3.5vw,44px); font-weight:200; color:var(--white); text-align:center; margin-bottom:64px; line-height:1.2; opacity:0; transform:translateY(16px);">
-      Byggt för att användas,<br>inte för att imponera.
+      Varje funktion löser<br>ett verkligt problem.
     </h2>
 
     <!-- Tab nav -->
     <div id="ssTabs" style="display:flex; gap:0; border:1px solid var(--border2); margin-bottom:32px; opacity:0; transform:translateY(12px);">
-      <button onclick="showTab(0)" id="tab0" class="ss-tab ss-tab-active" style="flex:1; padding:12px; background:var(--white); color:#080808; font-size:12px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; border:none; cursor:pointer; transition:all 0.2s;">Översikt</button>
-      <button onclick="showTab(1)" id="tab1" class="ss-tab" style="flex:1; padding:12px; background:transparent; color:var(--dim); font-size:12px; font-weight:300; letter-spacing:0.1em; text-transform:uppercase; border:none; border-left:1px solid var(--border2); cursor:pointer; transition:all 0.2s;">Orderhantering</button>
+      <button onclick="showTab(0)" id="tab0" class="ss-tab ss-tab-active" style="flex:1; padding:12px; background:var(--white); color:#080808; font-size:12px; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; border:none; cursor:pointer; transition:all 0.2s;">Realtid</button>
+      <button onclick="showTab(1)" id="tab1" class="ss-tab" style="flex:1; padding:12px; background:transparent; color:var(--dim); font-size:12px; font-weight:300; letter-spacing:0.1em; text-transform:uppercase; border:none; border-left:1px solid var(--border2); cursor:pointer; transition:all 0.2s;">Ordrar</button>
       <button onclick="showTab(2)" id="tab2" class="ss-tab" style="flex:1; padding:12px; background:transparent; color:var(--dim); font-size:12px; font-weight:300; letter-spacing:0.1em; text-transform:uppercase; border:none; border-left:1px solid var(--border2); cursor:pointer; transition:all 0.2s;">Chaufför</button>
       <button onclick="showTab(3)" id="tab3" class="ss-tab" style="flex:1; padding:12px; background:transparent; color:var(--dim); font-size:12px; font-weight:300; letter-spacing:0.1em; text-transform:uppercase; border:none; border-left:1px solid var(--border2); cursor:pointer; transition:all 0.2s;">Fakturering</button>
     </div>
 
     <!-- Browser frame -->
     <div id="ssFrame" style="opacity:0; transform:translateY(20px);">
-      <div style="background:#1a1a1a; border:1px solid var(--border2); border-bottom:none; padding:10px 16px; display:flex; align-items:center; gap:8px; border-radius:6px 6px 0 0;">
+      <div style="background:#1a1a1a; border:1px solid var(--border2); border-bottom:none; padding:10px 16px; display:flex; align-items:center; gap:8px;">
         <div style="width:10px; height:10px; border-radius:50%; background:#333;"></div>
         <div style="width:10px; height:10px; border-radius:50%; background:#333;"></div>
         <div style="width:10px; height:10px; border-radius:50%; background:#333;"></div>
@@ -778,8 +778,17 @@ footer {
           <span style="font-size:11px; color:var(--dim); letter-spacing:0.03em;">app.concra.online</span>
         </div>
       </div>
-      <div style="border:1px solid var(--border2); border-top:none; border-radius:0 0 6px 6px; overflow:hidden; background:#111; box-shadow:0 32px 80px rgba(0,0,0,0.6);">
-        <img id="ssImg" src="/img/screenshot-dashboard.jpg" alt="Concra dashboard" style="width:100%; display:block; transition:opacity 0.3s ease;" />
+      <div style="border:1px solid var(--border2); border-top:none; overflow:hidden; background:#111; box-shadow:0 32px 80px rgba(0,0,0,0.5);">
+        <img id="ssImg" src="/img/screenshot-dashboard.jpg" alt="Concra" style="width:100%; display:block; transition:opacity 0.25s ease;" />
+      </div>
+
+      <!-- Caption -->
+      <div style="border:1px solid var(--border); border-top:none; padding:32px 40px; display:flex; gap:48px; align-items:flex-start; background:var(--s1);">
+        <div style="flex:1;">
+          <h3 id="ssCapTitle" style="font-size:20px; font-weight:300; color:var(--white); margin-bottom:10px; transition:opacity 0.25s;">Realtid. Alltid.</h3>
+          <p id="ssCapText" style="font-size:15px; font-weight:300; line-height:1.75; color:var(--mid); transition:opacity 0.25s;">Se varje bil på kartan, live. Du vet exakt var varje lass befinner sig utan att ringa chauffören. Kunden frågar — du svarar direkt. Inga gissningar, inget väntande.</p>
+        </div>
+        <a href="#cta" style="padding:12px 28px; background:var(--white); color:#080808; font-size:13px; font-weight:400; letter-spacing:0.06em; text-decoration:none; white-space:nowrap; flex-shrink:0; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Boka demo</a>
       </div>
     </div>
   </div>
@@ -1225,19 +1234,43 @@ ctaTl
   .to('#ctaNote',     { opacity: 1, duration: 0.6 }, 0.65);
 
 // ── Screenshots tabs ─────────────────────────────────────────
-const tabImages = [
-  '/img/screenshot-dashboard.jpg',
-  '/img/screenshot-aktiva.jpg',
-  '/img/screenshot-chauf-order.jpg',
-  '/img/screenshot-invoice.jpg',
+const tabData = [
+  {
+    img: '/img/screenshot-dashboard.jpg',
+    title: 'Realtid. Alltid.',
+    text: 'Se varje bil på kartan, live. Du vet exakt var varje lass befinner sig utan att ringa chauffören. Kunden frågar — du svarar direkt. Inga gissningar, inget väntande.',
+  },
+  {
+    img: '/img/screenshot-aktiva.jpg',
+    title: 'Full kontroll på en skärm.',
+    text: 'Alla aktiva leveranser samlade i ett flöde — status, förare, adress och volym. Ingen radiokontakt, inget spring. Disponenten ser allt och kan agera direkt.',
+  },
+  {
+    img: '/img/screenshot-chauf-order.jpg',
+    title: 'Byggd för betongbilen.',
+    text: 'Chauffören ser sina ordrar och bekräftar lastning och lossning med ett tryck. Inga lappar, ingen privat telefon. Gränssnittet fungerar med handskar på — i alla väder.',
+  },
+  {
+    img: '/img/screenshot-invoice.jpg',
+    title: 'Ordern avslutas. Fakturan skapar sig själv.',
+    text: 'När leveransen är klar synkas allt automatiskt till Fortnox, Visma eller Kleer. Korrekt volym, rätt kund, rätt pris — direkt. Utan att du öppnat ett kalkylblad.',
+  },
 ];
 function showTab(i) {
   const img = document.getElementById('ssImg');
+  const title = document.getElementById('ssCapTitle');
+  const text = document.getElementById('ssCapText');
   img.style.opacity = '0';
+  title.style.opacity = '0';
+  text.style.opacity = '0';
   setTimeout(() => {
-    img.src = tabImages[i];
+    img.src = tabData[i].img;
+    title.textContent = tabData[i].title;
+    text.textContent = tabData[i].text;
     img.style.opacity = '1';
-  }, 200);
+    title.style.opacity = '1';
+    text.style.opacity = '1';
+  }, 250);
   document.querySelectorAll('.ss-tab').forEach((t, j) => {
     if (j === i) {
       t.style.background = 'var(--white)';
