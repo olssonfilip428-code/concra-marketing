@@ -751,40 +751,6 @@ footer {
 <!-- DIVIDER -->
 <div class="divider"></div>
 
-<!-- DEMO VIDEO -->
-<section id="demo" style="padding:100px 48px; max-width:100%; border-bottom:1px solid var(--border); background:var(--s1);">
-  <div style="max-width:960px; margin:0 auto;">
-    <p id="demoLabel" class="section-label" style="text-align:center;">Se det i action</p>
-    <h2 id="demoHeadline" style="font-size:clamp(28px,3.5vw,44px); font-weight:200; color:var(--white); text-align:center; margin-bottom:16px; line-height:1.2; opacity:0; transform:translateY(16px);">
-      Concra — live demo
-    </h2>
-    <p style="text-align:center; font-size:14px; font-weight:300; color:var(--dim); margin-bottom:48px; letter-spacing:0.06em;">2 minuter. Hela systemet.</p>
-
-    <!-- Screen frame -->
-    <div id="demoEmbed" style="opacity:0; transform:translateY(20px);">
-      <!-- Top bar — browser chrome illusion -->
-      <div style="background:#1a1a1a; border:1px solid var(--border2); border-bottom:none; padding:10px 16px; display:flex; align-items:center; gap:8px; border-radius:6px 6px 0 0;">
-        <div style="width:10px; height:10px; border-radius:50%; background:#333;"></div>
-        <div style="width:10px; height:10px; border-radius:50%; background:#333;"></div>
-        <div style="width:10px; height:10px; border-radius:50%; background:#333;"></div>
-        <div style="flex:1; background:#111; border-radius:3px; height:20px; margin:0 12px; display:flex; align-items:center; padding:0 10px;">
-          <span style="font-size:11px; color:var(--dim); letter-spacing:0.03em;">app.concra.se</span>
-        </div>
-      </div>
-      <!-- Video -->
-      <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border:1px solid var(--border2); border-top:none; border-radius:0 0 6px 6px; background:#000; box-shadow:0 32px 80px rgba(0,0,0,0.6);">
-        <video
-          controls
-          preload="metadata"
-          style="position:absolute; top:0; left:0; width:100%; height:100%; outline:none;"
-        >
-          <source src="/video/demo.mp4" type="video/mp4">
-        </video>
-      </div>
-    </div>
-
-  </div>
-</section>
 
 <!-- SCREENSHOTS -->
 <section id="screenshots" style="max-width:100%; padding:100px 0; border-bottom:1px solid var(--border); background:var(--bg); overflow:hidden;">
@@ -1193,11 +1159,6 @@ gsap.to('#solutionReveal', { opacity: 1, y: 0, duration: 1.0, delay: 0.1, scroll
 ['#feat1','#feat2','#feat3'].forEach((id, i) =>
   gsap.to(id, { opacity: 1, y: 0, duration: 0.8, delay: i * 0.12, scrollTrigger: once('#solution') })
 );
-
-// ── Demo ─────────────────────────────────────────────────────
-gsap.to('#demoLabel',    { opacity: 1, duration: 0.7, scrollTrigger: once('#demo') });
-gsap.to('#demoHeadline', { opacity: 1, y: 0, duration: 0.9, delay: 0.1, scrollTrigger: once('#demo') });
-gsap.to('#demoEmbed',    { opacity: 1, y: 0, duration: 1.0, delay: 0.2, scrollTrigger: once('#demo') });
 
 // ── Stats ───────────────────────────────────────────────────
 gsap.to('#statsLabel',    { opacity: 1, duration: 0.7, scrollTrigger: once('#stats') });
