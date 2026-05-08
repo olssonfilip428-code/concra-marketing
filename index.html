@@ -766,7 +766,6 @@ footer {
       <button onclick="showTab(1)" id="tab1" class="ss-tab" style="flex:1; padding:12px; background:transparent; color:var(--dim); font-size:12px; font-weight:300; letter-spacing:0.1em; text-transform:uppercase; border:none; border-left:1px solid var(--border2); cursor:pointer; transition:all 0.2s;">Ordrar</button>
       <button onclick="showTab(2)" id="tab2" class="ss-tab" style="flex:1; padding:12px; background:transparent; color:var(--dim); font-size:12px; font-weight:300; letter-spacing:0.1em; text-transform:uppercase; border:none; border-left:1px solid var(--border2); cursor:pointer; transition:all 0.2s;">Chaufför</button>
       <button onclick="showTab(3)" id="tab3" class="ss-tab" style="flex:1; padding:12px; background:transparent; color:var(--dim); font-size:12px; font-weight:300; letter-spacing:0.1em; text-transform:uppercase; border:none; border-left:1px solid var(--border2); cursor:pointer; transition:all 0.2s;">Fakturering</button>
-      <button onclick="showTab(4)" id="tab4" class="ss-tab" style="flex:1; padding:12px; background:transparent; color:var(--dim); font-size:12px; font-weight:300; letter-spacing:0.1em; text-transform:uppercase; border:none; border-left:1px solid var(--border2); cursor:pointer; transition:all 0.2s;">Dagsplan</button>
     </div>
 
     <!-- Browser frame -->
@@ -779,8 +778,12 @@ footer {
           <span style="font-size:11px; color:var(--dim); letter-spacing:0.03em;">app.concra.online</span>
         </div>
       </div>
-      <div style="border:1px solid var(--border2); border-top:none; overflow:hidden; background:#111; box-shadow:0 32px 80px rgba(0,0,0,0.5);">
+      <div style="border:1px solid var(--border2); border-top:none; overflow:hidden; background:#111; box-shadow:0 32px 80px rgba(0,0,0,0.5); position:relative;">
         <img id="ssImg" src="/img/screenshot-dashboard.jpg" alt="Concra" style="width:100%; display:block; transition:opacity 0.25s ease;" />
+        <div id="ssDots" style="display:none; position:absolute; bottom:14px; left:50%; transform:translateX(-50%); gap:6px; align-items:center;">
+          <div class="ss-dot" onclick="slideTo(0)" style="width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.9); cursor:pointer;"></div>
+          <div class="ss-dot" onclick="slideTo(1)" style="width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.3); cursor:pointer;"></div>
+        </div>
       </div>
 
       <!-- Caption -->
@@ -1240,43 +1243,79 @@ const tabData = [
     img: '/img/screenshot-dashboard.jpg',
     title: 'Realtid. Alltid.',
     text: 'Se varje bil på kartan, live. Du vet exakt var varje lass befinner sig utan att ringa chauffören. Kunden frågar — du svarar direkt. Inga gissningar, inget väntande.',
+    slides: null,
   },
   {
     img: '/img/screenshot-aktiva.jpg',
     title: 'Full kontroll på en skärm.',
     text: 'Alla aktiva leveranser samlade i ett flöde — status, förare, adress och volym. Ingen radiokontakt, inget spring. Disponenten ser allt och kan agera direkt.',
+    slides: null,
   },
   {
     img: '/img/screenshot-chauf-order.jpg',
     title: 'Byggd för betongbilen.',
     text: 'Chauffören ser sina ordrar och bekräftar lastning och lossning med ett tryck. Inga lappar, ingen privat telefon. Gränssnittet fungerar med handskar på — i alla väder.',
+    slides: ['/img/screenshot-chauf-order.jpg', '/img/screenshot-chauf-nav.jpg'],
   },
   {
     img: '/img/screenshot-invoice.jpg',
     title: 'Ordern avslutas. Fakturan skapar sig själv.',
     text: 'När leveransen är klar synkas allt automatiskt till Fortnox, Visma eller Kleer. Korrekt volym, rätt kund, rätt pris — direkt. Utan att du öppnat ett kalkylblad.',
-  },
-  {
-    img: '/img/screenshot-chauf-nav.jpg',
-    title: 'Dagens jobb. Direkt i handen.',
-    text: 'Chauffören öppnar appen och ser alla dagens uppdrag — kund, adress, volym och betongklass. Statusen uppdateras i realtid. Disponenten ser exakt vad som är gjort och vad som är kvar.',
+    slides: null,
   },
 ];
+
+let activeTab = 0;
+let slideIndex = 0;
+let slideTimer = null;
+
+function slideTo(idx) {
+  const tab = tabData[activeTab];
+  if (!tab.slides) return;
+  slideIndex = idx;
+  const img = document.getElementById('ssImg');
+  img.style.opacity = '0';
+  setTimeout(() => { img.src = tab.slides[slideIndex]; img.style.opacity = '1'; }, 250);
+  document.querySelectorAll('.ss-dot').forEach((d, j) => {
+    d.style.background = j === slideIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)';
+  });
+}
+
+function startSlideshow(tab) {
+  clearInterval(slideTimer);
+  if (!tab.slides) return;
+  slideTimer = setInterval(() => {
+    slideTo((slideIndex + 1) % tab.slides.length);
+  }, 2800);
+}
+
 function showTab(i) {
+  clearInterval(slideTimer);
+  slideIndex = 0;
+  activeTab = i;
+  const tab = tabData[i];
   const img = document.getElementById('ssImg');
   const title = document.getElementById('ssCapTitle');
   const text = document.getElementById('ssCapText');
+  const dots = document.getElementById('ssDots');
   img.style.opacity = '0';
   title.style.opacity = '0';
   text.style.opacity = '0';
   setTimeout(() => {
-    img.src = tabData[i].img;
-    title.textContent = tabData[i].title;
-    text.textContent = tabData[i].text;
+    img.src = tab.img;
+    title.textContent = tab.title;
+    text.textContent = tab.text;
     img.style.opacity = '1';
     title.style.opacity = '1';
     text.style.opacity = '1';
   }, 250);
+  dots.style.display = tab.slides ? 'flex' : 'none';
+  if (tab.slides) {
+    document.querySelectorAll('.ss-dot').forEach((d, j) => {
+      d.style.background = j === 0 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)';
+    });
+    startSlideshow(tab);
+  }
   document.querySelectorAll('.ss-tab').forEach((t, j) => {
     if (j === i) {
       t.style.background = 'var(--white)';
