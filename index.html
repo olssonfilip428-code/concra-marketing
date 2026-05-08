@@ -579,49 +579,51 @@ footer {
 }
 
 /* ── STORY ──────────────────────────────────────────────── */
-#story { padding: 80px 0 0; }
-.story-head { text-align: center; padding: 0 48px 52px; }
-.story-headline {
-  font-size: clamp(36px, 5vw, 62px);
-  font-weight: 200; line-height: 1.1;
-  color: var(--white); margin-bottom: 14px;
-  opacity: 0; transform: translateY(20px);
-}
-.story-sub {
-  font-size: 15px; font-weight: 300; line-height: 1.65;
-  color: var(--mid); max-width: 420px; margin: 0 auto;
-  opacity: 0; transform: translateY(10px);
-}
-/* Stage — simple fixed-height box, position:relative for inner */
+/* Stage är hela sektionen — ingen padding, ingen story-head ovan kartan */
+#story { padding: 0; }
 .story-stage {
-  height: 86vh; min-height: 560px;
+  height: 100vh; min-height: 600px;
   position: relative;
-}
-/* Inner — THIS is the containing block for all absolute children */
-.story-inner {
-  position: relative;
-  width: 100%; height: 100%;
   background: #080808;
   overflow: hidden;
 }
-#story-map {
+/* Mapbox-wrapper: Mapbox skriver position:relative på containern,
+   så vi wrapper:ar den i ett absolut positioned skal */
+.story-map-wrap {
   position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  background: #0d0d0d;
 }
-/* Edge vignettes */
+#story-map { width: 100%; height: 100%; background: #0d0d0d; }
+/* Vignett: tung gradient uppifrån (rubrik-yta) + sidor */
 .story-vignette {
   position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(8,8,8,0.55) 0%, transparent 18%),
-    linear-gradient(to top,    rgba(8,8,8,0.45) 0%, transparent 18%);
+    linear-gradient(to bottom, rgba(8,8,8,0.82) 0%, rgba(8,8,8,0.35) 28%, transparent 50%),
+    linear-gradient(to top,    rgba(8,8,8,0.5)  0%, transparent 22%),
+    linear-gradient(to right,  rgba(8,8,8,0.88) 0%, transparent 38%);
 }
+/* Rubrik inlagd i kartans övre vänstra hörn */
+.story-top {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+  padding: 36px 52px 0;
+}
+.story-label-top {
+  font-size: 10px; font-weight: 400; letter-spacing: 0.38em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4); margin-bottom: 10px;
+  opacity: 0; transform: translateY(8px); transition: opacity 0.7s, transform 0.7s;
+}
+.story-label-top.visible { opacity: 1; transform: translateY(0); }
+.story-headline {
+  font-size: clamp(28px, 3.8vw, 52px);
+  font-weight: 200; line-height: 1.12;
+  color: var(--white); max-width: 520px;
+  opacity: 0; transform: translateY(12px); transition: opacity 0.9s 0.12s, transform 0.9s 0.12s;
+}
+.story-headline.visible { opacity: 1; transform: translateY(0); }
 /* Left gradient + step nav */
 .story-left {
   position: absolute; top: 0; left: 0; bottom: 0;
-  width: 300px; z-index: 5;
-  background: linear-gradient(to right, rgba(8,8,8,0.96) 58%, transparent);
-  display: flex; align-items: center; padding: 0 48px;
+  width: 290px; z-index: 5;
+  display: flex; align-items: center; padding: 0 52px;
   pointer-events: none;
 }
 .story-steps { display: flex; flex-direction: column; gap: 0; pointer-events: auto; }
@@ -1284,16 +1286,15 @@ footer {
 
 <!-- STORY -->
 <section id="story">
-  <div class="story-head">
-    <p class="section-label" id="storyLabel">Så här fungerar det</p>
-    <h2 class="story-headline" id="storyHeadline">En leverans.<br>Realtid hela vägen.</h2>
-    <p class="story-sub" id="storySub">En betongleverans från order till faktura — utan ett enda manuellt steg.</p>
-  </div>
-
   <div class="story-stage">
-    <div class="story-inner">
-      <div id="story-map"></div>
-      <div class="story-vignette"></div>
+    <div class="story-map-wrap"><div id="story-map"></div></div>
+    <div class="story-vignette"></div>
+
+    <!-- Rubrik inlagd i kartan -->
+    <div class="story-top">
+      <p class="story-label-top" id="storyLabel">Så här fungerar det</p>
+      <h2 class="story-headline" id="storyHeadline">En leverans.<br>Realtid hela vägen.</h2>
+    </div>
 
       <!-- Left: step nav -->
       <div class="story-left">
@@ -1404,7 +1405,6 @@ footer {
       <div class="story-bar"><div class="story-bar-fill" id="storyBar"></div></div>
       <button class="story-replay" id="storyReplay">&#8635;&ensp;Replay</button>
 
-    </div><!-- /story-inner -->
   </div><!-- /story-stage -->
 </section>
 
@@ -1691,41 +1691,63 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
 (function() {
   if (typeof mapboxgl === 'undefined' || !window.MAPBOX_TOKEN) return;
 
-  // Rutt Mölndal → Kungsbacka
+  // E6 Mölndal → Kungsbacka (riktiga vägkoordinater)
   const ROUTE = [
-    [12.0143, 57.6554],
-    [12.0210, 57.6390],
-    [12.0305, 57.6160],
-    [12.0410, 57.5930],
-    [12.0520, 57.5680],
-    [12.0635, 57.5420],
-    [12.0715, 57.5175],
-    [12.0765, 57.4877],
+    [12.0143, 57.6554], // Mölndal fabrik (start)
+    [12.0172, 57.6505],
+    [12.0198, 57.6455],
+    [12.0222, 57.6405],
+    [12.0248, 57.6352],
+    [12.0273, 57.6297],
+    [12.0297, 57.6240],
+    [12.0320, 57.6180],
+    [12.0346, 57.6118],
+    [12.0372, 57.6055],
+    [12.0398, 57.5990],
+    [12.0423, 57.5924],
+    [12.0447, 57.5858],
+    [12.0469, 57.5792],
+    [12.0490, 57.5726],
+    [12.0510, 57.5660],
+    [12.0530, 57.5593],
+    [12.0548, 57.5525],
+    [12.0563, 57.5457],
+    [12.0577, 57.5388],
+    [12.0590, 57.5318],
+    [12.0606, 57.5247],
+    [12.0624, 57.5176],
+    [12.0644, 57.5105],
+    [12.0665, 57.5034],
+    [12.0688, 57.4965],
+    [12.0710, 57.4930],
+    [12.0735, 57.4908],
+    [12.0752, 57.4890],
+    [12.0765, 57.4877], // Kungsbacka (mål)
   ];
 
-  // 5 steg × 4 s = 20 s
-  const STEP_MS = 4000;
+  // 5 steg × 6 s = 30 s
+  const STEP_MS = 6000;
   const TOTAL_MS = STEP_MS * 5;
 
   const STEPS = [
     {
-      cam: { center:[12.014,57.655], zoom:12.2, pitch:48, bearing:-12, duration:2800 },
+      cam: { center:[12.014,57.656], zoom:12.5, pitch:50, bearing:-10, duration:3200 },
       truck: false,
     },
     {
-      cam: { center:[12.038,57.590], zoom:11.0, pitch:52, bearing:165, duration:3200 },
-      truck: true, truckFrom:0, truckTo:0.25,
+      cam: { center:[12.035,57.606], zoom:11.2, pitch:54, bearing:168, duration:3800 },
+      truck: true, truckFrom:0, truckTo:0.28,
     },
     {
-      cam: { center:[12.058,57.546], zoom:11.8, pitch:57, bearing:172, duration:3200 },
-      truck: true, truckFrom:0.25, truckTo:0.62,
+      cam: { center:[12.055,57.552], zoom:11.8, pitch:58, bearing:174, duration:3800 },
+      truck: true, truckFrom:0.28, truckTo:0.63,
     },
     {
-      cam: { center:[12.076,57.488], zoom:13.2, pitch:62, bearing:190, duration:3000 },
-      truck: true, truckFrom:0.62, truckTo:1.0,
+      cam: { center:[12.076,57.488], zoom:13.0, pitch:62, bearing:190, duration:3400 },
+      truck: true, truckFrom:0.63, truckTo:1.0,
     },
     {
-      cam: { center:[12.038,57.572], zoom:9.8,  pitch:18, bearing:0,   duration:2600 },
+      cam: { center:[12.040,57.572], zoom:10.0, pitch:20, bearing:0,   duration:3000 },
       truck: false,
     },
   ];
@@ -1926,10 +1948,14 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
   }, { threshold: 0.4 });
   io.observe(document.querySelector('.story-stage'));
 
-  // Header fade-in
-  gsap.to('#storyLabel',    { opacity:1, duration:0.7, scrollTrigger:{ trigger:'#story', start:'top 80%' } });
-  gsap.to('#storyHeadline', { opacity:1, y:0, duration:1.0, delay:0.1, scrollTrigger:{ trigger:'#story', start:'top 80%' } });
-  gsap.to('#storySub',      { opacity:1, y:0, duration:0.9, delay:0.2, scrollTrigger:{ trigger:'#story', start:'top 80%' } });
+  // Header fade-in (CSS-transition via class)
+  const headIO = new IntersectionObserver((entries) => {
+    if (!entries[0].isIntersecting) return;
+    document.getElementById('storyLabel').classList.add('visible');
+    setTimeout(() => document.getElementById('storyHeadline').classList.add('visible'), 120);
+    headIO.disconnect();
+  }, { threshold: 0.2 });
+  headIO.observe(document.getElementById('story'));
 })();
 
 // ── Demo form ────────────────────────────────────────────────
