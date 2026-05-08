@@ -579,50 +579,46 @@ footer {
 }
 
 /* ── STORY ──────────────────────────────────────────────── */
-/* Stage är hela sektionen — ingen padding, ingen story-head ovan kartan */
+/* Mapbox sätter position:relative på #story-map — det är OK.
+   Vi sätter explicit höjd, och lägger alla overlays INUTI containern
+   så de alltid är innanför kartan. */
 #story { padding: 0; }
-.story-stage {
-  height: 100vh; min-height: 600px;
-  position: relative;
-  background: #080808;
-  overflow: hidden;
+#story-map {
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  background: #0d0d0d;
+  /* Mapbox skriver position:relative här — det är containing block för overlays */
 }
-/* Mapbox-wrapper: Mapbox skriver position:relative på containern,
-   så vi wrapper:ar den i ett absolut positioned skal */
-.story-map-wrap {
-  position: absolute; inset: 0;
-}
-#story-map { width: 100%; height: 100%; background: #0d0d0d; }
-/* Vignett: tung gradient uppifrån (rubrik-yta) + sidor */
+/* Alla overlays: position:absolute relativt #story-map */
 .story-vignette {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(8,8,8,0.82) 0%, rgba(8,8,8,0.35) 28%, transparent 50%),
-    linear-gradient(to top,    rgba(8,8,8,0.5)  0%, transparent 22%),
-    linear-gradient(to right,  rgba(8,8,8,0.88) 0%, transparent 38%);
+    linear-gradient(to bottom, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.3) 26%, transparent 46%),
+    linear-gradient(to top,    rgba(8,8,8,0.5)  0%, transparent 20%),
+    linear-gradient(to right,  rgba(8,8,8,0.9)  0%, transparent 36%);
 }
-/* Rubrik inlagd i kartans övre vänstra hörn */
 .story-top {
-  position: absolute; top: 0; left: 0; right: 0; z-index: 5;
-  padding: 36px 52px 0;
+  position: absolute; top: 0; left: 0; right: 0; z-index: 6;
+  padding: 40px 56px 0; pointer-events: none;
 }
 .story-label-top {
   font-size: 10px; font-weight: 400; letter-spacing: 0.38em; text-transform: uppercase;
-  color: rgba(255,255,255,0.4); margin-bottom: 10px;
+  color: rgba(255,255,255,0.38); margin-bottom: 10px;
   opacity: 0; transform: translateY(8px); transition: opacity 0.7s, transform 0.7s;
 }
 .story-label-top.visible { opacity: 1; transform: translateY(0); }
 .story-headline {
-  font-size: clamp(28px, 3.8vw, 52px);
+  font-size: clamp(26px, 3.6vw, 50px);
   font-weight: 200; line-height: 1.12;
-  color: var(--white); max-width: 520px;
-  opacity: 0; transform: translateY(12px); transition: opacity 0.9s 0.12s, transform 0.9s 0.12s;
+  color: var(--white); max-width: 500px;
+  opacity: 0; transform: translateY(12px); transition: opacity 0.9s 0.1s, transform 0.9s 0.1s;
 }
 .story-headline.visible { opacity: 1; transform: translateY(0); }
-/* Left gradient + step nav */
+/* Steg-nav — vänster, inuti #story-map */
 .story-left {
   position: absolute; top: 0; left: 0; bottom: 0;
-  width: 290px; z-index: 5;
+  width: 280px; z-index: 6;
   display: flex; align-items: center; padding: 0 52px;
   pointer-events: none;
 }
@@ -1286,11 +1282,12 @@ footer {
 
 <!-- STORY -->
 <section id="story">
-  <div class="story-stage">
-    <div class="story-map-wrap"><div id="story-map"></div></div>
+  <!-- #story-map är Mapbox-containern. Mapbox sätter position:relative på den,
+       vilket gör den till containing block. Alla overlays ligger inuti den. -->
+  <div id="story-map">
     <div class="story-vignette"></div>
 
-    <!-- Rubrik inlagd i kartan -->
+    <!-- Rubrik uppe till vänster i kartan -->
     <div class="story-top">
       <p class="story-label-top" id="storyLabel">Så här fungerar det</p>
       <h2 class="story-headline" id="storyHeadline">En leverans.<br>Realtid hela vägen.</h2>
@@ -1405,7 +1402,7 @@ footer {
       <div class="story-bar"><div class="story-bar-fill" id="storyBar"></div></div>
       <button class="story-replay" id="storyReplay">&#8635;&ensp;Replay</button>
 
-  </div><!-- /story-stage -->
+  </div><!-- /#story-map -->
 </section>
 
 <!-- CTA -->
@@ -1687,43 +1684,28 @@ gsap.to('#intLabel',   { opacity: 1, duration: 0.7, scrollTrigger: once('#integr
 gsap.to('#intGrid',    { opacity: 1, y: 0, duration: 0.9, delay: 0.1, scrollTrigger: once('#integrations') });
 gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: once('#integrations') });
 
-// ── Story — tidsbaserad autoplay (20 s) ──────────────────────
+// ── Story — tidsbaserad autoplay (30 s) ──────────────────────
 (function() {
   if (typeof mapboxgl === 'undefined' || !window.MAPBOX_TOKEN) return;
 
-  // E6 Mölndal → Kungsbacka (riktiga vägkoordinater)
-  const ROUTE = [
-    [12.0143, 57.6554], // Mölndal fabrik (start)
-    [12.0172, 57.6505],
-    [12.0198, 57.6455],
-    [12.0222, 57.6405],
-    [12.0248, 57.6352],
-    [12.0273, 57.6297],
-    [12.0297, 57.6240],
-    [12.0320, 57.6180],
-    [12.0346, 57.6118],
-    [12.0372, 57.6055],
-    [12.0398, 57.5990],
-    [12.0423, 57.5924],
-    [12.0447, 57.5858],
-    [12.0469, 57.5792],
-    [12.0490, 57.5726],
-    [12.0510, 57.5660],
-    [12.0530, 57.5593],
-    [12.0548, 57.5525],
-    [12.0563, 57.5457],
-    [12.0577, 57.5388],
-    [12.0590, 57.5318],
-    [12.0606, 57.5247],
-    [12.0624, 57.5176],
-    [12.0644, 57.5105],
-    [12.0665, 57.5034],
-    [12.0688, 57.4965],
-    [12.0710, 57.4930],
-    [12.0735, 57.4908],
-    [12.0752, 57.4890],
-    [12.0765, 57.4877], // Kungsbacka (mål)
-  ];
+  // Hämtar riktig väggeometri via Mapbox Directions API
+  let ROUTE = null; // fylls in asynkront
+
+  async function fetchRoute() {
+    const start = '12.0143,57.6554'; // Mölndal fabrik
+    const end   = '12.0765,57.4877'; // Kungsbacka
+    try {
+      const res = await fetch(
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}` +
+        `?geometries=geojson&overview=full&access_token=${mapboxgl.accessToken}`
+      );
+      const data = await res.json();
+      ROUTE = data.routes[0].geometry.coordinates; // [[lng,lat],...]
+    } catch(e) {
+      // Fallback: rak linje längs E6-korridoren
+      ROUTE = [[12.0143,57.6554],[12.0300,57.6180],[12.0510,57.5680],[12.0660,57.5140],[12.0765,57.4877]];
+    }
+  }
 
   // 5 steg × 6 s = 30 s
   const STEP_MS = 6000;
@@ -1769,22 +1751,29 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
   let truckRafId = null, truckStepStart = null;
 
   // ── Karta ────────────────────────────────────────────────
-  function initMap() {
+  async function initMap() {
     mapboxgl.accessToken = window.MAPBOX_TOKEN;
+
+    // Hämta väggeometri parallellt med kartinitieringen
+    const routePromise = fetchRoute();
+
     map = new mapboxgl.Map({
       container: 'story-map',
       style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: [12.04, 57.60], zoom: 8.5, pitch: 0, bearing: 0,
+      center: [12.04, 57.59], zoom: 9.0, pitch: 0, bearing: 0,
       interactive: false, attributionControl: false,
     });
-    map.on('load', () => {
+
+    map.on('load', async () => {
       map.resize();
+      await routePromise; // vänta på Directions-svaret
+
       map.addSource('route', { type:'geojson', data:{
         type:'Feature', geometry:{ type:'LineString', coordinates:ROUTE }
       }});
       map.addLayer({ id:'route-glow', type:'line', source:'route',
         layout:{'line-cap':'round','line-join':'round'},
-        paint:{'line-color':'#f5c842','line-width':14,'line-opacity':0.13,'line-blur':10}
+        paint:{'line-color':'#f5c842','line-width':14,'line-opacity':0.12,'line-blur':10}
       });
       map.addLayer({ id:'route-dash', type:'line', source:'route',
         layout:{'line-cap':'butt','line-join':'round'},
@@ -1946,7 +1935,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
       }, 100);
     }
   }, { threshold: 0.4 });
-  io.observe(document.querySelector('.story-stage'));
+  io.observe(document.getElementById('story-map'));
 
   // Header fade-in (CSS-transition via class)
   const headIO = new IntersectionObserver((entries) => {
@@ -1955,7 +1944,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     setTimeout(() => document.getElementById('storyHeadline').classList.add('visible'), 120);
     headIO.disconnect();
   }, { threshold: 0.2 });
-  headIO.observe(document.getElementById('story'));
+  headIO.observe(document.getElementById('story-map'));
 })();
 
 // ── Demo form ────────────────────────────────────────────────
