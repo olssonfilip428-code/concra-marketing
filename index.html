@@ -6,9 +6,6 @@
 <title>Concra — Betongbranschen i realtid</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta name="description" content="Realtidsspårning, automatisk fakturering och SMS till kunden. Concra är operativsystemet för betongbranschen.">
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet"/>
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
-<script src="/js/mapbox-token.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
@@ -578,46 +575,6 @@ footer {
   color: var(--dim); letter-spacing: 0.04em;
 }
 
-/* ── GTA INTRO ──────────────────────────────────────────── */
-#intro{position:fixed;inset:0;z-index:9998;background:#000;transition:opacity .9s ease}
-#intro-map{position:absolute;inset:0}
-#intro-scan{position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:repeating-linear-gradient(to bottom,rgba(0,0,0,.06) 0,rgba(0,0,0,.06) 1px,transparent 1px,transparent 3px)}
-#intro-vignette{position:absolute;inset:0;pointer-events:none;z-index:2;
-  background:radial-gradient(ellipse 78% 78% at 50% 50%,transparent 30%,rgba(0,0,0,.8) 100%)}
-.ic{position:absolute;width:52px;height:52px;z-index:3;pointer-events:none}
-#ic-tl{top:28px;left:28px;border-top:1px solid rgba(255,255,255,.3);border-left:1px solid rgba(255,255,255,.3)}
-#ic-br{bottom:28px;right:28px;border-bottom:1px solid rgba(255,255,255,.3);border-right:1px solid rgba(255,255,255,.3)}
-#intro-hud{position:absolute;top:32px;left:50%;transform:translateX(-50%);z-index:3;
-  font-size:10px;font-weight:300;letter-spacing:.38em;text-transform:uppercase;
-  color:rgba(255,255,255,.3);pointer-events:none;white-space:nowrap;
-  animation:hudpulse 2.5s ease-in-out infinite}
-@keyframes hudpulse{0%,100%{opacity:.3}50%{opacity:.7}}
-#intro-coords{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);z-index:3;
-  font-size:11px;font-weight:300;letter-spacing:.18em;color:rgba(255,255,255,.28);
-  pointer-events:none;font-variant-numeric:tabular-nums;white-space:nowrap}
-#intro-fade{position:absolute;inset:0;z-index:4;background:#080808;opacity:0;
-  transition:opacity 1.4s ease;pointer-events:none}
-#intro-brand{position:absolute;inset:0;z-index:5;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  opacity:0;transition:opacity .9s ease;pointer-events:none}
-.ib-word{font-size:clamp(48px,9vw,108px);font-weight:200;letter-spacing:.22em;
-  color:#f2f2f0;text-transform:uppercase}
-.ib-rule{width:220px;height:1px;margin:20px 0;
-  background:linear-gradient(90deg,transparent,rgba(255,200,80,.45),transparent)}
-.ib-tag{font-size:10px;font-weight:300;letter-spacing:.45em;text-transform:uppercase;
-  color:rgba(255,255,255,.3)}
-#intro-skip{position:absolute;bottom:28px;right:28px;z-index:6;
-  background:none;border:1px solid rgba(255,255,255,.13);
-  color:rgba(255,255,255,.32);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  padding:7px 14px;cursor:pointer;font-family:inherit;transition:all .2s}
-#intro-skip:hover{color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.28)}
-.intro-truck{width:10px;height:10px;border-radius:50%;background:#fff;
-  box-shadow:0 0 10px rgba(255,255,255,.7)}
-.intro-truck::after{content:'';position:absolute;inset:-6px;border-radius:50%;
-  border:1px solid rgba(255,255,255,.5);animation:itruckping 1.8s ease-out infinite}
-@keyframes itruckping{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(2.8)}}
-
 /* ── MOBILE ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
   nav { padding: 18px 24px; }
@@ -636,24 +593,6 @@ footer {
 </style>
 </head>
 <body>
-
-<!-- GTA INTRO -->
-<div id="intro">
-  <div id="intro-map"></div>
-  <div id="intro-scan"></div>
-  <div id="intro-vignette"></div>
-  <div class="ic" id="ic-tl"></div>
-  <div class="ic" id="ic-br"></div>
-  <div id="intro-hud">Göteborg &nbsp;·&nbsp; Sverige</div>
-  <div id="intro-coords">57.7089°N &nbsp; 11.9746°E</div>
-  <div id="intro-fade"></div>
-  <div id="intro-brand">
-    <div class="ib-word">Concra</div>
-    <div class="ib-rule"></div>
-    <div class="ib-tag">Betongbranschen i realtid</div>
-  </div>
-  <button id="intro-skip">Hoppa över</button>
-</div>
 
 <!-- Grain overlay -->
 <svg id="grain" xmlns="http://www.w3.org/2000/svg">
@@ -1212,7 +1151,7 @@ ScrollTrigger.create({
 });
 
 // ── Hero entrance ───────────────────────────────────────────
-const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, paused: true });
+const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 tl
   .to('#heroContent', { opacity: 1, duration: 0.1 }, 0)
   .to('#heroEmblem',  { opacity: 1, y: 0, duration: 1.0 }, 0.3)
@@ -1425,93 +1364,6 @@ function handleDemo(e) {
     body: JSON.stringify({ email }),
   }).catch(() => {});
 }
-
-// ── GTA INTRO ───────────────────────────────────────────────
-(function() {
-  document.body.style.overflow = 'hidden';
-
-  mapboxgl.accessToken = window.MAPBOX_TOKEN || '';
-
-  const map = new mapboxgl.Map({
-    container: 'intro-map',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [14.5, 61.0],
-    zoom: 4.2,
-    bearing: 0,
-    pitch: 0,
-    interactive: false,
-    attributionControl: false,
-  });
-
-  let done = false;
-
-  function endIntro() {
-    if (done) return;
-    done = true;
-    const el = document.getElementById('intro');
-    el.style.opacity = '0';
-    document.body.style.overflow = '';
-    tl.play();
-    setTimeout(() => el.remove(), 950);
-  }
-
-  document.getElementById('intro-skip').addEventListener('click', endIntro);
-
-  const coordsEl = document.getElementById('intro-coords');
-  map.on('move', () => {
-    const c = map.getCenter();
-    coordsEl.textContent =
-      `${c.lat.toFixed(4)}°N   ${c.lng.toFixed(4)}°E`;
-  });
-
-  const trucks = [
-    [11.9746, 57.7089],
-    [12.0143, 57.6554],
-    [12.1065, 57.7392],
-    [11.8430, 57.7150],
-    [11.9900, 57.7600],
-  ];
-
-  map.on('load', () => {
-    map.flyTo({
-      center: [11.9746, 57.7089],
-      zoom: 14.5,
-      bearing: -18,
-      pitch: 48,
-      duration: 5000,
-      easing: t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t,
-    });
-
-    // Lastbilar dyker upp efter inflyget
-    setTimeout(() => {
-      if (done) return;
-      trucks.forEach((c, i) => {
-        setTimeout(() => {
-          const el = document.createElement('div');
-          el.className = 'intro-truck';
-          el.style.position = 'relative';
-          new mapboxgl.Marker({ element: el }).setLngLat(c).addTo(map);
-        }, i * 200);
-      });
-    }, 5300);
-
-    // Tona till svart
-    setTimeout(() => {
-      if (!done) document.getElementById('intro-fade').style.opacity = '1';
-    }, 7200);
-
-    // Visa CONCRA
-    setTimeout(() => {
-      if (!done) document.getElementById('intro-brand').style.opacity = '1';
-    }, 8300);
-
-    // Avsluta intro
-    setTimeout(endIntro, 10400);
-  });
-
-  // Fallback om Mapbox inte laddar
-  setTimeout(endIntro, 16000);
-})();
 </script>
 </body>
 </html>
