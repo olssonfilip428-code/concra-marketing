@@ -779,7 +779,7 @@ footer {
         </div>
       </div>
       <div style="border:1px solid var(--border2); border-top:none; overflow:hidden; background:#111; box-shadow:0 32px 80px rgba(0,0,0,0.5); position:relative;">
-        <img id="ssImg" src="/img/screenshot-dashboard.jpg" alt="Concra" style="width:100%; display:block; transition:opacity 0.25s ease;" />
+        <img id="ssImg" src="/img/screenshot-dashboard.jpg" alt="Concra" style="width:100%; display:block; transition:opacity 0.6s ease;" />
         <div id="ssDots" style="display:none; position:absolute; bottom:14px; left:50%; transform:translateX(-50%); gap:6px; align-items:center;">
           <div class="ss-dot" onclick="slideTo(0)" style="width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.9); cursor:pointer;"></div>
           <div class="ss-dot" onclick="slideTo(1)" style="width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.3); cursor:pointer;"></div>
@@ -1275,7 +1275,7 @@ function slideTo(idx) {
   slideIndex = idx;
   const img = document.getElementById('ssImg');
   img.style.opacity = '0';
-  setTimeout(() => { img.src = tab.slides[slideIndex]; img.style.opacity = '1'; }, 250);
+  setTimeout(() => { img.src = tab.slides[slideIndex]; img.style.opacity = '1'; }, 600);
   document.querySelectorAll('.ss-dot').forEach((d, j) => {
     d.style.background = j === slideIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)';
   });
@@ -1286,7 +1286,7 @@ function startSlideshow(tab) {
   if (!tab.slides) return;
   slideTimer = setInterval(() => {
     slideTo((slideIndex + 1) % tab.slides.length);
-  }, 2800);
+  }, 5000);
 }
 
 function showTab(i) {
