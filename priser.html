@@ -108,29 +108,20 @@
     .f-links a:hover{color:var(--white)}
     .f-r{font-size:12px;color:rgba(255,255,255,.42);font-weight:300}
 
-    /* LIGHT SECTIONS */
-    .includes{background:#f2f1ef;border-color:rgba(0,0,0,.08)}
-    .includes .sec-tag{color:rgba(0,0,0,.32)}
-    .includes .sec-tag::before{background:rgba(160,110,20,.45)!important;opacity:1!important}
-    .includes .sec-h{color:#0c0c0c}
-    .inc-item{border-bottom-color:rgba(0,0,0,.1)}
-    .inc-cols .inc-item:nth-last-child(-n+2){border-bottom:none}
-    .inc-text{color:rgba(0,0,0,.6)!important}
-    .inc-check polyline{stroke:rgba(0,0,0,.35)!important}
-
-    .faq{background:#f2f1ef;border-color:rgba(0,0,0,.08)}
-    .faq .sec-tag{color:rgba(0,0,0,.32)}
-    .faq .sec-tag::before{background:rgba(160,110,20,.45)!important;opacity:1!important}
-    .faq .sec-h{color:#0c0c0c}
-    .faq-item{border-top-color:rgba(0,0,0,.1);border-color:rgba(0,0,0,.1)}
-    .faq-item:nth-child(2n){border-left-color:rgba(0,0,0,.1)}
-    .faq-q{color:#111!important}
-    .faq-a{color:rgba(0,0,0,.6)!important}
-
-    /* GDPR bar between light sections */
-    .gdpr-bar{background:#e8e7e5;border-color:rgba(0,0,0,.08)}
-    .gdpr-bar p{color:rgba(0,0,0,.5)!important}
-    .gdpr-bar svg path{stroke:rgba(0,0,0,.25)!important}
+    /* ── DJUP — upphöjda inslag inom mörkt tema ── */
+    :root{--card:#17150f;--card2:#1e1b14;--border-hi:rgba(255,255,255,.12)}
+    .hero-right{background:var(--card);border-color:var(--border-hi)}
+    .hero-stat{border-bottom-color:rgba(255,255,255,.1)}
+    .model{background:#0f0e0c}
+    .mg{background:rgba(255,255,255,.025)}
+    .mg:hover{background:rgba(255,255,255,.045)}
+    .model-grid{border-color:var(--border-hi)}
+    .mg{border-right-color:rgba(255,255,255,.1)}
+    .includes{background:#0d0c0a}
+    .inc-item{border-bottom-color:rgba(255,255,255,.09)}
+    .faq{background:#0f0e0c}
+    .faq-item{border-color:rgba(255,255,255,.09)}
+    .faq-item:nth-child(2n){border-left-color:rgba(255,255,255,.09)}
 
     /* ── AMBER THEME ── */
     :root{--amber:rgba(255,200,80,.9);--amber-dim:rgba(255,200,80,.18);--amber-faint:rgba(255,200,80,.05)}
@@ -277,7 +268,7 @@
 </section>
 
 <!-- GDPR TRUST -->
-<section class="gdpr-bar" style="padding:32px 52px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px">
+<section style="padding:32px 52px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px">
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0"><path d="M9 1.5L2 4.5V9c0 3.6 2.8 6.9 7 7.5 4.2-.6 7-3.9 7-7.5V4.5L9 1.5z" stroke="rgba(255,255,255,0.3)" stroke-width="1.3" stroke-linejoin="round"/></svg>
   <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,.58);line-height:1.7;max-width:700px">All data hanteras i enlighet med GDPR. Personuppgifter lagras inom EU och raderas på begäran. Ni äger er leveransdata — alltid.</p>
 </section>

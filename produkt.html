@@ -55,6 +55,7 @@
 
     .feat{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid rgba(255,255,255,.07);padding:100px 0}
     .feat:first-child{border-top:none}
+    .feat:nth-child(even){background:#0d0c0a;margin:0 -52px;padding-left:52px;padding-right:52px}
     .feat.rev .feat-vis{order:-1}
 
     .feat-text{padding-right:80px;display:flex;flex-direction:column;justify-content:center}
@@ -67,7 +68,7 @@
     .feat-list li{font-size:13px;font-weight:400;color:rgba(255,255,255,.55);list-style:none;display:flex;align-items:flex-start;gap:12px;letter-spacing:.02em}
     .feat-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);flex-shrink:0;margin-top:6px}
 
-    .feat-vis{background:var(--dark);border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden;min-height:420px;display:flex;align-items:center;justify-content:center}
+    .feat-vis{background:var(--dark);border:1px solid rgba(255,255,255,.12);position:relative;overflow:hidden;min-height:420px;display:flex;align-items:center;justify-content:center}
 
     /* SVG mock UIs */
     .mock{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:36px}
