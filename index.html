@@ -581,12 +581,48 @@ footer {
 /* ── STORY ──────────────────────────────────────────────── */
 /* section#story = containing block. #story-map forceas absolut
    med !important. Overlays ligger i section, INTE i map-div. */
+#story-wrap {
+  display: flex;
+  height: 75vh; min-height: 540px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
 #story {
   padding: 0; margin: 0;
-  height: 100vh; min-height: 600px;
+  width: 62%; height: 100%;
   position: relative;
   background: #0d0d0d;
   overflow: hidden;
+  flex-shrink: 0;
+}
+#story-side {
+  flex: 1;
+  background: #080808;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 56px 52px;
+  overflow: hidden;
+}
+.sp-label {
+  font-size: 10px; font-weight: 400; letter-spacing: 0.38em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28); margin-bottom: 36px;
+}
+.sp-list { display: flex; flex-direction: column; gap: 28px; }
+.sp-item { display: flex; gap: 18px; align-items: flex-start; }
+.sp-num {
+  font-size: 10px; font-weight: 400; letter-spacing: 0.15em;
+  color: #f5c842; flex-shrink: 0; margin-top: 3px;
+}
+.sp-item h4 {
+  font-size: 14px; font-weight: 400; color: var(--white);
+  margin-bottom: 5px; letter-spacing: 0.01em;
+}
+.sp-item p {
+  font-size: 13px; font-weight: 300; line-height: 1.65; color: var(--mid);
+}
+@media (max-width: 768px) {
+  #story-wrap { flex-direction: column; height: auto; }
+  #story { width: 100%; height: 75vw; min-height: 320px; }
+  #story-side { padding: 40px 24px; border-left: none; border-top: 1px solid rgba(255,255,255,0.07); }
 }
 #story-map,
 #story-map.mapboxgl-map {
@@ -1345,6 +1381,7 @@ footer {
 </section>
 
 <!-- STORY -->
+<div id="story-wrap">
 <section id="story">
   <!-- Mapbox-containern: BARA kartan här, inga overlays -->
   <div id="story-map"></div>
@@ -1440,6 +1477,41 @@ footer {
       <button class="story-replay" id="storyReplay">&#8635;&ensp;Replay</button>
 
 </section>
+
+<div id="story-side">
+  <p class="sp-label">Varför Concra</p>
+  <div class="sp-list">
+    <div class="sp-item">
+      <span class="sp-num">01</span>
+      <div>
+        <h4>Realtid hela vägen</h4>
+        <p>Kunden ser bilen live på kartan. Inga samtal om "när kommer ni" — svaret finns alltid på skärmen.</p>
+      </div>
+    </div>
+    <div class="sp-item">
+      <span class="sp-num">02</span>
+      <div>
+        <h4>Fakturan skapar sig själv</h4>
+        <p>Ordern avslutas — Fortnox uppdateras automatiskt. Korrekt, direkt, utan ett knapptryck.</p>
+      </div>
+    </div>
+    <div class="sp-item">
+      <span class="sp-num">03</span>
+      <div>
+        <h4>Kunden notifieras automatiskt</h4>
+        <p>SMS skickas vid avgång och ankomst. Ni slipper ringa — kunden vet redan.</p>
+      </div>
+    </div>
+    <div class="sp-item">
+      <span class="sp-num">04</span>
+      <div>
+        <h4>Noll bindningstid</h4>
+        <p>Betala per leverans. Inga setup-kostnader. Avsluta när ni vill.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- /#story-wrap -->
 
 <!-- CTA -->
 <section id="cta">
