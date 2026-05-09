@@ -1713,18 +1713,18 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
   const STEP_MS  = 12000;
   const TOTAL_MS = STEP_MS * 5;
 
-  // follow:true = kameran foljer bilen via jumpTo i realtid
+  // follow:true => jumpTo till bilens startpos direkt, sedan smooth follow
   const STEPS = [
-    // 0: Order skapad - overview depot+destination
-    { cam:{ center:[12.046,57.574], zoom:10.2, pitch:20, bearing:0,   duration:3500 }, truck:'park', follow:false },
-    // 1: Avgang - kamera foljer bilen
-    { cam:{ zoom:13.0, pitch:55, bearing:170, duration:3000 }, truck:true, truckFrom:0,    truckTo:0.28, follow:true  },
-    // 2: Live-ETA - foljer mitt pa stracktan
-    { cam:{ zoom:12.5, pitch:58, bearing:175, duration:2500 }, truck:true, truckFrom:0.28, truckTo:0.65, follow:true  },
-    // 3: Framme - kamera zoomar till jobbplatsen
-    { cam:{ center:DEST, zoom:14.5, pitch:62, bearing:210,    duration:3500 }, truck:true, truckFrom:0.65, truckTo:1.0, follow:false },
-    // 4: Faktura - pull-back overview
-    { cam:{ center:[12.046,57.574], zoom:10.0, pitch:15, bearing:0,   duration:4000 }, truck:'dest', follow:false },
+    // 0: Overview — depot + destination syns, bil parkerad
+    { cam:{ center:[12.046,57.574], zoom:10.2, pitch:20, bearing:0, duration:3200 }, truck:'park', follow:false },
+    // 1: Avgang — jump till bilens pos, folja lineärt
+    { cam:{ zoom:13.5, pitch:55, bearing:168 }, truck:true, truckFrom:0,    truckTo:0.28, follow:true  },
+    // 2: Live-ETA — folja mitt pa strackan
+    { cam:{ zoom:12.8, pitch:58, bearing:172 }, truck:true, truckFrom:0.28, truckTo:0.65, follow:true  },
+    // 3: Framme — kamera flyger till destination, bil kor in
+    { cam:{ center:DEST, zoom:14.5, pitch:60, bearing:200, duration:3200 }, truck:true, truckFrom:0.65, truckTo:1.0, follow:false },
+    // 4: Faktura — pull-back overview
+    { cam:{ center:[12.046,57.574], zoom:10.0, pitch:15, bearing:0, duration:3800 }, truck:'dest', follow:false },
   ];
 
   function lerp(a,b,t) { return a+(b-a)*t; }
@@ -1813,7 +1813,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     window.addEventListener('resize', () => map && map.resize());
   }
 
-  // ── Truck-animation (RAF + throttlad easeTo for camera) ────
+  // ── Truck-animation (RAF + smooth camera follow) ────────────
   function animateTruck(fromT, toT, stepDurationMs, followCam) {
     cancelAnimationFrame(truckRafId);
     truckStepStart = null;
@@ -1822,17 +1822,18 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     function tick(now) {
       if (!truckStepStart) truckStepStart = now;
       const frac = Math.min(1, (now-truckStepStart)/stepDurationMs);
-      const pos  = ptOnRoute(lerp(fromT, toT, ease(frac)));
+      // Linear vid follow (konstant hastighet), ease-out vid ankomst (steg 3)
+      const t   = followCam ? frac : ease(frac);
+      const pos = ptOnRoute(lerp(fromT, toT, t));
       truckMarker.setLngLat(pos);
-      // Kamera max 15fps med smooth easeTo
-      if (followCam && now - lastCam > 66) {
-        map.easeTo({ center: pos, duration: 200, easing: t => t, essential: true });
+      // Kamera 20fps, 130ms easeTo — minimal lag, max smidig
+      if (followCam && now - lastCam > 50) {
+        map.easeTo({ center: pos, duration: 130, easing: p => p, essential: true });
         lastCam = now;
       }
-      // Kord sträcka max 8fps
-      if (now - lastRoute > 125) {
-        const t = lerp(fromT, toT, ease(frac));
-        const cutIdx = Math.min(Math.floor(t * (ROUTE.length-1)), ROUTE.length-2);
+      // Kord stracka max 10fps
+      if (now - lastRoute > 100) {
+        const cutIdx = Math.min(Math.floor(lerp(fromT, toT, t) * (ROUTE.length-1)), ROUTE.length-2);
         const driven = ROUTE.slice(0, cutIdx+1).concat([pos]);
         try { map.getSource('route-done').setData({type:'Feature',geometry:{type:'LineString',coordinates:driven}}); } catch(e){}
         lastRoute = now;
@@ -1906,9 +1907,9 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     currentStep = idx;
     const s = STEPS[idx];
 
-    // Kamera
+    // Kamera: follow => jumpTo till bilens startpos (noll lag), annars flyTo
     if (s.follow) {
-      map.easeTo({ zoom:s.cam.zoom, pitch:s.cam.pitch, bearing:s.cam.bearing, duration:s.cam.duration, essential:true });
+      map.jumpTo({ center: ptOnRoute(s.truckFrom), zoom:s.cam.zoom, pitch:s.cam.pitch, bearing:s.cam.bearing });
     } else {
       map.flyTo({ ...s.cam, essential:true });
     }
