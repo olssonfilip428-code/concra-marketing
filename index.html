@@ -1699,7 +1699,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
       const res = await fetch(
         'https://api.mapbox.com/directions/v5/mapbox/driving/' +
         DEPOT[0]+','+DEPOT[1]+';'+DEST[0]+','+DEST[1] +
-        '?geometries=geojson&overview=simplified&access_token=' + mapboxgl.accessToken
+        '?geometries=geojson&overview=full&access_token=' + mapboxgl.accessToken
       );
       const data = await res.json();
       ROUTE = data.routes[0].geometry.coordinates;
@@ -1710,9 +1710,9 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
 
   const TOTAL_MS    = 60000;
   const TRUCK_START = 2800;   // bil borjar kora vid 2.8 s
-  const TRUCK_END   = 50000;  // bil framme vid 50 s
+  const TRUCK_END   = 49000;  // bil framme vid 49 s
 
-  // Fem event-triggers (elapsed ms) - kopplade till bilens position
+  // Events: skipUI=true = bara kamera, inget kort/stepper-byte
   const EVENTS = [
     {
       at: 0, stepIdx: 0, cardIdx: 0,
@@ -1726,7 +1726,6 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     {
       at: 2800, stepIdx: 1, cardIdx: 1,
       onEnter() {
-        // Hoppa kameran direkt till bilens startpos - noll lag
         map.jumpTo({ center:DEPOT, zoom:13.5, pitch:55, bearing:168 });
         tgZ=13.5; tgP=55; tgB=168;
         isFollowing = true;
@@ -1735,22 +1734,26 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     {
       at: 21000, stepIdx: 2, cardIdx: 2,
       onEnter() {
-        // Zooma ut lite medan vi fortfarande foljer
         tgZ=12.6; tgP=57; tgB=172;
         startETA();
       }
     },
     {
-      at: 38500, stepIdx: 3, cardIdx: 3,
+      // Kamera flyger till destination, INGET kortbyte an (bilen ej framme)
+      at: 38000, skipUI: true,
       onEnter() {
         isFollowing = false;
         map.flyTo({ center:DEST, zoom:14.5, pitch:60, bearing:200, duration:3200, essential:true });
       }
     },
     {
-      at: 51500, stepIdx: 4, cardIdx: 4,
+      // Bilen faktiskt framme (synkat med TRUCK_END=49000)
+      at: 49000, stepIdx: 3, cardIdx: 3,
+      onEnter() { /* arrivedFired hanteras i truck-blocket */ }
+    },
+    {
+      at: 52000, stepIdx: 4, cardIdx: 4,
       onEnter() {
-        isFollowing = false;
         map.flyTo({ center:[12.046,57.574], zoom:10.0, pitch:15, bearing:0, duration:3500, essential:true });
       }
     },
@@ -1903,9 +1906,11 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
       if(elapsed>=ev.at && lastEventIdx<i){
         lastEventIdx=i;
         ev.onEnter();
-        showCard(ev.cardIdx);
-        updateCopy(ev.stepIdx);
-        updateStepper(ev.stepIdx);
+        if(!ev.skipUI){
+          showCard(ev.cardIdx);
+          updateCopy(ev.stepIdx);
+          updateStepper(ev.stepIdx);
+        }
       }
     });
 
