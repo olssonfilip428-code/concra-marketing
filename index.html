@@ -705,6 +705,36 @@ footer {
 .sc-inv-row.inv-total { color: var(--white); }
 .sc-inv-row strong { color: var(--white); font-weight: 300; }
 .sc-inv-row.inv-total strong { color: #f5c842; }
+.story-label-top { transition: opacity 0.3s, transform 0.3s !important; }
+.story-headline   { transition: opacity 0.35s, transform 0.35s !important; }
+/* Stepper */
+.story-stepper {
+  position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+  z-index: 6; display: flex; align-items: center;
+  background: rgba(6,5,4,0.76); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.09); border-radius: 60px;
+  padding: 8px 20px; gap: 0; white-space: nowrap;
+}
+.stepper-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 4px 11px; opacity: 0.28; transition: opacity 0.4s;
+}
+.stepper-item.active { opacity: 1; }
+.stepper-item.done   { opacity: 0.42; }
+.si-num {
+  font-size: 9px; letter-spacing: 0.18em; color: #f5c842;
+  font-weight: 400; text-transform: uppercase;
+}
+.si-label {
+  font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--white); font-weight: 300;
+}
+.stepper-sep { width: 18px; height: 1px; background: rgba(255,255,255,0.14); flex-shrink: 0; }
+@media (max-width: 600px) {
+  .si-label { display: none; }
+  .stepper-sep { width: 10px; }
+  .stepper-item { padding: 4px 7px; }
+}
 .story-bar {
   position: absolute; bottom: 0; left: 0; right: 0; height: 2px; z-index: 6;
   background: rgba(255,255,255,0.06);
@@ -1359,6 +1389,18 @@ footer {
         </div>
       </div><!-- /story-cards -->
 
+      <!-- Stepper -->
+      <div class="story-stepper" id="storyStepper">
+        <div class="stepper-item active" data-i="0"><span class="si-num">01</span><span class="si-label">Order skapad</span></div>
+        <div class="stepper-sep"></div>
+        <div class="stepper-item" data-i="1"><span class="si-num">02</span><span class="si-label">Avgång</span></div>
+        <div class="stepper-sep"></div>
+        <div class="stepper-item" data-i="2"><span class="si-num">03</span><span class="si-label">Live-ETA</span></div>
+        <div class="stepper-sep"></div>
+        <div class="stepper-item" data-i="3"><span class="si-num">04</span><span class="si-label">Framme</span></div>
+        <div class="stepper-sep"></div>
+        <div class="stepper-item" data-i="4"><span class="si-num">05</span><span class="si-label">Faktura</span></div>
+      </div>
       <!-- Progress bar -->
       <div class="story-bar"><div class="story-bar-fill" id="storyBar"></div></div>
       <button class="story-replay" id="storyReplay">&#8635;&ensp;Replay</button>
@@ -1727,7 +1769,19 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
       });
       map.addLayer({ id:'route-line', type:'line', source:'route',
         layout:{'line-cap':'round','line-join':'round'},
-        paint:{'line-color':'#f5c842','line-width':3,'line-opacity':0.85,'line-dasharray':[2,3]}
+        paint:{'line-color':'#f5c842','line-width':2.5,'line-opacity':0.28,'line-dasharray':[2,4]}
+      });
+      // Kord sträcka (fylls pa allt eftersom)
+      map.addSource('route-done', { type:'geojson', data:{
+        type:'Feature', geometry:{ type:'LineString', coordinates:[DEPOT,DEPOT] }
+      }});
+      map.addLayer({ id:'route-done-glow', type:'line', source:'route-done',
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{'line-color':'#f5c842','line-width':14,'line-opacity':0.18,'line-blur':10}
+      });
+      map.addLayer({ id:'route-done-line', type:'line', source:'route-done',
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{'line-color':'#f5c842','line-width':4,'line-opacity':1.0}
       });
 
       // Lastbil-markor
@@ -1764,16 +1818,24 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     cancelAnimationFrame(truckRafId);
     truckStepStart = null;
     truckMarker.getElement().style.display = 'block';
-    let lastCam = 0;
+    let lastCam = 0, lastRoute = 0;
     function tick(now) {
       if (!truckStepStart) truckStepStart = now;
       const frac = Math.min(1, (now-truckStepStart)/stepDurationMs);
       const pos  = ptOnRoute(lerp(fromT, toT, ease(frac)));
       truckMarker.setLngLat(pos);
-      // Kamera max 15fps med smooth easeTo — undviker 60x WebGL-render/s
+      // Kamera max 15fps med smooth easeTo
       if (followCam && now - lastCam > 66) {
         map.easeTo({ center: pos, duration: 200, easing: t => t, essential: true });
         lastCam = now;
+      }
+      // Kord sträcka max 8fps
+      if (now - lastRoute > 125) {
+        const t = lerp(fromT, toT, ease(frac));
+        const cutIdx = Math.min(Math.floor(t * (ROUTE.length-1)), ROUTE.length-2);
+        const driven = ROUTE.slice(0, cutIdx+1).concat([pos]);
+        try { map.getSource('route-done').setData({type:'Feature',geometry:{type:'LineString',coordinates:driven}}); } catch(e){}
+        lastRoute = now;
       }
       if (frac < 1) {
         truckRafId = requestAnimationFrame(tick);
@@ -1795,6 +1857,38 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
       if (el) el.textContent = etaVal;
       if (etaVal <= 1) { clearInterval(etaTimer); etaTimer = null; }
     }, STEP_MS/22);
+  }
+
+  // ── Steg-text + stepper ──────────────────────────────────
+  const STEP_COPY = [
+    { label: '01 — Order skapad', headline: 'Beställt.<br>Klart på sekunder.' },
+    { label: '02 — Avgång',       headline: 'Bilen rullar.<br>Kunden är notifierad.' },
+    { label: '03 — Live-ETA',     headline: 'Ankomsttiden<br>uppdateras i realtid.' },
+    { label: '04 — Framme',       headline: 'Leveransen<br>är bekräftad.' },
+    { label: '05 — Faktura',      headline: 'Fakturerat till<br>Fortnox automatiskt.' },
+  ];
+
+  function updateCopy(idx) {
+    const copy = STEP_COPY[idx];
+    const lEl = document.getElementById('storyLabel');
+    const hEl = document.getElementById('storyHeadline');
+    if (!lEl || !hEl) return;
+    lEl.style.opacity = '0'; lEl.style.transform = 'translateY(-6px)';
+    hEl.style.opacity = '0'; hEl.style.transform = 'translateY(-6px)';
+    setTimeout(() => {
+      lEl.textContent = copy.label;
+      hEl.innerHTML   = copy.headline;
+      lEl.style.opacity = '1'; lEl.style.transform = 'translateY(0)';
+      hEl.style.opacity = '1'; hEl.style.transform = 'translateY(0)';
+    }, 280);
+  }
+
+  function updateStepper(idx) {
+    document.querySelectorAll('.stepper-item').forEach((el, i) => {
+      el.classList.remove('active','done');
+      if (i < idx)  el.classList.add('done');
+      if (i === idx) el.classList.add('active');
+    });
   }
 
   // ── Kort-animation ────────────────────────────────────────
@@ -1840,6 +1934,8 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     else { clearInterval(etaTimer); etaTimer = null; }
 
     showCard(idx);
+    updateCopy(idx);
+    updateStepper(idx);
   }
 
   // ── Huvud-RAF-loop ────────────────────────────────────────
@@ -1870,6 +1966,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     const bar = document.getElementById('storyBar');
     if (bar) bar.style.width = '0';
     document.querySelectorAll('.sc-card').forEach(c => c.classList.remove('entering','leaving'));
+    try { map.getSource('route-done').setData({type:'Feature',geometry:{type:'LineString',coordinates:[DEPOT,DEPOT]}}); } catch(e){}
     rafId = requestAnimationFrame(tick);
   }
 
