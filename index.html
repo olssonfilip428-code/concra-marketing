@@ -829,6 +829,39 @@ footer {
   .feature { border-right: none; border-bottom: 1px solid var(--border); }
   .stats-grid { border-left: none; }
   .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+
+  /* Screenshots-sektion */
+  #screenshots { padding: 60px 0 !important; }
+  #screenshots > div { padding: 0 20px !important; }
+
+  /* Tabs: horisontell scroll istallet for klippta labels */
+  #ssTabs {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; -ms-overflow-style: none;
+  }
+  #ssTabs::-webkit-scrollbar { display: none; }
+  #ssTabs .ss-tab {
+    flex: 0 0 auto !important;
+    padding: 12px 20px !important;
+    white-space: nowrap;
+  }
+
+  /* Browser-ram: ta bort overflodigt browser-chrome-padding */
+  #ssFrame > div:first-child { padding: 8px 12px !important; }
+
+  /* Caption: stapla vertikalt */
+  #ssFrame > div:last-child {
+    flex-direction: column !important;
+    padding: 24px 20px !important;
+    gap: 20px !important;
+    align-items: stretch !important;
+  }
+  #ssFrame > div:last-child > a {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 15px !important;
+    box-sizing: border-box;
+  }
 }
 </style>
 </head>
