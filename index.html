@@ -1720,7 +1720,6 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
         isFollowing = false;
         truckMarker.setLngLat(DEPOT);
         truckMarker.getElement().style.display = 'block';
-        map.flyTo({ center:[12.046,57.574], zoom:10.2, pitch:20, bearing:0, duration:2200, essential:true });
       }
     },
     {
@@ -1792,7 +1791,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     map = new mapboxgl.Map({
       container: 'story-map',
       style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: [12.046, 57.574], zoom: 10.2, pitch: 0, bearing: 0,
+      center: [12.046, 57.574], zoom: 10.2, pitch: 20, bearing: 0,
       interactive: false, attributionControl: false, fadeDuration: 0,
     });
 
