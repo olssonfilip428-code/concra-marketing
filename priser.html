@@ -154,6 +154,9 @@
       .cta{padding:80px 24px}
       footer{padding:28px 24px}
       [data-hw-grid]{grid-template-columns:1fr!important;gap:40px!important}
+      [data-calc-grid]{grid-template-columns:1fr!important}
+      [data-calc-grid]>div{border-right:none!important;border-bottom:1px solid rgba(255,255,255,.09)}
+      [data-calc-grid]>div:last-child{border-bottom:none}
     }
   </style>
 </head>
@@ -303,36 +306,59 @@
   <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,.58);line-height:1.7;max-width:700px">All data hanteras i enlighet med GDPR. Personuppgifter lagras inom EU och raderas på begäran. Ni äger er leveransdata — alltid.</p>
 </section>
 
-<!-- FAQ -->
+<!-- RÄKNEEXEMPEL -->
 <section class="faq">
-  <div class="sec-tag">Vanliga frågor</div>
-  <h2 class="sec-h">Bra att veta.</h2>
-  <div class="faq-grid">
-    <div class="faq-item">
-      <div class="faq-q">Hur fungerar betalningen?</div>
-      <p class="faq-a">Ni betalar per levererat lass, fakturerat månadsvis. Prissättningen diskuterar vi under demo-samtalet — den är enkel och transparent.</p>
+  <div class="sec-tag">Räkneexempel</div>
+  <h2 class="sec-h">Vad det kostar<br><em style="color:rgba(255,255,255,.18);font-style:normal">i praktiken.</em></h2>
+  <div data-calc-grid style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:64px;border:1px solid rgba(255,255,255,.09)">
+
+    <!-- Scenario 1 -->
+    <div style="padding:48px 40px;border-right:1px solid rgba(255,255,255,.09)">
+      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px">Litet bolag</div>
+      <div style="margin-bottom:32px">
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">1</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">6</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">120</span></div>
+      </div>
+      <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px">Månadskostnad</div>
+        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">9 600 kr</div>
+      </div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">Hur lång är bindningstiden?</div>
-      <p class="faq-a">Ingen. Hårdvaran köper ni en gång — mjukvaran betalar ni per lass, löpande. Vill ni avsluta, avslutar ni. Inga förskottsbetalningar, inga månadsabonnemang.</p>
+
+    <!-- Scenario 2 -->
+    <div style="padding:48px 40px;border-right:1px solid rgba(255,255,255,.09)">
+      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px">Medelstort bolag</div>
+      <div style="margin-bottom:32px">
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">3</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">8</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">480</span></div>
+      </div>
+      <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px">Månadskostnad</div>
+        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">38 400 kr</div>
+      </div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">Vad kostar hårdvaran?</div>
-      <p class="faq-a">En dedikerad terminal per bil — engångskostnad som vi går igenom under demo-samtalet. Vi hanterar konfiguration och driftsättning, ni behöver inte göra något tekniskt.</p>
+
+    <!-- Scenario 3 -->
+    <div style="padding:48px 40px">
+      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px">Växande aktör</div>
+      <div style="margin-bottom:32px">
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">6</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">10</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">1 200</span></div>
+      </div>
+      <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px">Månadskostnad</div>
+        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">96 000 kr</div>
+      </div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">Fungerar det med mitt bokföringssystem?</div>
-      <p class="faq-a">Ja. Concra integrerar med Fortnox, Visma och Kleer. Artiklar, kunder och fakturor synkroniseras automatiskt.</p>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Hur snabbt kan vi komma igång?</div>
-      <p class="faq-a">Samma dag. Koppla ert bokföringssystem, konfigurera fordon och priszoner — de flesta är igång på under en timme.</p>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Vad händer med vår data?</div>
-      <p class="faq-a">All data lagras i Sverige, krypterad, och delas aldrig med tredje part. Ni äger er data — alltid.</p>
-    </div>
+
   </div>
+  <p style="font-size:13px;font-weight:300;color:rgba(255,255,255,.28);line-height:1.8;margin-top:36px;max-width:560px">Exakt pris per lass sätts tillsammans med er baserat på volym och upplägg — vi diskuterar det under demo-samtalet.</p>
 </section>
 
 <!-- CTA -->
