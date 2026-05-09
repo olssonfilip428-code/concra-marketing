@@ -1686,14 +1686,13 @@ gsap.to('#intLabel',   { opacity: 1, duration: 0.7, scrollTrigger: once('#integr
 gsap.to('#intGrid',    { opacity: 1, y: 0, duration: 0.9, delay: 0.1, scrollTrigger: once('#integrations') });
 gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: once('#integrations') });
 
-// ── Story — tidsbaserad autoplay (60 s) ──────────────────────
+// -- Story: kontinuerligt event-drivet flode (60 s) ----------------
 (function() {
   if (typeof mapboxgl === 'undefined' || !window.MAPBOX_TOKEN) return;
 
-  const DEPOT = [12.0143, 57.6554]; // Molndal fabrik
-  const DEST  = [12.0765, 57.4877]; // Kungsbacka Bygg AB
-
-  let ROUTE = null;
+  const DEPOT = [12.0143, 57.6554];
+  const DEST  = [12.0765, 57.4877];
+  let ROUTE   = null;
 
   async function fetchRoute() {
     try {
@@ -1709,40 +1708,79 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     }
   }
 
-  // 5 steg x 12 s = 60 s
-  const STEP_MS  = 12000;
-  const TOTAL_MS = STEP_MS * 5;
+  const TOTAL_MS    = 60000;
+  const TRUCK_START = 2800;   // bil borjar kora vid 2.8 s
+  const TRUCK_END   = 50000;  // bil framme vid 50 s
 
-  // follow:true => jumpTo till bilens startpos direkt, sedan smooth follow
-  const STEPS = [
-    // 0: Overview — depot + destination syns, bil parkerad
-    { cam:{ center:[12.046,57.574], zoom:10.2, pitch:20, bearing:0, duration:3200 }, truck:'park', follow:false },
-    // 1: Avgang — jump till bilens pos, folja lineärt
-    { cam:{ zoom:13.5, pitch:55, bearing:168 }, truck:true, truckFrom:0,    truckTo:0.28, follow:true  },
-    // 2: Live-ETA — folja mitt pa strackan
-    { cam:{ zoom:12.8, pitch:58, bearing:172 }, truck:true, truckFrom:0.28, truckTo:0.65, follow:true  },
-    // 3: Framme — kamera flyger till destination, bil kor in
-    { cam:{ center:DEST, zoom:14.5, pitch:60, bearing:200, duration:3200 }, truck:true, truckFrom:0.65, truckTo:1.0, follow:false },
-    // 4: Faktura — pull-back overview
-    { cam:{ center:[12.046,57.574], zoom:10.0, pitch:15, bearing:0, duration:3800 }, truck:'dest', follow:false },
+  // Fem event-triggers (elapsed ms) - kopplade till bilens position
+  const EVENTS = [
+    {
+      at: 0, stepIdx: 0, cardIdx: 0,
+      onEnter() {
+        isFollowing = false;
+        truckMarker.setLngLat(DEPOT);
+        truckMarker.getElement().style.display = 'block';
+        map.flyTo({ center:[12.046,57.574], zoom:10.2, pitch:20, bearing:0, duration:2200, essential:true });
+      }
+    },
+    {
+      at: 2800, stepIdx: 1, cardIdx: 1,
+      onEnter() {
+        // Hoppa kameran direkt till bilens startpos - noll lag
+        map.jumpTo({ center:DEPOT, zoom:13.5, pitch:55, bearing:168 });
+        tgZ=13.5; tgP=55; tgB=168;
+        isFollowing = true;
+      }
+    },
+    {
+      at: 21000, stepIdx: 2, cardIdx: 2,
+      onEnter() {
+        // Zooma ut lite medan vi fortfarande foljer
+        tgZ=12.6; tgP=57; tgB=172;
+        startETA();
+      }
+    },
+    {
+      at: 38500, stepIdx: 3, cardIdx: 3,
+      onEnter() {
+        isFollowing = false;
+        map.flyTo({ center:DEST, zoom:14.5, pitch:60, bearing:200, duration:3200, essential:true });
+      }
+    },
+    {
+      at: 51500, stepIdx: 4, cardIdx: 4,
+      onEnter() {
+        isFollowing = false;
+        map.flyTo({ center:[12.046,57.574], zoom:10.0, pitch:15, bearing:0, duration:3500, essential:true });
+      }
+    },
   ];
 
-  function lerp(a,b,t) { return a+(b-a)*t; }
-  function ease(t) { return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+  const STEP_COPY = [
+    { label: '01 — Order skapad', headline: 'Bestellt.<br>Klart pa sekunder.' },
+    { label: '02 — Avgang',       headline: 'Bilen rullar.<br>Kunden ar notifierad.' },
+    { label: '03 — Live-ETA',     headline: 'Ankomsttiden<br>uppdateras i realtid.' },
+    { label: '04 — Framme',       headline: 'Leveransen<br>ar bekraftad.' },
+    { label: '05 — Faktura',      headline: 'Fakturerat till<br>Fortnox automatiskt.' },
+  ];
 
-  function ptOnRoute(t) {
-    const n = ROUTE.length-1;
-    const pos = Math.max(0,Math.min(1,t))*n;
-    const i = Math.min(Math.floor(pos),n-1);
-    const f = pos-i;
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function ease(t){ return t<0.5?2*t*t:-1+(4-2*t)*t; }
+  function ptOnRoute(t){
+    const n=ROUTE.length-1, pos=Math.max(0,Math.min(1,t))*n;
+    const i=Math.min(Math.floor(pos),n-1), f=pos-i;
     return [lerp(ROUTE[i][0],ROUTE[i+1][0],f), lerp(ROUTE[i][1],ROUTE[i+1][1],f)];
   }
 
   let map=null, truckMarker=null, destMarker=null, depotMarker=null, mapReady=false;
   let playing=false, startTs=null, rafId=null;
   let etaTimer=null, etaVal=22;
-  let currentStep=-1;
-  let truckRafId=null, truckStepStart=null;
+  let lastEventIdx=-1, arrivedFired=false;
+  let isFollowing=false, lastCam=0, lastRoute=0;
+  let truckPos=DEPOT;
+  // Lerpade kameraparametrar for mjuk overgong medan vi foljer
+  let fwZ=13.5, fwP=55, fwB=168;
+  let tgZ=13.5, tgP=55, tgB=168;
 
   async function initMap() {
     mapboxgl.accessToken = window.MAPBOX_TOKEN;
@@ -1759,7 +1797,6 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
       map.resize();
       await routePromise;
 
-      // Rutt-linje
       map.addSource('route', { type:'geojson', data:{
         type:'Feature', geometry:{ type:'LineString', coordinates:ROUTE }
       }});
@@ -1771,7 +1808,6 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
         layout:{'line-cap':'round','line-join':'round'},
         paint:{'line-color':'#f5c842','line-width':2.5,'line-opacity':0.28,'line-dasharray':[2,4]}
       });
-      // Kord sträcka (fylls pa allt eftersom)
       map.addSource('route-done', { type:'geojson', data:{
         type:'Feature', geometry:{ type:'LineString', coordinates:[DEPOT,DEPOT] }
       }});
@@ -1784,211 +1820,168 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
         paint:{'line-color':'#f5c842','line-width':4,'line-opacity':1.0}
       });
 
-      // Lastbil-markor
-      const te = document.createElement('div');
-      te.className = 'truck-wrap';
-      te.innerHTML = '<div class="truck-dot"></div><div class="truck-ring"></div>';
-      te.style.display = 'none';
-      truckMarker = new mapboxgl.Marker({ element:te, anchor:'center' }).setLngLat(DEPOT).addTo(map);
+      // Lastbil
+      const te=document.createElement('div'); te.className='truck-wrap';
+      te.innerHTML='<div class="truck-dot"></div><div class="truck-ring"></div>';
+      te.style.display='none';
+      truckMarker=new mapboxgl.Marker({element:te,anchor:'center'}).setLngLat(DEPOT).addTo(map);
 
-      // Depot-markor
-      const de = document.createElement('div');
-      de.className = 'depot-marker';
-      de.innerHTML = '<div class="depot-dot"></div><div class="depot-label">Molndal depot</div>';
-      depotMarker = new mapboxgl.Marker({ element:de, anchor:'center' }).setLngLat(DEPOT).addTo(map);
+      // Depot
+      const de=document.createElement('div'); de.className='depot-marker';
+      de.innerHTML='<div class="depot-dot"></div><div class="depot-label">Molndal depot</div>';
+      depotMarker=new mapboxgl.Marker({element:de,anchor:'center'}).setLngLat(DEPOT).addTo(map);
 
-      // Destination-markor
-      const dse = document.createElement('div');
-      dse.className = 'dest-marker';
-      dse.innerHTML =
-        '<div class="dest-pin">' +
-          '<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>' +
-          '<span class="dest-label">Kungsbacka Bygg AB</span>' +
-        '</div>' +
+      // Destination
+      const dse=document.createElement('div'); dse.className='dest-marker';
+      dse.innerHTML=
+        '<div class="dest-pin">'+
+          '<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'+
+          '<span class="dest-label">Kungsbacka Bygg AB</span>'+
+        '</div>'+
         '<div class="dest-pulse"></div>';
-      destMarker = new mapboxgl.Marker({ element:dse, anchor:'bottom' }).setLngLat(DEST).addTo(map);
+      destMarker=new mapboxgl.Marker({element:dse,anchor:'bottom'}).setLngLat(DEST).addTo(map);
 
-      mapReady = true;
+      mapReady=true;
     });
-    window.addEventListener('resize', () => map && map.resize());
+    window.addEventListener('resize', ()=> map && map.resize());
   }
 
-  // ── Truck-animation (RAF + smooth camera follow) ────────────
-  function animateTruck(fromT, toT, stepDurationMs, followCam) {
-    cancelAnimationFrame(truckRafId);
-    truckStepStart = null;
-    truckMarker.getElement().style.display = 'block';
-    let lastCam = 0, lastRoute = 0;
-    function tick(now) {
-      if (!truckStepStart) truckStepStart = now;
-      const frac = Math.min(1, (now-truckStepStart)/stepDurationMs);
-      // Linear vid follow (konstant hastighet), ease-out vid ankomst (steg 3)
-      const t   = followCam ? frac : ease(frac);
-      const pos = ptOnRoute(lerp(fromT, toT, t));
-      truckMarker.setLngLat(pos);
-      // Kamera 20fps, 130ms easeTo — minimal lag, max smidig
-      if (followCam && now - lastCam > 50) {
-        map.easeTo({ center: pos, duration: 130, easing: p => p, essential: true });
-        lastCam = now;
-      }
-      // Kord stracka max 10fps
-      if (now - lastRoute > 100) {
-        const cutIdx = Math.min(Math.floor(lerp(fromT, toT, t) * (ROUTE.length-1)), ROUTE.length-2);
-        const driven = ROUTE.slice(0, cutIdx+1).concat([pos]);
-        try { map.getSource('route-done').setData({type:'Feature',geometry:{type:'LineString',coordinates:driven}}); } catch(e){}
-        lastRoute = now;
-      }
-      if (frac < 1) {
-        truckRafId = requestAnimationFrame(tick);
-      } else if (currentStep === 3) {
-        if (destMarker) destMarker.getElement().classList.add('arrived');
-      }
-    }
-    truckRafId = requestAnimationFrame(tick);
-  }
-
-  // ── ETA-raknare ───────────────────────────────────────────
   function startETA() {
     if (etaTimer) return;
-    etaVal = 22;
-    const el = document.getElementById('etaNum');
-    if (el) el.textContent = etaVal;
-    etaTimer = setInterval(() => {
-      etaVal = Math.max(1, etaVal-1);
-      if (el) el.textContent = etaVal;
-      if (etaVal <= 1) { clearInterval(etaTimer); etaTimer = null; }
-    }, STEP_MS/22);
+    etaVal=22;
+    const el=document.getElementById('etaNum');
+    if(el) el.textContent=etaVal;
+    etaTimer=setInterval(()=>{
+      etaVal=Math.max(1,etaVal-1);
+      if(el) el.textContent=etaVal;
+      if(etaVal<=1){ clearInterval(etaTimer); etaTimer=null; }
+    }, 29000/22); // ETA raknar ner fran 22 over 29s (21000-50000)
   }
 
-  // ── Steg-text + stepper ──────────────────────────────────
-  const STEP_COPY = [
-    { label: '01 — Order skapad', headline: 'Beställt.<br>Klart på sekunder.' },
-    { label: '02 — Avgång',       headline: 'Bilen rullar.<br>Kunden är notifierad.' },
-    { label: '03 — Live-ETA',     headline: 'Ankomsttiden<br>uppdateras i realtid.' },
-    { label: '04 — Framme',       headline: 'Leveransen<br>är bekräftad.' },
-    { label: '05 — Faktura',      headline: 'Fakturerat till<br>Fortnox automatiskt.' },
-  ];
+  function showCard(idx) {
+    document.querySelectorAll('.sc-card').forEach((c,i)=>{
+      c.classList.remove('entering','leaving');
+      if(i===idx) requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.add('entering')));
+      else if(i===idx-1) c.classList.add('leaving');
+    });
+  }
 
   function updateCopy(idx) {
-    const copy = STEP_COPY[idx];
-    const lEl = document.getElementById('storyLabel');
-    const hEl = document.getElementById('storyHeadline');
-    if (!lEl || !hEl) return;
-    lEl.style.opacity = '0'; lEl.style.transform = 'translateY(-6px)';
-    hEl.style.opacity = '0'; hEl.style.transform = 'translateY(-6px)';
-    setTimeout(() => {
-      lEl.textContent = copy.label;
-      hEl.innerHTML   = copy.headline;
-      lEl.style.opacity = '1'; lEl.style.transform = 'translateY(0)';
-      hEl.style.opacity = '1'; hEl.style.transform = 'translateY(0)';
+    const copy=STEP_COPY[idx];
+    const lEl=document.getElementById('storyLabel');
+    const hEl=document.getElementById('storyHeadline');
+    if(!lEl||!hEl) return;
+    lEl.style.opacity='0'; lEl.style.transform='translateY(-6px)';
+    hEl.style.opacity='0'; hEl.style.transform='translateY(-6px)';
+    setTimeout(()=>{
+      lEl.textContent=copy.label; hEl.innerHTML=copy.headline;
+      lEl.style.opacity='1'; lEl.style.transform='translateY(0)';
+      hEl.style.opacity='1'; hEl.style.transform='translateY(0)';
     }, 280);
   }
 
   function updateStepper(idx) {
-    document.querySelectorAll('.stepper-item').forEach((el, i) => {
+    document.querySelectorAll('.stepper-item').forEach((el,i)=>{
       el.classList.remove('active','done');
-      if (i < idx)  el.classList.add('done');
-      if (i === idx) el.classList.add('active');
+      if(i<idx)  el.classList.add('done');
+      if(i===idx) el.classList.add('active');
     });
   }
 
-  // ── Kort-animation ────────────────────────────────────────
-  function showCard(idx) {
-    document.querySelectorAll('.sc-card').forEach((c,i) => {
-      c.classList.remove('entering','leaving');
-      if (i===idx) requestAnimationFrame(() => requestAnimationFrame(() => c.classList.add('entering')));
-      else if (i===idx-1) c.classList.add('leaving');
-    });
-  }
-
-  // ── Aktivera steg ─────────────────────────────────────────
-  function goStep(idx) {
-    if (idx === currentStep) return;
-    currentStep = idx;
-    const s = STEPS[idx];
-
-    // Kamera: follow => jumpTo till bilens startpos (noll lag), annars flyTo
-    if (s.follow) {
-      map.jumpTo({ center: ptOnRoute(s.truckFrom), zoom:s.cam.zoom, pitch:s.cam.pitch, bearing:s.cam.bearing });
-    } else {
-      map.flyTo({ ...s.cam, essential:true });
-    }
-
-    // Lastbil
-    if (s.truck === 'park') {
-      cancelAnimationFrame(truckRafId);
-      truckMarker.setLngLat(DEPOT);
-      truckMarker.getElement().style.display = 'block';
-    } else if (s.truck === 'dest') {
-      cancelAnimationFrame(truckRafId);
-      truckMarker.setLngLat(DEST);
-      truckMarker.getElement().style.display = 'block';
-    } else if (s.truck) {
-      animateTruck(s.truckFrom, s.truckTo, STEP_MS, s.follow);
-    } else {
-      cancelAnimationFrame(truckRafId);
-      if (truckMarker) truckMarker.getElement().style.display = 'none';
-    }
-
-    // ETA
-    if (idx === 2) startETA();
-    else { clearInterval(etaTimer); etaTimer = null; }
-
-    showCard(idx);
-    updateCopy(idx);
-    updateStepper(idx);
-  }
-
-  // ── Huvud-RAF-loop ────────────────────────────────────────
+  // ── Huvud-RAF ──────────────────────────────────────────────
   function tick(now) {
-    if (!startTs) startTs = now;
-    const elapsed = now-startTs;
-    const progress = Math.min(1, elapsed/TOTAL_MS);
-    const bar = document.getElementById('storyBar');
-    if (bar) bar.style.width = (progress*100)+'%';
-    goStep(Math.min(4, Math.floor(elapsed/STEP_MS)));
-    if (progress < 1) {
-      rafId = requestAnimationFrame(tick);
+    if(!startTs) startTs=now;
+    const elapsed=now-startTs;
+    const progress=Math.min(1, elapsed/TOTAL_MS);
+
+    // Progress-bar
+    const bar=document.getElementById('storyBar');
+    if(bar) bar.style.width=(progress*100)+'%';
+
+    // Trigga events
+    EVENTS.forEach((ev,i)=>{
+      if(elapsed>=ev.at && lastEventIdx<i){
+        lastEventIdx=i;
+        ev.onEnter();
+        showCard(ev.cardIdx);
+        updateCopy(ev.stepIdx);
+        updateStepper(ev.stepIdx);
+      }
+    });
+
+    // Kontinuerlig bil-rorelse
+    if(elapsed>=TRUCK_START){
+      const rawFrac=(elapsed-TRUCK_START)/(TRUCK_END-TRUCK_START);
+      const tf=Math.min(1, rawFrac);
+      truckPos=ptOnRoute(tf);
+      truckMarker.setLngLat(truckPos);
+
+      // Ankomst-puls
+      if(tf>=1 && !arrivedFired){
+        arrivedFired=true;
+        if(destMarker) destMarker.getElement().classList.add('arrived');
+      }
+
+      // Kamera-follow med lerpade parametrar (smooth overgong)
+      if(isFollowing && now-lastCam>50){
+        fwZ=lerp(fwZ,tgZ,0.07); fwP=lerp(fwP,tgP,0.07); fwB=lerp(fwB,tgB,0.07);
+        map.easeTo({ center:truckPos, zoom:fwZ, pitch:fwP, bearing:fwB, duration:130, easing:p=>p, essential:true });
+        lastCam=now;
+      }
+
+      // Kord stracka (route-done)
+      if(now-lastRoute>100){
+        const ci=Math.min(Math.floor(tf*(ROUTE.length-1)), ROUTE.length-2);
+        const driven=ROUTE.slice(0,ci+1).concat([truckPos]);
+        try{ map.getSource('route-done').setData({type:'Feature',geometry:{type:'LineString',coordinates:driven}}); }catch(e){}
+        lastRoute=now;
+      }
+    }
+
+    if(progress<1){
+      rafId=requestAnimationFrame(tick);
     } else {
-      playing = false;
-      const rb = document.getElementById('storyReplay');
-      if (rb) rb.classList.add('show');
+      playing=false;
+      const rb=document.getElementById('storyReplay');
+      if(rb) rb.classList.add('show');
     }
   }
 
   function startPlay() {
-    if (playing || !mapReady) return;
-    playing=true; startTs=null; currentStep=-1;
+    if(playing||!mapReady) return;
+    playing=true; startTs=null;
+    lastEventIdx=-1; arrivedFired=false; isFollowing=false;
+    fwZ=13.5; fwP=55; fwB=168; tgZ=13.5; tgP=55; tgB=168;
     etaVal=22; clearInterval(etaTimer); etaTimer=null;
-    cancelAnimationFrame(rafId); cancelAnimationFrame(truckRafId);
-    if (destMarker) destMarker.getElement().classList.remove('arrived');
-    const rb = document.getElementById('storyReplay');
-    if (rb) rb.classList.remove('show');
-    const bar = document.getElementById('storyBar');
-    if (bar) bar.style.width = '0';
-    document.querySelectorAll('.sc-card').forEach(c => c.classList.remove('entering','leaving'));
-    try { map.getSource('route-done').setData({type:'Feature',geometry:{type:'LineString',coordinates:[DEPOT,DEPOT]}}); } catch(e){}
-    rafId = requestAnimationFrame(tick);
+    cancelAnimationFrame(rafId);
+    if(destMarker) destMarker.getElement().classList.remove('arrived');
+    const rb=document.getElementById('storyReplay');
+    if(rb) rb.classList.remove('show');
+    const bar=document.getElementById('storyBar');
+    if(bar) bar.style.width='0';
+    document.querySelectorAll('.sc-card').forEach(c=>c.classList.remove('entering','leaving'));
+    try{ map.getSource('route-done').setData({type:'Feature',geometry:{type:'LineString',coordinates:[DEPOT,DEPOT]}}); }catch(e){}
+    truckPos=DEPOT;
+    if(truckMarker){ truckMarker.setLngLat(DEPOT); truckMarker.getElement().style.display='none'; }
+    rafId=requestAnimationFrame(tick);
   }
 
   document.getElementById('storyReplay').addEventListener('click', startPlay);
 
-  let inited = false;
-  const io = new IntersectionObserver((entries) => {
-    if (!entries[0].isIntersecting) return;
-    if (!inited) { inited=true; initMap(); }
-    if (!playing) {
-      const tryStart = setInterval(() => {
-        if (mapReady) { clearInterval(tryStart); startPlay(); }
-      }, 100);
+  let inited=false;
+  const io=new IntersectionObserver((entries)=>{
+    if(!entries[0].isIntersecting) return;
+    if(!inited){ inited=true; initMap(); }
+    if(!playing){
+      const tryStart=setInterval(()=>{ if(mapReady){ clearInterval(tryStart); startPlay(); } }, 100);
     }
   }, { threshold: 0.4 });
   io.observe(document.getElementById('story-map'));
 
-  const headIO = new IntersectionObserver((entries) => {
-    if (!entries[0].isIntersecting) return;
+  const headIO=new IntersectionObserver((entries)=>{
+    if(!entries[0].isIntersecting) return;
     document.getElementById('storyLabel').classList.add('visible');
-    setTimeout(() => document.getElementById('storyHeadline').classList.add('visible'), 120);
+    setTimeout(()=>document.getElementById('storyHeadline').classList.add('visible'), 120);
     headIO.disconnect();
   }, { threshold: 0.2 });
   headIO.observe(document.getElementById('story-map'));
