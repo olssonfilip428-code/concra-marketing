@@ -1709,7 +1709,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
   }
 
   const TOTAL_MS    = 60000;
-  const TRUCK_START = 2800;   // bil borjar kora vid 2.8 s
+  const TRUCK_START = 1200;   // bil borjar kora vid 1.2 s
   const TRUCK_END   = 49000;  // bil framme vid 49 s
 
   // Events: skipUI=true = bara kamera, inget kort/stepper-byte
@@ -1723,7 +1723,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
       }
     },
     {
-      at: 2800, stepIdx: 1, cardIdx: 1,
+      at: 1200, stepIdx: 1, cardIdx: 1,
       onEnter() {
         map.jumpTo({ center:DEPOT, zoom:13.5, pitch:55, bearing:168 });
         tgZ=13.5; tgP=55; tgB=168;
@@ -1791,7 +1791,7 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     map = new mapboxgl.Map({
       container: 'story-map',
       style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: [12.046, 57.574], zoom: 10.2, pitch: 20, bearing: 0,
+      center: [12.0143, 57.6554], zoom: 12.8, pitch: 50, bearing: 168,
       interactive: false, attributionControl: false, fadeDuration: 0,
     });
 
