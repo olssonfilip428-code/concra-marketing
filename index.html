@@ -740,6 +740,48 @@ footer {
   0%   { transform: scale(0.7); opacity: 0.9; }
   100% { transform: scale(2.2); opacity: 0; }
 }
+/* Depot-markör */
+.depot-marker { position: relative; display: flex; flex-direction: column; align-items: center; }
+.depot-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  border: 2px solid rgba(255,255,255,0.85);
+  box-shadow: 0 0 8px rgba(255,255,255,0.3);
+}
+.depot-label {
+  position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+  background: rgba(8,7,6,0.78); color: rgba(255,255,255,0.65);
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: 3px; white-space: nowrap;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+/* Destination-markör */
+.dest-marker { position: relative; display: flex; flex-direction: column; align-items: center; }
+.dest-pin {
+  display: flex; flex-direction: column; align-items: center;
+  color: #f5c842; filter: drop-shadow(0 0 8px rgba(245,200,66,0.5));
+}
+.dest-label {
+  background: rgba(8,7,6,0.85); color: #f5c842;
+  font-size: 10px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 9px; border-radius: 3px; white-space: nowrap;
+  border: 1px solid rgba(245,200,66,0.35);
+  margin-top: 5px;
+}
+.dest-pulse {
+  position: absolute; top: 13px; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid #f5c842; opacity: 0;
+  pointer-events: none;
+}
+.dest-marker.arrived .dest-pulse {
+  animation: destPulse 1.4s ease-out infinite;
+}
+@keyframes destPulse {
+  0%   { transform: translate(-50%,-50%) scale(0.6); opacity: 0.9; }
+  100% { transform: translate(-50%,-50%) scale(2.4); opacity: 0; }
+}
 .mapboxgl-ctrl-attrib { display: none !important; }
 .mapboxgl-ctrl-logo   { display: none !important; }
 
@@ -1602,180 +1644,187 @@ gsap.to('#intLabel',   { opacity: 1, duration: 0.7, scrollTrigger: once('#integr
 gsap.to('#intGrid',    { opacity: 1, y: 0, duration: 0.9, delay: 0.1, scrollTrigger: once('#integrations') });
 gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: once('#integrations') });
 
-// ── Story — tidsbaserad autoplay (30 s) ──────────────────────
+// ── Story — tidsbaserad autoplay (60 s) ──────────────────────
 (function() {
   if (typeof mapboxgl === 'undefined' || !window.MAPBOX_TOKEN) return;
 
-  // Hämtar riktig väggeometri via Mapbox Directions API
-  let ROUTE = null; // fylls in asynkront
+  const DEPOT = [12.0143, 57.6554]; // Molndal fabrik
+  const DEST  = [12.0765, 57.4877]; // Kungsbacka Bygg AB
+
+  let ROUTE = null;
 
   async function fetchRoute() {
-    const start = '12.0143,57.6554'; // Mölndal fabrik
-    const end   = '12.0765,57.4877'; // Kungsbacka
     try {
       const res = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}` +
-        `?geometries=geojson&overview=full&access_token=${mapboxgl.accessToken}`
+        'https://api.mapbox.com/directions/v5/mapbox/driving/' +
+        DEPOT[0]+','+DEPOT[1]+';'+DEST[0]+','+DEST[1] +
+        '?geometries=geojson&overview=full&access_token=' + mapboxgl.accessToken
       );
       const data = await res.json();
-      ROUTE = data.routes[0].geometry.coordinates; // [[lng,lat],...]
+      ROUTE = data.routes[0].geometry.coordinates;
     } catch(e) {
-      // Fallback: rak linje längs E6-korridoren
-      ROUTE = [[12.0143,57.6554],[12.0300,57.6180],[12.0510,57.5680],[12.0660,57.5140],[12.0765,57.4877]];
+      ROUTE = [DEPOT,[12.030,57.618],[12.051,57.568],[12.066,57.514],DEST];
     }
   }
 
-  // 5 steg × 6 s = 30 s
-  const STEP_MS = 6000;
+  // 5 steg x 12 s = 60 s
+  const STEP_MS  = 12000;
   const TOTAL_MS = STEP_MS * 5;
 
+  // follow:true = kameran foljer bilen via jumpTo i realtid
   const STEPS = [
-    {
-      cam: { center:[12.014,57.656], zoom:12.5, pitch:50, bearing:-10, duration:3200 },
-      truck: false,
-    },
-    {
-      cam: { center:[12.035,57.606], zoom:11.2, pitch:54, bearing:168, duration:3800 },
-      truck: true, truckFrom:0, truckTo:0.28,
-    },
-    {
-      cam: { center:[12.055,57.552], zoom:11.8, pitch:58, bearing:174, duration:3800 },
-      truck: true, truckFrom:0.28, truckTo:0.63,
-    },
-    {
-      cam: { center:[12.076,57.488], zoom:13.0, pitch:62, bearing:190, duration:3400 },
-      truck: true, truckFrom:0.63, truckTo:1.0,
-    },
-    {
-      cam: { center:[12.040,57.572], zoom:10.0, pitch:20, bearing:0,   duration:3000 },
-      truck: false,
-    },
+    // 0: Order skapad - overview depot+destination
+    { cam:{ center:[12.046,57.574], zoom:10.2, pitch:20, bearing:0,   duration:3500 }, truck:'park', follow:false },
+    // 1: Avgang - kamera foljer bilen
+    { cam:{ zoom:13.0, pitch:55, bearing:170, duration:3000 }, truck:true, truckFrom:0,    truckTo:0.28, follow:true  },
+    // 2: Live-ETA - foljer mitt pa stracktan
+    { cam:{ zoom:12.5, pitch:58, bearing:175, duration:2500 }, truck:true, truckFrom:0.28, truckTo:0.65, follow:true  },
+    // 3: Framme - kamera zoomar till jobbplatsen
+    { cam:{ center:DEST, zoom:14.5, pitch:62, bearing:210,    duration:3500 }, truck:true, truckFrom:0.65, truckTo:1.0, follow:false },
+    // 4: Faktura - pull-back overview
+    { cam:{ center:[12.046,57.574], zoom:10.0, pitch:15, bearing:0,   duration:4000 }, truck:'dest', follow:false },
   ];
 
-  function lerp(a, b, t) { return a + (b - a) * t; }
+  function lerp(a,b,t) { return a+(b-a)*t; }
+  function ease(t) { return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
 
   function ptOnRoute(t) {
-    const n = ROUTE.length - 1;
-    const pos = Math.max(0, Math.min(1, t)) * n;
-    const i = Math.min(Math.floor(pos), n - 1);
-    const f = pos - i;
-    return [lerp(ROUTE[i][0], ROUTE[i+1][0], f), lerp(ROUTE[i][1], ROUTE[i+1][1], f)];
+    const n = ROUTE.length-1;
+    const pos = Math.max(0,Math.min(1,t))*n;
+    const i = Math.min(Math.floor(pos),n-1);
+    const f = pos-i;
+    return [lerp(ROUTE[i][0],ROUTE[i+1][0],f), lerp(ROUTE[i][1],ROUTE[i+1][1],f)];
   }
 
-  let map = null, truckMarker = null, mapReady = false;
-  let playing = false, startTs = null, rafId = null;
-  let etaTimer = null, etaVal = 22;
-  let currentStep = -1;
-  let truckRafId = null, truckStepStart = null;
+  let map=null, truckMarker=null, destMarker=null, depotMarker=null, mapReady=false;
+  let playing=false, startTs=null, rafId=null;
+  let etaTimer=null, etaVal=22;
+  let currentStep=-1;
+  let truckRafId=null, truckStepStart=null;
 
-  // ── Karta ────────────────────────────────────────────────
   async function initMap() {
     mapboxgl.accessToken = window.MAPBOX_TOKEN;
-
-    // Hämta väggeometri parallellt med kartinitieringen
     const routePromise = fetchRoute();
 
     map = new mapboxgl.Map({
       container: 'story-map',
       style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: [12.04, 57.59], zoom: 9.0, pitch: 0, bearing: 0,
+      center: [12.046, 57.574], zoom: 10.2, pitch: 0, bearing: 0,
       interactive: false, attributionControl: false,
     });
 
     map.on('load', async () => {
       map.resize();
-      await routePromise; // vänta på Directions-svaret
+      await routePromise;
 
+      // Rutt-linje
       map.addSource('route', { type:'geojson', data:{
         type:'Feature', geometry:{ type:'LineString', coordinates:ROUTE }
       }});
       map.addLayer({ id:'route-glow', type:'line', source:'route',
         layout:{'line-cap':'round','line-join':'round'},
-        paint:{'line-color':'#f5c842','line-width':14,'line-opacity':0.12,'line-blur':10}
+        paint:{'line-color':'#f5c842','line-width':16,'line-opacity':0.10,'line-blur':12}
       });
-      map.addLayer({ id:'route-dash', type:'line', source:'route',
-        layout:{'line-cap':'butt','line-join':'round'},
-        paint:{'line-color':'#f5c842','line-width':2.5,'line-opacity':0.92,'line-dasharray':[2,3.5]}
+      map.addLayer({ id:'route-line', type:'line', source:'route',
+        layout:{'line-cap':'round','line-join':'round'},
+        paint:{'line-color':'#f5c842','line-width':3,'line-opacity':0.85,'line-dasharray':[2,3]}
       });
-      // Lastbil-markör
-      const el = document.createElement('div');
-      el.className = 'truck-wrap';
-      el.innerHTML = '<div class="truck-dot"></div><div class="truck-ring"></div>';
-      el.style.display = 'none';
-      truckMarker = new mapboxgl.Marker({ element:el, anchor:'center' })
-        .setLngLat(ROUTE[0]).addTo(map);
+
+      // Lastbil-markor
+      const te = document.createElement('div');
+      te.className = 'truck-wrap';
+      te.innerHTML = '<div class="truck-dot"></div><div class="truck-ring"></div>';
+      te.style.display = 'none';
+      truckMarker = new mapboxgl.Marker({ element:te, anchor:'center' }).setLngLat(DEPOT).addTo(map);
+
+      // Depot-markor
+      const de = document.createElement('div');
+      de.className = 'depot-marker';
+      de.innerHTML = '<div class="depot-dot"></div><div class="depot-label">Molndal depot</div>';
+      depotMarker = new mapboxgl.Marker({ element:de, anchor:'center' }).setLngLat(DEPOT).addTo(map);
+
+      // Destination-markor
+      const dse = document.createElement('div');
+      dse.className = 'dest-marker';
+      dse.innerHTML =
+        '<div class="dest-pin">' +
+          '<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>' +
+          '<span class="dest-label">Kungsbacka Bygg AB</span>' +
+        '</div>' +
+        '<div class="dest-pulse"></div>';
+      destMarker = new mapboxgl.Marker({ element:dse, anchor:'bottom' }).setLngLat(DEST).addTo(map);
+
       mapReady = true;
     });
     window.addEventListener('resize', () => map && map.resize());
   }
 
-  // ── Truck-animation per steg (RAF) ───────────────────────
-  function animateTruck(fromT, toT, stepDurationMs) {
+  // ── Truck-animation (RAF + optional kamera-follow) ────────
+  function animateTruck(fromT, toT, stepDurationMs, followCam) {
     cancelAnimationFrame(truckRafId);
     truckStepStart = null;
     truckMarker.getElement().style.display = 'block';
     function tick(now) {
       if (!truckStepStart) truckStepStart = now;
-      const elapsed = now - truckStepStart;
-      const frac = Math.min(1, elapsed / stepDurationMs);
-      truckMarker.setLngLat(ptOnRoute(lerp(fromT, toT, frac)));
-      if (frac < 1) truckRafId = requestAnimationFrame(tick);
+      const frac = Math.min(1, (now-truckStepStart)/stepDurationMs);
+      const pos  = ptOnRoute(lerp(fromT, toT, ease(frac)));
+      truckMarker.setLngLat(pos);
+      if (followCam) map.jumpTo({ center: pos });
+      if (frac < 1) {
+        truckRafId = requestAnimationFrame(tick);
+      } else if (currentStep === 3) {
+        if (destMarker) destMarker.getElement().classList.add('arrived');
+      }
     }
     truckRafId = requestAnimationFrame(tick);
   }
 
-  // ── ETA ──────────────────────────────────────────────────
+  // ── ETA-raknare ───────────────────────────────────────────
   function startETA() {
     if (etaTimer) return;
     etaVal = 22;
     const el = document.getElementById('etaNum');
     if (el) el.textContent = etaVal;
     etaTimer = setInterval(() => {
-      etaVal = Math.max(1, etaVal - 1);
+      etaVal = Math.max(1, etaVal-1);
       if (el) el.textContent = etaVal;
       if (etaVal <= 1) { clearInterval(etaTimer); etaTimer = null; }
-    }, STEP_MS / 22);
+    }, STEP_MS/22);
   }
 
   // ── Kort-animation ────────────────────────────────────────
   function showCard(idx) {
-    document.querySelectorAll('.sc-card').forEach((c, i) => {
-      c.classList.remove('entering', 'leaving');
-      if (i === idx) {
-        // micro-delay so leaving-animation plays first
-        requestAnimationFrame(() => requestAnimationFrame(() => c.classList.add('entering')));
-      } else if (i === idx - 1) {
-        c.classList.add('leaving');
-      }
+    document.querySelectorAll('.sc-card').forEach((c,i) => {
+      c.classList.remove('entering','leaving');
+      if (i===idx) requestAnimationFrame(() => requestAnimationFrame(() => c.classList.add('entering')));
+      else if (i===idx-1) c.classList.add('leaving');
     });
   }
 
-  // ── Steg-nav ─────────────────────────────────────────────
-  function activateStep(idx) {
-    document.querySelectorAll('.story-step').forEach((el, i) => {
-      el.classList.remove('active', 'filling', 'done');
-      if (i < idx)  el.classList.add('done');
-      if (i === idx) {
-        el.classList.add('active', 'filling');
-        // Sätt transition-duration till STEP_MS
-        const fill = el.querySelector('.ss-bar-fill');
-        if (fill) fill.style.transition = `bottom ${STEP_MS}ms linear`;
-      }
-    });
-  }
-
-  // ── Aktivera ett steg ─────────────────────────────────────
+  // ── Aktivera steg ─────────────────────────────────────────
   function goStep(idx) {
     if (idx === currentStep) return;
     currentStep = idx;
     const s = STEPS[idx];
 
     // Kamera
-    map.flyTo({ ...s.cam, essential: true });
+    if (s.follow) {
+      map.easeTo({ zoom:s.cam.zoom, pitch:s.cam.pitch, bearing:s.cam.bearing, duration:s.cam.duration, essential:true });
+    } else {
+      map.flyTo({ ...s.cam, essential:true });
+    }
 
     // Lastbil
-    if (s.truck) {
-      animateTruck(s.truckFrom, s.truckTo, STEP_MS);
+    if (s.truck === 'park') {
+      cancelAnimationFrame(truckRafId);
+      truckMarker.setLngLat(DEPOT);
+      truckMarker.getElement().style.display = 'block';
+    } else if (s.truck === 'dest') {
+      cancelAnimationFrame(truckRafId);
+      truckMarker.setLngLat(DEST);
+      truckMarker.getElement().style.display = 'block';
+    } else if (s.truck) {
+      animateTruck(s.truckFrom, s.truckTo, STEP_MS, s.follow);
     } else {
       cancelAnimationFrame(truckRafId);
       if (truckMarker) truckMarker.getElement().style.display = 'none';
@@ -1786,27 +1835,19 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     else { clearInterval(etaTimer); etaTimer = null; }
 
     showCard(idx);
-    activateStep(idx);
   }
 
   // ── Huvud-RAF-loop ────────────────────────────────────────
   function tick(now) {
     if (!startTs) startTs = now;
-    const elapsed = now - startTs;
-    const progress = Math.min(1, elapsed / TOTAL_MS);
-
-    // Progress-bar
+    const elapsed = now-startTs;
+    const progress = Math.min(1, elapsed/TOTAL_MS);
     const bar = document.getElementById('storyBar');
-    if (bar) bar.style.width = (progress * 100) + '%';
-
-    // Vilket steg?
-    const stepIdx = Math.min(4, Math.floor(elapsed / STEP_MS));
-    goStep(stepIdx);
-
+    if (bar) bar.style.width = (progress*100)+'%';
+    goStep(Math.min(4, Math.floor(elapsed/STEP_MS)));
     if (progress < 1) {
       rafId = requestAnimationFrame(tick);
     } else {
-      // Klart — visa replay
       playing = false;
       const rb = document.getElementById('storyReplay');
       if (rb) rb.classList.add('show');
@@ -1815,38 +1856,24 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
 
   function startPlay() {
     if (playing || !mapReady) return;
-    playing = true;
-    startTs = null;
-    currentStep = -1;
-    etaVal = 22;
-    clearInterval(etaTimer); etaTimer = null;
-    cancelAnimationFrame(rafId);
-    cancelAnimationFrame(truckRafId);
+    playing=true; startTs=null; currentStep=-1;
+    etaVal=22; clearInterval(etaTimer); etaTimer=null;
+    cancelAnimationFrame(rafId); cancelAnimationFrame(truckRafId);
+    if (destMarker) destMarker.getElement().classList.remove('arrived');
     const rb = document.getElementById('storyReplay');
     if (rb) rb.classList.remove('show');
     const bar = document.getElementById('storyBar');
     if (bar) bar.style.width = '0';
-    // Nollställ steg-nav
-    document.querySelectorAll('.story-step').forEach(el =>
-      el.classList.remove('active','filling','done'));
-    // Nollställ kort
-    document.querySelectorAll('.sc-card').forEach(c =>
-      c.classList.remove('entering','leaving'));
+    document.querySelectorAll('.sc-card').forEach(c => c.classList.remove('entering','leaving'));
     rafId = requestAnimationFrame(tick);
   }
 
-  // Replay-knapp
   document.getElementById('storyReplay').addEventListener('click', startPlay);
 
-  // Init när sektionen syns
   let inited = false;
   const io = new IntersectionObserver((entries) => {
     if (!entries[0].isIntersecting) return;
-    if (!inited) {
-      inited = true;
-      initMap();
-    }
-    // Starta när kartan är redo
+    if (!inited) { inited=true; initMap(); }
     if (!playing) {
       const tryStart = setInterval(() => {
         if (mapReady) { clearInterval(tryStart); startPlay(); }
@@ -1855,7 +1882,6 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
   }, { threshold: 0.4 });
   io.observe(document.getElementById('story-map'));
 
-  // Header fade-in (CSS-transition via class)
   const headIO = new IntersectionObserver((entries) => {
     if (!entries[0].isIntersecting) return;
     document.getElementById('storyLabel').classList.add('visible');
