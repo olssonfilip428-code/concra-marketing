@@ -579,28 +579,32 @@ footer {
 }
 
 /* ── STORY ──────────────────────────────────────────────── */
-/* Mapbox sätter position:relative på #story-map — det är OK.
-   Vi sätter explicit höjd, och lägger alla overlays INUTI containern
-   så de alltid är innanför kartan. */
-#story { padding: 0; }
-#story-map {
-  width: 100%;
-  height: 100vh;
-  min-height: 600px;
+/* section#story = containing block. #story-map forceas absolut
+   med !important. Overlays ligger i section, INTE i map-div. */
+#story {
+  padding: 0; margin: 0;
+  height: 100vh; min-height: 600px;
+  position: relative;
   background: #0d0d0d;
-  /* Mapbox skriver position:relative här — det är containing block för overlays */
+  overflow: hidden;
 }
-/* Alla overlays: position:absolute relativt #story-map */
+#story-map,
+#story-map.mapboxgl-map {
+  position: absolute !important;
+  top: 0 !important; left: 0 !important;
+  width: 100% !important; height: 100% !important;
+  background: #0d0d0d;
+}
 .story-vignette {
-  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.3) 26%, transparent 46%),
-    linear-gradient(to top,    rgba(8,8,8,0.5)  0%, transparent 20%),
-    linear-gradient(to right,  rgba(8,8,8,0.9)  0%, transparent 36%);
+    linear-gradient(to bottom, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.28) 25%, transparent 45%),
+    linear-gradient(to top,    rgba(8,8,8,0.55) 0%, transparent 22%),
+    linear-gradient(to right,  rgba(8,8,8,0.92) 0%, transparent 36%);
 }
 .story-top {
   position: absolute; top: 0; left: 0; right: 0; z-index: 6;
-  padding: 40px 56px 0; pointer-events: none;
+  padding: 42px 56px 0; pointer-events: none;
 }
 .story-label-top {
   font-size: 10px; font-weight: 400; letter-spacing: 0.38em; text-transform: uppercase;
@@ -609,22 +613,20 @@ footer {
 }
 .story-label-top.visible { opacity: 1; transform: translateY(0); }
 .story-headline {
-  font-size: clamp(26px, 3.6vw, 50px);
+  font-size: clamp(26px, 3.5vw, 50px);
   font-weight: 200; line-height: 1.12;
-  color: var(--white); max-width: 500px;
+  color: var(--white); max-width: 480px;
   opacity: 0; transform: translateY(12px); transition: opacity 0.9s 0.1s, transform 0.9s 0.1s;
 }
 .story-headline.visible { opacity: 1; transform: translateY(0); }
-/* Steg-nav — vänster, inuti #story-map */
 .story-left {
   position: absolute; top: 0; left: 0; bottom: 0;
-  width: 280px; z-index: 6;
+  width: 270px; z-index: 6;
   display: flex; align-items: center; padding: 0 52px;
   pointer-events: none;
 }
 .story-steps { display: flex; flex-direction: column; gap: 0; pointer-events: auto; }
 .story-step { display: flex; align-items: stretch; gap: 16px; padding: 13px 0; }
-/* Animated progress bar per step */
 .ss-bar {
   width: 2px; flex-shrink: 0; border-radius: 1px;
   background: rgba(255,255,255,0.08); position: relative; overflow: hidden;
@@ -637,7 +639,6 @@ footer {
 }
 .story-step.filling .ss-bar-fill { height: 100%; }
 .story-step.done .ss-bar-fill { height: 100%; transition: none; }
-.ss-content { display: flex; flex-direction: column; gap: 4px; justify-content: center; }
 .ss-num {
   font-size: 10px; font-weight: 400; letter-spacing: 0.22em;
   color: var(--dim); transition: color 0.35s;
@@ -652,14 +653,11 @@ footer {
 .story-step.active .ss-label,
 .story-step.filling .ss-label { color: var(--white); }
 .story-step.done .ss-label { color: rgba(255,255,255,0.35); }
-
-/* Cards — right side, centered */
 .story-cards {
   position: absolute; top: 50%; right: 48px;
   transform: translateY(-50%);
-  z-index: 5; width: 305px;
+  z-index: 6; width: 305px;
 }
-/* Each card hidden by default; uses keyframe animations */
 .sc-card {
   position: absolute; top: 0; left: 0; right: 0;
   background: rgba(8,7,6,0.88);
@@ -682,9 +680,7 @@ footer {
   animation: scIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   pointer-events: auto;
 }
-.sc-card.leaving {
-  animation: scOut 0.28s ease-in forwards;
-}
+.sc-card.leaving { animation: scOut 0.28s ease-in forwards; }
 .sc-badge {
   font-size: 10px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase;
   color: #f5c842; margin-bottom: 11px;
@@ -743,7 +739,6 @@ footer {
 .sc-inv-row.inv-total { color: var(--white); }
 .sc-inv-row strong { color: var(--white); font-weight: 300; }
 .sc-inv-row.inv-total strong { color: #f5c842; }
-/* Progress bar */
 .story-bar {
   position: absolute; bottom: 0; left: 0; right: 0; height: 2px; z-index: 6;
   background: rgba(255,255,255,0.06);
@@ -753,7 +748,6 @@ footer {
   background: linear-gradient(to right, #c8960c, #f5c842);
   transition: width 0.12s linear;
 }
-/* Replay button */
 .story-replay {
   position: absolute; bottom: 18px; right: 18px; z-index: 6;
   background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
@@ -763,7 +757,6 @@ footer {
 }
 .story-replay.show { opacity: 1; }
 .story-replay:hover { background: rgba(255,255,255,0.12); color: var(--white); }
-/* Truck marker */
 .truck-wrap {
   width: 22px; height: 22px; position: relative;
   display: flex; align-items: center; justify-content: center;
@@ -1282,16 +1275,16 @@ footer {
 
 <!-- STORY -->
 <section id="story">
-  <!-- #story-map är Mapbox-containern. Mapbox sätter position:relative på den,
-       vilket gör den till containing block. Alla overlays ligger inuti den. -->
-  <div id="story-map">
-    <div class="story-vignette"></div>
+  <!-- Mapbox-containern: BARA kartan här, inga overlays -->
+  <div id="story-map"></div>
 
-    <!-- Rubrik uppe till vänster i kartan -->
-    <div class="story-top">
-      <p class="story-label-top" id="storyLabel">Så här fungerar det</p>
-      <h2 class="story-headline" id="storyHeadline">En leverans.<br>Realtid hela vägen.</h2>
-    </div>
+  <!-- Alla overlays: position:absolute relativt section#story -->
+  <div class="story-vignette"></div>
+
+  <div class="story-top">
+    <p class="story-label-top" id="storyLabel">Så här fungerar det</p>
+    <h2 class="story-headline" id="storyHeadline">En leverans.<br>Realtid hela vägen.</h2>
+  </div>
 
       <!-- Left: step nav -->
       <div class="story-left">
@@ -1402,7 +1395,6 @@ footer {
       <div class="story-bar"><div class="story-bar-fill" id="storyBar"></div></div>
       <button class="story-replay" id="storyReplay">&#8635;&ensp;Replay</button>
 
-  </div><!-- /#story-map -->
 </section>
 
 <!-- CTA -->
