@@ -1,5 +1,5 @@
 (function () {
-  const API = "https://api.concra.se/api/ella/chat";
+  const API = "https://concra.se/api/ella/chat";
   const AVATAR = "E";
   const NAME = "Ella";
   const TITLE = "Concra";
