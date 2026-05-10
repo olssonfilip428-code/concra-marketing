@@ -5,6 +5,13 @@
   const TITLE = "Concra";
   const GREETING = "Hej! Jag heter Ella och jobbar med Concra. Vad kan jag hjälpa dig med?";
 
+  const CHIPS = [
+    "Hur fungerar Concra?",
+    "Vad kostar det?",
+    "Vad gör ni som andra inte gör?",
+    "Boka demo",
+  ];
+
   const css = `
 #ella-btn{position:fixed;bottom:28px;right:28px;z-index:9000;width:52px;height:52px;border-radius:50%;background:#f2f2f0;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,.45);transition:transform .2s}
 #ella-btn:hover{transform:scale(1.08)}
@@ -13,7 +20,6 @@
 #ella-panel.open{display:flex}
 #ella-head{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px}
 #ella-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#080808;flex-shrink:0}
-#ella-info{}
 #ella-name{font-size:13px;font-weight:400;letter-spacing:.06em;color:#f2f2f0}
 #ella-role{font-size:11px;font-weight:300;color:rgba(255,255,255,.35);letter-spacing:.04em}
 #ella-close{margin-left:auto;background:none;border:none;cursor:pointer;padding:4px;color:rgba(255,255,255,.3);font-size:18px;line-height:1;transition:color .15s}
@@ -23,6 +29,9 @@
 .ella-msg.ella{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85);align-self:flex-start}
 .ella-msg.user{background:rgba(255,200,80,.12);color:rgba(255,255,255,.78);align-self:flex-end;text-align:right}
 .ella-msg.typing{color:rgba(255,255,255,.3);font-style:italic}
+#ella-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 14px}
+.ella-chip{background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6);font-size:12px;font-weight:300;font-family:inherit;padding:6px 12px;cursor:pointer;border-radius:2px;transition:all .15s;letter-spacing:.02em;white-space:nowrap}
+.ella-chip:hover{border-color:rgba(255,200,80,.5);color:rgba(255,200,80,.9)}
 #ella-form{border-top:1px solid rgba(255,255,255,.08);display:flex;gap:0}
 #ella-input{flex:1;background:transparent;border:none;outline:none;padding:13px 14px;font-size:13px;font-weight:300;color:#f2f2f0;font-family:inherit;resize:none;height:46px;max-height:120px;line-height:1.5}
 #ella-input::placeholder{color:rgba(255,255,255,.22)}
@@ -53,6 +62,7 @@
     <button id="ella-close" aria-label="Stäng">×</button>
   </div>
   <div id="ella-msgs"></div>
+  <div id="ella-chips"></div>
   <form id="ella-form" autocomplete="off">
     <textarea id="ella-input" placeholder="Skriv ett meddelande…" rows="1"></textarea>
     <button type="submit" id="ella-send" aria-label="Skicka">
@@ -66,6 +76,7 @@
   const panel = document.getElementById("ella-panel");
   const closeBtn = document.getElementById("ella-close");
   const msgs = document.getElementById("ella-msgs");
+  const chipsEl = document.getElementById("ella-chips");
   const form = document.getElementById("ella-form");
   const input = document.getElementById("ella-input");
   const send = document.getElementById("ella-send");
@@ -83,6 +94,25 @@
     return div;
   }
 
+  function showChips() {
+    chipsEl.innerHTML = "";
+    CHIPS.forEach((label) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "ella-chip";
+      b.textContent = label;
+      b.addEventListener("click", () => {
+        hideChips();
+        sendMessage(label);
+      });
+      chipsEl.appendChild(b);
+    });
+  }
+
+  function hideChips() {
+    chipsEl.innerHTML = "";
+  }
+
   function setOpen(val) {
     open = val;
     panel.classList.toggle("open", val);
@@ -90,30 +120,14 @@
       greeted = true;
       addMsg("ella", GREETING);
       history.push({ role: "assistant", content: GREETING });
+      showChips();
     }
     if (val) input.focus();
   }
 
-  btn.addEventListener("click", () => setOpen(!open));
-  closeBtn.addEventListener("click", () => setOpen(false));
-
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      form.requestSubmit();
-    }
-  });
-
-  input.addEventListener("input", () => {
-    input.style.height = "auto";
-    input.style.height = Math.min(input.scrollHeight, 120) + "px";
-  });
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const text = input.value.trim();
+  async function sendMessage(text) {
     if (!text) return;
-
+    hideChips();
     input.value = "";
     input.style.height = "";
     send.disabled = true;
@@ -145,5 +159,27 @@
 
     send.disabled = false;
     input.focus();
+  }
+
+  btn.addEventListener("click", () => setOpen(!open));
+  closeBtn.addEventListener("click", () => setOpen(false));
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
+  input.addEventListener("input", () => {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 120) + "px";
+    if (input.value.trim()) hideChips();
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (text) sendMessage(text);
   });
 })();
