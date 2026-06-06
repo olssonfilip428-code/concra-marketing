@@ -169,11 +169,14 @@
     <span style="font-weight:200;font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:#f2f2f0;">Concra</span>
   </a>
   <div class="nav-links">
-    <a href="/produkt">Produkt</a>
-    <a href="/priser" class="active">Priser</a>
-    <a href="/kontakt">Kontakt</a>
+    <a href="/produkt" data-i18n="nav_produkt">Produkt</a>
+    <a href="/priser" class="active" data-i18n="nav_priser">Priser</a>
+    <a href="/kontakt" data-i18n="nav_kontakt">Kontakt</a>
   </div>
-  <a class="nbtn" href="/kontakt">Boka demo</a>
+  <div style="display:flex;align-items:center;gap:10px">
+    <a class="nbtn" href="/kontakt" data-i18n="nav_cta">Boka demo</a>
+    <button id="langToggle" onclick="toggleLang()" style="background:none;border:1px solid rgba(255,255,255,0.14);color:rgba(192,192,190,0.8);font-size:11px;font-weight:300;letter-spacing:0.1em;padding:5px 12px;cursor:pointer;font-family:inherit;transition:color 0.2s,border-color 0.2s">EN</button>
+  </div>
   <button class="mob-btn" aria-label="Meny" onclick="document.getElementById('mob-overlay').classList.add('open')"><svg width="22" height="14" viewBox="0 0 22 14" fill="none"><line x1="0" y1="1" x2="22" y2="1" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="7" x2="22" y2="7" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="13" x2="22" y2="13" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/></svg></button>
 </nav>
 <div class="mob-overlay" id="mob-overlay">
@@ -187,22 +190,22 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-tag">Kom igång</div>
-    <h1 class="hero-h">Betala per lass.<br><em>Inte per licens.</em></h1>
-    <p class="hero-p">Concras modell är byggd för att ge mindre betongföretag samma digitala förutsättningar som de stora. Inga fasta kostnader — ni betalar för varje levererat lass och ingenting annat.</p>
+    <div class="hero-tag" data-i18n="pris_hero_tag">Kom igång</div>
+    <h1 class="hero-h" data-i18n-html="pris_hero_h">Betala per lass.<br><em>Inte per licens.</em></h1>
+    <p class="hero-p" data-i18n="pris_hero_p">Concras modell är byggd för att ge mindre betongföretag samma digitala förutsättningar som de stora. Inga fasta kostnader — ni betalar för varje levererat lass och ingenting annat.</p>
   </div>
   <div class="hero-right">
     <div class="hero-stat">
-      <div class="hs-val" style="font-size:clamp(24px,3vw,40px);padding-top:8px">Engångskostnad</div>
-      <div class="hs-lbl">Hårdvara per bil</div>
+      <div class="hs-val" style="font-size:clamp(24px,3vw,40px);padding-top:8px" data-i18n="pris_stat1_val">Engångskostnad</div>
+      <div class="hs-lbl" data-i18n="pris_stat1_lbl">Hårdvara per bil</div>
     </div>
     <div class="hero-stat">
-      <div class="hs-val">1 dag</div>
-      <div class="hs-lbl">Tid till igång</div>
+      <div class="hs-val" data-i18n="pris_stat2_val">1 dag</div>
+      <div class="hs-lbl" data-i18n="pris_stat2_lbl">Tid till igång</div>
     </div>
     <div class="hero-stat">
       <div class="hs-val">0</div>
-      <div class="hs-lbl">Månaders bindning</div>
+      <div class="hs-lbl" data-i18n="pris_stat3_lbl">Månaders bindning</div>
     </div>
   </div>
 </section>
@@ -212,52 +215,52 @@
 <!-- SCREENSHOT -->
 <!-- INCLUDES -->
 <section class="includes">
-  <div class="sec-tag">Vad ingår</div>
-  <h2 class="sec-h">Hela plattformen.<br>Från dag ett.</h2>
+  <div class="sec-tag" data-i18n="pris_inc_tag">Vad ingår</div>
+  <h2 class="sec-h" data-i18n-html="pris_inc_h">Hela plattformen.<br>Från dag ett.</h2>
   <div class="inc-cols">
     <div class="inc-item">
       <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="inc-text">GPS-spårning i realtid</span>
+      <span class="inc-text" data-i18n="inc1">GPS-spårning i realtid</span>
     </div>
     <div class="inc-item">
       <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="inc-text">Automatisk fakturering via ditt bokföringssystem</span>
+      <span class="inc-text" data-i18n="inc2">Automatisk fakturering via ditt bokföringssystem</span>
     </div>
     <div class="inc-item">
       <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="inc-text">Spårningslänk till kund via SMS när bilen lämnar fabriken</span>
+      <span class="inc-text" data-i18n="inc3">Spårningslänk till kund via SMS när bilen lämnar fabriken</span>
     </div>
     <div class="inc-item">
       <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="inc-text">CO₂-data per leverans (Boverket-standard)</span>
+      <span class="inc-text" data-i18n="inc4">CO₂-data per leverans (Boverket-standard)</span>
     </div>
     <div class="inc-item">
       <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="inc-text">Dedikerat chaufförsgränssnitt med navigation</span>
+      <span class="inc-text" data-i18n="inc5">Dedikerat chaufförsgränssnitt med navigation</span>
     </div>
     <div class="inc-item">
       <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="inc-text">Automatiska månadsinsikter och beslutsstöd</span>
+      <span class="inc-text" data-i18n="inc6">Automatiska månadsinsikter och beslutsstöd</span>
     </div>
     <div class="inc-item">
       <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="inc-text">Väder- och gjutdokumentation</span>
+      <span class="inc-text" data-i18n="inc7">Väder- och gjutdokumentation</span>
     </div>
     <div class="inc-item">
       <svg class="inc-check" width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8.5 6.5,12 13,5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span class="inc-text">CSV-export och kredithantering</span>
+      <span class="inc-text" data-i18n="inc8">CSV-export och kredithantering</span>
     </div>
   </div>
 </section>
 
 <!-- HARDWARE -->
 <section style="padding:100px 52px;border-bottom:1px solid var(--border);background:#0a0a09">
-  <div class="sec-tag">Hårdvara</div>
-  <h2 class="sec-h">En box.<br>Per bil. En gång.</h2>
+  <div class="sec-tag" data-i18n="hw_tag">Hårdvara</div>
+  <h2 class="sec-h" data-i18n-html="hw_h">En box.<br>Per bil. En gång.</h2>
   <div data-hw-grid style="display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:64px;align-items:start">
     <div>
-      <p style="font-size:16px;font-weight:300;color:rgba(255,255,255,.78);line-height:1.9;margin-bottom:32px">Concra-terminalen är en kompakt industrienhet som monteras i varje bil. Den kopplar upp sig mot mobilnätet, loggar position och status i realtid, och synkar automatiskt med plattformen. Inga SIM-kort att hantera, inga appar att installera.</p>
-      <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,.58);line-height:1.8">Vi hanterar installation och driftsättning på plats. Ni behöver inte göra något tekniskt — vi ser till att allt fungerar innan vi lämnar.</p>
+      <p style="font-size:16px;font-weight:300;color:rgba(255,255,255,.78);line-height:1.9;margin-bottom:32px" data-i18n="hw_p1">Concra-terminalen är en kompakt industrienhet som monteras i varje bil. Den kopplar upp sig mot mobilnätet, loggar position och status i realtid, och synkar automatiskt med plattformen. Inga SIM-kort att hantera, inga appar att installera.</p>
+      <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,.58);line-height:1.8" data-i18n="hw_p2">Vi hanterar installation och driftsättning på plats. Ni behöver inte göra något tekniskt — vi ser till att allt fungerar innan vi lämnar.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:0;border:1px solid rgba(255,255,255,0.1)">
       <div style="padding:28px 32px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;gap:20px;align-items:start">
@@ -265,8 +268,8 @@
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.3"/><circle cx="7" cy="7" r="2" fill="rgba(255,255,255,0.4)"/></svg>
         </div>
         <div>
-          <div style="font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.92);margin-bottom:6px">GPS + 4G inbyggt</div>
-          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.6">Realtidsposition utan externa donglar. Täckning via det svenska mobilnätet.</div>
+          <div style="font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.92);margin-bottom:6px" data-i18n="hw1_title">GPS + 4G inbyggt</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.6" data-i18n="hw1_desc">Realtidsposition utan externa donglar. Täckning via det svenska mobilnätet.</div>
         </div>
       </div>
       <div style="padding:28px 32px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;gap:20px;align-items:start">
@@ -274,8 +277,8 @@
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="4" width="10" height="7" rx="1" stroke="rgba(255,255,255,0.4)" stroke-width="1.3"/><path d="M5 4V3a2 2 0 014 0v1" stroke="rgba(255,255,255,0.4)" stroke-width="1.3"/></svg>
         </div>
         <div>
-          <div style="font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.92);margin-bottom:6px">Strömförsörjning via bilen</div>
-          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.6">Kopplas till bilens elsystem. Inbyggt batteri hanterar kortare strömavbrott.</div>
+          <div style="font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.92);margin-bottom:6px" data-i18n="hw2_title">Strömförsörjning via bilen</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.6" data-i18n="hw2_desc">Kopplas till bilens elsystem. Inbyggt batteri hanterar kortare strömavbrott.</div>
         </div>
       </div>
       <div style="padding:28px 32px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;gap:20px;align-items:start">
@@ -283,8 +286,8 @@
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="11" height="8" rx="1" stroke="rgba(255,255,255,0.4)" stroke-width="1.3"/><path d="M5 3V2h4v1" stroke="rgba(255,255,255,0.4)" stroke-width="1.3"/><line x1="4" y1="7" x2="10" y2="7" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round"/></svg>
         </div>
         <div>
-          <div style="font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.92);margin-bottom:6px">Chaufförsskärm ingår</div>
-          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.6">Chauffören ser order, navigering och status direkt på skärmen. Ingen telefon behövs.</div>
+          <div style="font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.92);margin-bottom:6px" data-i18n="hw3_title">Chaufförsskärm ingår</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.6" data-i18n="hw3_desc">Chauffören ser order, navigering och status direkt på skärmen. Ingen telefon behövs.</div>
         </div>
       </div>
       <div style="padding:28px 32px;display:flex;gap:20px;align-items:start">
@@ -292,8 +295,8 @@
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v2M7 11v2M1 7h2M11 7h2" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="7" r="3" stroke="rgba(255,255,255,0.4)" stroke-width="1.3"/></svg>
         </div>
         <div>
-          <div style="font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.92);margin-bottom:6px">OTA-uppdateringar</div>
-          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.6">Ny funktionalitet rullas ut automatiskt. Ni behöver aldrig uppdatera något manuellt.</div>
+          <div style="font-size:13px;font-weight:300;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.92);margin-bottom:6px" data-i18n="hw4_title">OTA-uppdateringar</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.6" data-i18n="hw4_desc">Ny funktionalitet rullas ut automatiskt. Ni behöver aldrig uppdatera något manuellt.</div>
         </div>
       </div>
     </div>
@@ -303,72 +306,72 @@
 <!-- GDPR TRUST -->
 <section style="padding:32px 52px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:20px">
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style="flex-shrink:0"><path d="M9 1.5L2 4.5V9c0 3.6 2.8 6.9 7 7.5 4.2-.6 7-3.9 7-7.5V4.5L9 1.5z" stroke="rgba(255,255,255,0.3)" stroke-width="1.3" stroke-linejoin="round"/></svg>
-  <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,.58);line-height:1.7;max-width:700px">All data hanteras i enlighet med GDPR. Personuppgifter lagras inom EU och raderas på begäran. Ni äger er leveransdata — alltid.</p>
+  <p style="font-size:12px;font-weight:300;color:rgba(255,255,255,.58);line-height:1.7;max-width:700px" data-i18n="gdpr_text">All data hanteras i enlighet med GDPR. Personuppgifter lagras inom EU och raderas på begäran. Ni äger er leveransdata — alltid.</p>
 </section>
 
 <!-- RÄKNEEXEMPEL -->
 <section class="faq">
-  <div class="sec-tag">Räkneexempel</div>
-  <h2 class="sec-h">Vad det kostar<br><em style="color:rgba(255,255,255,.18);font-style:normal">i praktiken.</em></h2>
+  <div class="sec-tag" data-i18n="calc_tag">Räkneexempel</div>
+  <h2 class="sec-h" data-i18n-html="calc_h">Vad det kostar<br><em style="color:rgba(255,255,255,.18);font-style:normal">i praktiken.</em></h2>
   <div data-calc-grid style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:64px;border:1px solid rgba(255,255,255,.09)">
 
     <!-- Scenario 1 -->
     <div style="padding:48px 40px;border-right:1px solid rgba(255,255,255,.09)">
-      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px">Litet bolag</div>
+      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px" data-i18n="calc_s1">Litet bolag</div>
       <div style="margin-bottom:32px">
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">1</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">6</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">120</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_trucks">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">1</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_day">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">6</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_days_month">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_month">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">120</span></div>
       </div>
       <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
-        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px">Månadskostnad</div>
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
         <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">9 600 kr</div>
       </div>
     </div>
 
     <!-- Scenario 2 -->
     <div style="padding:48px 40px;border-right:1px solid rgba(255,255,255,.09)">
-      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px">Medelstort bolag</div>
+      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px" data-i18n="calc_s2">Medelstort bolag</div>
       <div style="margin-bottom:32px">
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">3</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">8</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">480</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_trucks">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">3</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_day">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">8</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_days_month">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_month">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">480</span></div>
       </div>
       <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
-        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px">Månadskostnad</div>
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
         <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">38 400 kr</div>
       </div>
     </div>
 
     <!-- Scenario 3 -->
     <div style="padding:48px 40px">
-      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px">Växande aktör</div>
+      <div style="font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:28px" data-i18n="calc_s3">Växande aktör</div>
       <div style="margin-bottom:32px">
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">6</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">10</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">1 200</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_trucks">Bilar</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">6</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_day">Lass / dag</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">10</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_days_month">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_month">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">1 200</span></div>
       </div>
       <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
-        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px">Månadskostnad</div>
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
         <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">96 000 kr</div>
       </div>
     </div>
 
   </div>
-  <p style="font-size:13px;font-weight:300;color:rgba(255,255,255,.28);line-height:1.8;margin-top:36px;max-width:560px">Exakt pris per lass sätts tillsammans med er baserat på volym och upplägg — vi diskuterar det under demo-samtalet.</p>
+  <p style="font-size:13px;font-weight:300;color:rgba(255,255,255,.28);line-height:1.8;margin-top:36px;max-width:560px" data-i18n="calc_note">Exakt pris per lass sätts tillsammans med er baserat på volym och upplägg — vi diskuterar det under demo-samtalet.</p>
 </section>
 
 <!-- CTA -->
 <section class="cta">
-  <div class="cta-tag">Nästa steg</div>
-  <h2 class="cta-h">Prata<br>med oss.</h2>
-  <p class="cta-p">30 minuter. Vi visar systemet live och berättar allt om prissättningen. Inga dolda avgifter, inga obehagliga överraskningar.</p>
+  <div class="cta-tag" data-i18n="pris_cta_tag">Nästa steg</div>
+  <h2 class="cta-h" data-i18n-html="pris_cta_h">Prata<br>med oss.</h2>
+  <p class="cta-p" data-i18n="pris_cta_p">30 minuter. Vi visar systemet live och berättar allt om prissättningen. Inga dolda avgifter, inga obehagliga överraskningar.</p>
   <div class="cta-acts">
-    <a class="btn-b" href="/kontakt">Boka demo</a>
-    <a class="btn-o" href="/produkt">Se produkten</a>
+    <a class="btn-b" href="/kontakt" data-i18n="nav_cta">Boka demo</a>
+    <a class="btn-o" href="/produkt" data-i18n="pris_cta_prod">Se produkten</a>
   </div>
 </section>
 
@@ -378,14 +381,15 @@
     <span style="font-weight:200;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,0.22);">Concra</span>
   </a>
   <div class="f-links">
-    <a href="/produkt">Produkt</a>
-    <a href="/kalkylator">Kalkylator</a>
-    <a href="/betongklasser">Betongklasser</a>
-    <a href="/kontakt">Kontakt</a>
+    <a href="/produkt" data-i18n="footer_produkt">Produkt</a>
+    <a href="/kalkylator" data-i18n="footer_kalkylator">Kalkylator</a>
+    <a href="/betongklasser" data-i18n="footer_betongklasser">Betongklasser</a>
+    <a href="/kontakt" data-i18n="footer_kontakt">Kontakt</a>
   </div>
   <div class="f-r">© 2026 Concra</div>
 </footer>
 
-<script src="/js/ella.js"></script>
+<script src="/js/lang.js"></script>
+<!-- <script src="/js/ella.js"></script> -->
 </body>
 </html>

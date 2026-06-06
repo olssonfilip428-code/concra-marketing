@@ -2,3 +2,7 @@
 *.log
 
 video/
+
+# Hemlig Mapbox-token (injiceras vid deploy)
+/js/mapbox-token.js
+.env

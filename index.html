@@ -621,8 +621,15 @@ footer {
 }
 @media (max-width: 768px) {
   #story-wrap { flex-direction: column; height: auto; }
-  #story { width: 100%; height: 75vw; min-height: 320px; }
-  #story-side { padding: 40px 24px; border-left: none; border-top: 1px solid rgba(255,255,255,0.07); }
+  #story { width: 100%; height: 520px; min-height: 520px; }
+  #story-side { width: 100%; padding: 48px 24px; border-left: none; border-top: 1px solid rgba(255,255,255,0.07); }
+  .story-top { padding: 28px 20px 0; }
+  .story-headline { font-size: clamp(24px, 7vw, 36px); max-width: 260px; }
+  .story-cards { position: absolute; bottom: 60px; left: 16px; right: 16px; width: auto; top: auto; transform: none; }
+  .story-stepper { bottom: 16px; padding: 6px 14px; }
+  .si-label { display: none; }
+  .stepper-sep { width: 10px; }
+  .stepper-item { padding: 4px 8px; }
 }
 #story-map,
 #story-map.mapboxgl-map {
@@ -919,19 +926,22 @@ footer {
     <span class="nav-wordmark">Concra</span>
   </a>
   <ul class="nav-links">
-    <li><a href="/produkt">Produkt</a></li>
-    <li><a href="/priser">Priser</a></li>
-    <li><a href="/kontakt">Kontakt</a></li>
+    <li><a href="/produkt" data-i18n="nav_produkt">Produkt</a></li>
+    <li><a href="/priser" data-i18n="nav_priser">Priser</a></li>
+    <li><a href="/kontakt" data-i18n="nav_kontakt">Kontakt</a></li>
   </ul>
-  <a class="nav-cta" href="#cta">Boka demo</a>
+  <div style="display:flex;align-items:center;gap:10px">
+    <a class="nav-cta" href="#cta" data-i18n="nav_cta">Boka demo</a>
+    <button id="langToggle" onclick="toggleLang()" style="background:none;border:1px solid rgba(255,255,255,0.14);color:rgba(192,192,190,0.8);font-size:11px;font-weight:300;letter-spacing:0.1em;padding:5px 12px;cursor:pointer;font-family:inherit;transition:color 0.2s,border-color 0.2s" onmouseover="this.style.color='#f2f2f0';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='rgba(192,192,190,0.8)';this.style.borderColor='rgba(255,255,255,0.14)'">EN</button>
+  </div>
   <button class="mob-btn" aria-label="Meny" onclick="document.getElementById('mob-overlay').classList.add('open')"><svg width="22" height="14" viewBox="0 0 22 14" fill="none"><line x1="0" y1="1" x2="22" y2="1" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="7" x2="22" y2="7" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="13" x2="22" y2="13" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/></svg></button>
 </nav>
 <div class="mob-overlay" id="mob-overlay">
   <button class="mob-close" aria-label="Stäng" onclick="document.getElementById('mob-overlay').classList.remove('open')"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="1" y1="1" x2="19" y2="19" stroke="rgba(242,242,240,.45)" stroke-width="1.5"/><line x1="19" y1="1" x2="1" y2="19" stroke="rgba(242,242,240,.45)" stroke-width="1.5"/></svg></button>
-  <a href="/produkt">Produkt</a>
-  <a href="/priser">Priser</a>
-  <a href="/kontakt">Kontakt</a>
-  <a href="#cta" style="margin-top:16px;font-size:13px;letter-spacing:.18em;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);padding:14px 48px;border-bottom:none" onclick="document.getElementById('mob-overlay').classList.remove('open')">Boka demo</a>
+  <a href="/produkt" data-i18n="mob_produkt">Produkt</a>
+  <a href="/priser" data-i18n="mob_priser">Priser</a>
+  <a href="/kontakt" data-i18n="mob_kontakt">Kontakt</a>
+  <a href="#cta" style="margin-top:16px;font-size:13px;letter-spacing:.18em;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);padding:14px 48px;border-bottom:none" onclick="document.getElementById('mob-overlay').classList.remove('open')" data-i18n="mob_cta">Boka demo</a>
 </div>
 
 <!-- HERO -->
@@ -954,17 +964,17 @@ footer {
     </div>
 
     <!-- Tagline -->
-    <p class="hero-tagline" id="heroTagline">Betongbranschen i realtid</p>
+    <p class="hero-tagline" id="heroTagline" data-i18n="hero_tagline">Betongbranschen i realtid</p>
 
     <!-- Sub -->
-    <p class="hero-sub" id="heroSub">
+    <p class="hero-sub" id="heroSub" data-i18n="hero_sub">
       Kunden ser bilen på kartan. Fakturan skapar sig själv. Du slipper ringa runt — och missar aldrig en leverans igen.
     </p>
 
     <!-- Actions -->
     <div class="hero-actions" id="heroActions">
-      <a href="#cta" class="btn-primary">Boka demo</a>
-      <a href="/produkt" class="btn-ghost">Se hur det funkar</a>
+      <a href="#cta" class="btn-primary" data-i18n="hero_btn_primary">Boka demo</a>
+      <a href="/produkt" class="btn-ghost" data-i18n="hero_btn_ghost">Se hur det funkar</a>
     </div>
   </div>
 
@@ -972,11 +982,11 @@ footer {
   <div class="hero-ticker" id="heroTicker">
     <span class="ticker-live">Live</span>
     <div class="ticker-dot"></div>
-    <span class="ticker-text" id="tickerText">Leverans aktiv</span>
+    <span class="ticker-text" id="tickerText" data-i18n="ticker_initial">Leverans aktiv</span>
   </div>
 
   <div class="scroll-hint" id="scrollHint">
-    <span>Scrolla</span>
+    <span data-i18n="hero_scroll">Scrolla</span>
     <div class="scroll-line"></div>
   </div>
 </section>
@@ -986,8 +996,8 @@ footer {
 
 <!-- PROBLEM -->
 <section id="problem">
-  <p class="section-label" id="problemLabel">Det händer varje dag</p>
-  <h2 class="problem-headline" id="problemHeadline">
+  <p class="section-label" id="problemLabel" data-i18n="problem_label">Det händer varje dag</p>
+  <h2 class="problem-headline" id="problemHeadline" data-i18n-html="problem_headline">
     Kunden ringer.<br>
     <span class="dim">Ingen vet svaret.</span><br>
     Fakturan stämmer fortfarande inte.
@@ -996,22 +1006,22 @@ footer {
     <div class="problem-statement" id="prob1">
       <span class="problem-number">01</span>
       <div class="problem-text">
-        <h3>Ingen vet var bilen är</h3>
-        <p>Disponenten gissar. Kunden ringer. Bilen är på väg men ingen kan bekräfta det — för ingen har systemet för att se det i realtid.</p>
+        <h3 data-i18n="prob1_h3">Ingen vet var bilen är</h3>
+        <p data-i18n="prob1_p">Disponenten gissar. Kunden ringer. Bilen är på väg men ingen kan bekräfta det — för ingen har systemet för att se det i realtid.</p>
       </div>
     </div>
     <div class="problem-statement" id="prob2">
       <span class="problem-number">02</span>
       <div class="problem-text">
-        <h3>Manuella processer kostar mer än ni tror</h3>
-        <p>Lassedlar förs in manuellt. Fakturor skickas fel eller försent. Tid slösas bort på administration som ett modernt system hanterar helt automatiskt — varje dag, varje leverans.</p>
+        <h3 data-i18n="prob2_h3">Manuella processer kostar mer än ni tror</h3>
+        <p data-i18n="prob2_p">Lassedlar förs in manuellt. Fakturor skickas fel eller försent. Tid slösas bort på administration som ett modernt system hanterar helt automatiskt — varje dag, varje leverans.</p>
       </div>
     </div>
     <div class="problem-statement" id="prob3">
       <span class="problem-number">03</span>
       <div class="problem-text">
-        <h3>Kunden får inget besked</h3>
-        <p>Ingen notifiering. Inget SMS. Kunden ringer för att de inte vet. Du svarar för att du inte har något bättre alternativ. Varje gång.</p>
+        <h3 data-i18n="prob3_h3">Kunden får inget besked</h3>
+        <p data-i18n="prob3_p">Ingen notifiering. Inget SMS. Kunden ringer för att de inte vet. Du svarar för att du inte har något bättre alternativ. Varje gång.</p>
       </div>
     </div>
   </div>
@@ -1035,79 +1045,79 @@ footer {
       <!-- Right: cards -->
       <div class="story-cards">
         <div class="sc-card" id="sc0">
-          <div class="sc-badge">Order skapad &middot; 06:42</div>
+          <div class="sc-badge" data-i18n="sc0_badge">Order skapad · 06:42</div>
           <h3 class="sc-title">Kungsbacka Bygg AB</h3>
           <div class="sc-rows">
-            <div class="sc-row"><span>Volym</span><strong>8 m³</strong></div>
-            <div class="sc-row"><span>Kvalitet</span><strong>C30/37 XC2</strong></div>
-            <div class="sc-row"><span>Adress</span><strong>Björkhagavägen 14</strong></div>
-            <div class="sc-row"><span>Kontakt</span><strong>Markus Holm</strong></div>
+            <div class="sc-row"><span data-i18n="sc0_vol">Volym</span><strong>8 m³</strong></div>
+            <div class="sc-row"><span data-i18n="sc0_qual">Kvalitet</span><strong>C30/37 XC2</strong></div>
+            <div class="sc-row"><span data-i18n="sc0_addr">Adress</span><strong>Björkhagavägen 14</strong></div>
+            <div class="sc-row"><span data-i18n="sc0_contact">Kontakt</span><strong>Markus Holm</strong></div>
           </div>
-          <div class="sc-status green"><span class="sc-sdot"></span>Bekräftad av dispatchern</div>
+          <div class="sc-status green"><span class="sc-sdot"></span><span data-i18n="sc0_status">Bekräftad av dispatchern</span></div>
         </div>
 
         <div class="sc-card" id="sc1">
-          <div class="sc-badge">Avgång &middot; 07:14</div>
-          <h3 class="sc-title">SMS skickat automatiskt</h3>
+          <div class="sc-badge" data-i18n="sc1_badge">Avgång · 07:14</div>
+          <h3 class="sc-title" data-i18n="sc1_title">SMS skickat automatiskt</h3>
           <div class="sc-sms">
-            <div class="sms-bubble">Hej Markus! Er betong är på väg från Mölndal. Estimerad ankomst: <strong>07:51</strong>. Spåra live: concra.se/t/A4K2</div>
-            <div class="sms-meta">Skickat av Concra &middot; Fordon CG&thinsp;847</div>
+            <div class="sms-bubble" data-i18n-html="sc1_sms">Hej Markus! Er betong är på väg från Mölndal. Estimerad ankomst: <strong>07:51</strong>. Spåra live: concra.se/t/A4K2</div>
+            <div class="sms-meta" data-i18n="sc1_meta">Skickat av Concra · Fordon CG 847</div>
           </div>
         </div>
 
         <div class="sc-card" id="sc2">
-          <div class="sc-badge">Live-spårning &middot; 07:29</div>
-          <h3 class="sc-title">ETA uppdateras i realtid</h3>
+          <div class="sc-badge" data-i18n="sc2_badge">Live-spårning · 07:29</div>
+          <h3 class="sc-title" data-i18n="sc2_title">ETA uppdateras i realtid</h3>
           <div class="sc-eta-wrap">
             <div class="sc-eta-num" id="etaNum">22</div>
             <div class="sc-eta-unit">min</div>
           </div>
           <div class="sc-rows">
-            <div class="sc-row"><span>Hastighet</span><strong>78 km/h</strong></div>
-            <div class="sc-row"><span>Kvar</span><strong>19,4 km</strong></div>
+            <div class="sc-row"><span data-i18n="sc2_speed">Hastighet</span><strong>78 km/h</strong></div>
+            <div class="sc-row"><span data-i18n="sc2_remaining">Kvar</span><strong>19,4 km</strong></div>
           </div>
         </div>
 
         <div class="sc-card" id="sc3">
-          <div class="sc-badge">Framme &middot; 07:48</div>
-          <h3 class="sc-title">Lossning påbörjad</h3>
+          <div class="sc-badge" data-i18n="sc3_badge">Framme · 07:48</div>
+          <h3 class="sc-title" data-i18n="sc3_title">Lossning påbörjad</h3>
           <div class="sc-arrival">
             <div class="sc-check">✓</div>
             <div>
-              <p>Chauffören bekräftade ankomst</p>
+              <p data-i18n="sc3_confirm">Chauffören bekräftade ankomst</p>
               <p class="sc-small">07:48 &mdash; 8 m³ C30/37 XC2</p>
             </div>
           </div>
           <div class="sc-rows">
-            <div class="sc-row"><span>Väntetid</span><strong>0 min</strong></div>
-            <div class="sc-row"><span>Hydraulränna</span><strong>Nej</strong></div>
+            <div class="sc-row"><span data-i18n="sc3_wait">Väntetid</span><strong>0 min</strong></div>
+            <div class="sc-row"><span data-i18n="sc3_chute">Hydraulränna</span><strong data-i18n="sc3_chute_val">Nej</strong></div>
           </div>
-          <div class="sc-status green"><span class="sc-sdot"></span>Lossning pågår</div>
+          <div class="sc-status green"><span class="sc-sdot"></span><span data-i18n="sc3_status">Lossning pågår</span></div>
         </div>
 
         <div class="sc-card" id="sc4">
-          <div class="sc-badge">Faktura &middot; 08:22</div>
-          <h3 class="sc-title">Skickad till Fortnox</h3>
+          <div class="sc-badge" data-i18n="sc4_badge">Faktura · 08:22</div>
+          <h3 class="sc-title" data-i18n="sc4_title">Skickad till Fortnox</h3>
           <div class="sc-invoice">
-            <div class="sc-inv-row"><span>Betong C30/37 XC2 &middot; 8 m³</span><strong>14&thinsp;400 kr</strong></div>
-            <div class="sc-inv-row"><span>Frakt &middot; 37 km</span><strong>580 kr</strong></div>
-            <div class="sc-inv-row inv-total"><span>Totalt ex. moms</span><strong>14&thinsp;980 kr</strong></div>
+            <div class="sc-inv-row"><span data-i18n="sc4_item1">Betong C30/37 XC2 · 8 m³</span><strong>14&thinsp;400 kr</strong></div>
+            <div class="sc-inv-row"><span data-i18n="sc4_item2">Frakt · 37 km</span><strong>580 kr</strong></div>
+            <div class="sc-inv-row inv-total"><span data-i18n="sc4_total">Totalt ex. moms</span><strong>14&thinsp;980 kr</strong></div>
           </div>
-          <div class="sc-status green"><span class="sc-sdot"></span>Bokförd i Fortnox automatiskt</div>
+          <div class="sc-status green"><span class="sc-sdot"></span><span data-i18n="sc4_status">Bokförd i Fortnox automatiskt</span></div>
         </div>
       </div><!-- /story-cards -->
 
       <!-- Stepper -->
       <div class="story-stepper" id="storyStepper">
-        <div class="stepper-item active" data-i="0"><span class="si-num">01</span><span class="si-label">Order skapad</span></div>
+        <div class="stepper-item active" data-i="0"><span class="si-num">01</span><span class="si-label" data-i18n="step0_label">Order skapad</span></div>
         <div class="stepper-sep"></div>
-        <div class="stepper-item" data-i="1"><span class="si-num">02</span><span class="si-label">Avgång</span></div>
+        <div class="stepper-item" data-i="1"><span class="si-num">02</span><span class="si-label" data-i18n="step1_label">Avgång</span></div>
         <div class="stepper-sep"></div>
-        <div class="stepper-item" data-i="2"><span class="si-num">03</span><span class="si-label">Live-ETA</span></div>
+        <div class="stepper-item" data-i="2"><span class="si-num">03</span><span class="si-label" data-i18n="step2_label">Live-ETA</span></div>
         <div class="stepper-sep"></div>
-        <div class="stepper-item" data-i="3"><span class="si-num">04</span><span class="si-label">Framme</span></div>
+        <div class="stepper-item" data-i="3"><span class="si-num">04</span><span class="si-label" data-i18n="step3_label">Framme</span></div>
         <div class="stepper-sep"></div>
-        <div class="stepper-item" data-i="4"><span class="si-num">05</span><span class="si-label">Faktura</span></div>
+        <div class="stepper-item" data-i="4"><span class="si-num">05</span><span class="si-label" data-i18n="step4_label">Faktura</span></div>
       </div>
       <!-- Progress bar -->
       <div class="story-bar"><div class="story-bar-fill" id="storyBar"></div></div>
@@ -1116,34 +1126,34 @@ footer {
 </section>
 
 <div id="story-side">
-  <p class="sp-label">Varför Concra</p>
+  <p class="sp-label" data-i18n="story_side_label">Varför Concra</p>
   <div class="sp-list">
     <div class="sp-item">
       <span class="sp-num">01</span>
       <div>
-        <h4>Realtid hela vägen</h4>
-        <p>Kunden ser bilen live på kartan. Inga samtal om "när kommer ni" — svaret finns alltid på skärmen.</p>
+        <h4 data-i18n="sp1_h4">Realtid hela vägen</h4>
+        <p data-i18n="sp1_p">Kunden ser bilen live på kartan. Inga samtal om "när kommer ni" — svaret finns alltid på skärmen.</p>
       </div>
     </div>
     <div class="sp-item">
       <span class="sp-num">02</span>
       <div>
-        <h4>Fakturan skapar sig själv</h4>
-        <p>Ordern avslutas — Fortnox uppdateras automatiskt. Korrekt, direkt, utan ett knapptryck.</p>
+        <h4 data-i18n="sp2_h4">Fakturan skapar sig själv</h4>
+        <p data-i18n="sp2_p">Ordern avslutas — Fortnox uppdateras automatiskt. Korrekt, direkt, utan ett knapptryck.</p>
       </div>
     </div>
     <div class="sp-item">
       <span class="sp-num">03</span>
       <div>
-        <h4>Kunden notifieras automatiskt</h4>
-        <p>SMS skickas vid avgång och ankomst. Ni slipper ringa — kunden vet redan.</p>
+        <h4 data-i18n="sp3_h4">Kunden notifieras automatiskt</h4>
+        <p data-i18n="sp3_p">SMS skickas vid avgång och ankomst. Ni slipper ringa — kunden vet redan.</p>
       </div>
     </div>
     <div class="sp-item">
       <span class="sp-num">04</span>
       <div>
-        <h4>Noll bindningstid</h4>
-        <p>Betala per leverans. Inga setup-kostnader. Avsluta när ni vill.</p>
+        <h4 data-i18n="sp4_h4">Noll bindningstid</h4>
+        <p data-i18n="sp4_p">Betala per leverans. Inga setup-kostnader. Avsluta när ni vill.</p>
       </div>
     </div>
   </div>
@@ -1152,23 +1162,23 @@ footer {
 
 <!-- STATS -->
 <section id="stats">
-  <p class="section-label" id="statsLabel">Skalbart från dag ett</p>
-  <h2 class="stats-headline" id="statsHeadline">
+  <p class="section-label" id="statsLabel" data-i18n="stats_label">Skalbart från dag ett</p>
+  <h2 class="stats-headline" id="statsHeadline" data-i18n-html="stats_headline">
     <strong>Betongbilar. Projekt. Leveranser.</strong><br>
     Allt i ett system — betala per leverans.
   </h2>
   <div class="stats-grid">
     <div class="stat-item" id="stat1">
-      <div class="stat-number" style="font-size:clamp(24px,3vw,38px); padding-top:10px; line-height:1.15;">0<br>Bindningstid</div>
-      <div class="stat-label">Månadsvis. Avsluta när ni vill.</div>
+      <div class="stat-number" style="font-size:clamp(24px,3vw,38px); padding-top:10px; line-height:1.15;" data-i18n-html="stat1_number">0<br>Bindningstid</div>
+      <div class="stat-label" data-i18n="stat1_label">Månadsvis. Avsluta när ni vill.</div>
     </div>
     <div class="stat-item" id="stat2">
-      <div class="stat-number" style="font-size:clamp(24px,3vw,38px); padding-top:10px; line-height:1.15;">3<br>Bokföringssystem</div>
-      <div class="stat-label">Fortnox · Visma · Kleer</div>
+      <div class="stat-number" style="font-size:clamp(24px,3vw,38px); padding-top:10px; line-height:1.15;" data-i18n-html="stat2_number">3<br>Bokföringssystem</div>
+      <div class="stat-label" data-i18n="stat2_label">Fortnox · Visma · Kleer</div>
     </div>
     <div class="stat-item" id="stat3">
       <div class="stat-number"><span class="stat-count" data-target="100">0</span><span class="suffix"> %</span></div>
-      <div class="stat-label">Automatisk fakturasynk</div>
+      <div class="stat-label" data-i18n="stat3_label">Automatisk fakturasynk</div>
     </div>
   </div>
 </section>
@@ -1177,18 +1187,18 @@ footer {
 <!-- CTA -->
 <section id="cta">
   <div class="cta-inner">
-    <p class="section-label" id="ctaLabel">Redo att börja?</p>
-    <h2 class="cta-headline" id="ctaHeadline">
+    <p class="section-label" id="ctaLabel" data-i18n="cta_label">Redo att börja?</p>
+    <h2 class="cta-headline" id="ctaHeadline" data-i18n-html="cta_headline">
       Era konkurrenter<br>väntar fortfarande.
     </h2>
-    <p class="cta-sub" id="ctaSub">
+    <p class="cta-sub" id="ctaSub" data-i18n="cta_sub">
       Boka en 30-minuters demo. Vi visar hela systemet live — inga säljargument, bara produkten. Låg ingångskostnad, ingen bindningstid.
     </p>
     <form class="cta-form" id="ctaForm" onsubmit="handleDemo(event)">
-      <input type="email" placeholder="Din e-postadress" id="demoEmail" required />
-      <button type="submit" class="btn-primary">Boka demo</button>
+      <input type="email" placeholder="Din e-postadress" id="demoEmail" required data-i18n-placeholder="cta_placeholder" />
+      <button type="submit" class="btn-primary" data-i18n="cta_btn">Boka demo</button>
     </form>
-    <p class="cta-note" id="ctaNote">Inga bindningar. Vi hör av oss inom 24 timmar.</p>
+    <p class="cta-note" id="ctaNote" data-i18n="cta_note">Inga bindningar. Vi hör av oss inom 24 timmar.</p>
   </div>
 </section>
 
@@ -1202,10 +1212,10 @@ footer {
     <span class="footer-wordmark">Concra</span>
   </div>
   <ul class="footer-links">
-    <li><a href="/produkt">Produkt</a></li>
-    <li><a href="/kalkylator">Kalkylator</a></li>
-    <li><a href="/betongklasser">Betongklasser</a></li>
-    <li><a href="/kontakt">Kontakt</a></li>
+    <li><a href="/produkt" data-i18n="footer_produkt">Produkt</a></li>
+    <li><a href="/kalkylator" data-i18n="footer_kalkylator">Kalkylator</a></li>
+    <li><a href="/betongklasser" data-i18n="footer_betongklasser">Betongklasser</a></li>
+    <li><a href="/kontakt" data-i18n="footer_kontakt">Kontakt</a></li>
   </ul>
   <span class="footer-copy">© 2026 Concra</span>
 </footer>
@@ -1215,7 +1225,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // ── Live ticker ──────────────────────────────────────────────
 (function() {
-  const updates = [
+  let updates = [
     'Betongbil 3 — Helsingborg → Kungsbacka',
     'Leverans startad — Malmö → Lund',
     'Bil 7 framme — Göteborg, Hisings Backa',
@@ -1230,6 +1240,12 @@ gsap.registerPlugin(ScrollTrigger);
   let i = 0;
   const el = document.getElementById('tickerText');
   const ticker = document.getElementById('heroTicker');
+
+  // Expose a setter so lang.js can swap the array
+  window._tickerSetUpdates = function(arr) {
+    updates = arr;
+    i = 0;
+  };
 
   setTimeout(() => {
     ticker.classList.add('visible');
@@ -1532,6 +1548,9 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
     { label: '04 — Framme',       headline: 'Leveransen<br>är bekräftad.' },
     { label: '05 — Faktura',      headline: 'Fakturerat till<br>Fortnox automatiskt.' },
   ];
+  // Expose for lang.js to patch
+  window._stepCopyRef = STEP_COPY;
+  window._currentStepIdx = 0;
 
   function lerp(a,b,t){ return a+(b-a)*t; }
   function ease(t){ return t<0.5?2*t*t:-1+(4-2*t)*t; }
@@ -1636,13 +1655,16 @@ gsap.to('#intNote',    { opacity: 1, duration: 0.7, delay: 0.3, scrollTrigger: o
   }
 
   function updateCopy(idx) {
-    const copy=STEP_COPY[idx];
+    window._currentStepIdx = idx;
     const lEl=document.getElementById('storyLabel');
     const hEl=document.getElementById('storyHeadline');
     if(!lEl||!hEl) return;
     lEl.style.opacity='0'; lEl.style.transform='translateY(-6px)';
     hEl.style.opacity='0'; hEl.style.transform='translateY(-6px)';
     setTimeout(()=>{
+      const isEn = localStorage.getItem('lang') === 'en';
+      const copies = isEn && window._stepCopyEn ? window._stepCopyEn : STEP_COPY;
+      const copy=copies[idx];
       lEl.textContent=copy.label; hEl.innerHTML=copy.headline;
       lEl.style.opacity='1'; lEl.style.transform='translateY(0)';
       hEl.style.opacity='1'; hEl.style.transform='translateY(0)';
@@ -1773,6 +1795,7 @@ function handleDemo(e) {
   }).catch(() => {});
 }
 </script>
-<script src="/js/ella.js"></script>
+<script src="/js/lang.js"></script>
+<!-- <script src="/js/ella.js"></script> -->
 </body>
 </html>

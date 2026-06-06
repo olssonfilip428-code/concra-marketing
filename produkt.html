@@ -160,6 +160,20 @@
     .f-links a{font-size:12px;color:rgba(255,255,255,.52);text-decoration:none;transition:color .2s}
     .f-links a:hover{color:var(--white)}
 
+    /* ── HARDWARE SECTION ── */
+    .hw-section{padding:100px 52px;background:#070708;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+    .hw-text{}
+    .hw-tag{font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,200,80,.7);margin-bottom:28px;display:flex;align-items:center;gap:14px}
+    .hw-tag::before{content:'';display:block;width:32px;height:1px;background:rgba(255,200,80,.4)}
+    .hw-h{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:200;font-size:clamp(32px,4vw,52px);letter-spacing:.04em;line-height:1.1;margin-bottom:24px;color:var(--white)}
+    .hw-p{font-size:15px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.75;max-width:380px;margin-bottom:36px}
+    .hw-specs{display:flex;flex-direction:column;gap:12px}
+    .hw-spec{display:flex;align-items:flex-start;gap:12px;font-size:13px;font-weight:300;color:rgba(255,255,255,.55)}
+    .hw-spec::before{content:'';width:6px;height:6px;border-radius:50%;background:rgba(255,200,80,.6);flex-shrink:0;margin-top:5px}
+    .hw-img-wrap{position:relative}
+    .hw-img-wrap img{width:100%;height:auto;display:block;border-radius:0}
+    @media(max-width:900px){.hw-section{grid-template-columns:1fr;padding:64px 24px;gap:48px}.hw-img-wrap{order:-1}}
+
     @media(max-width:900px){
       nav{padding:20px 24px}
       .page-hero{padding:140px 24px 72px}
@@ -227,11 +241,14 @@
     <span class="logo-word">Concra</span>
   </a>
   <div class="nav-links">
-    <a href="/produkt" class="active">Produkt</a>
-    <a href="/priser">Priser</a>
-    <a href="/kontakt">Kontakt</a>
+    <a href="/produkt" class="active" data-i18n="nav_produkt">Produkt</a>
+    <a href="/priser" data-i18n="nav_priser">Priser</a>
+    <a href="/kontakt" data-i18n="nav_kontakt">Kontakt</a>
   </div>
-  <a class="nbtn" href="/#cta">Boka demo</a>
+  <div style="display:flex;align-items:center;gap:10px">
+    <a class="nbtn" href="/#cta" data-i18n="nav_cta">Boka demo</a>
+    <button id="langToggle" onclick="toggleLang()" style="background:none;border:1px solid rgba(255,255,255,0.14);color:rgba(192,192,190,0.8);font-size:11px;font-weight:300;letter-spacing:0.1em;padding:5px 12px;cursor:pointer;font-family:inherit;transition:color 0.2s,border-color 0.2s">EN</button>
+  </div>
   <button class="mob-btn" aria-label="Meny" onclick="document.getElementById('mob-overlay').classList.add('open')"><svg width="22" height="14" viewBox="0 0 22 14" fill="none"><line x1="0" y1="1" x2="22" y2="1" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="7" x2="22" y2="7" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/><line x1="0" y1="13" x2="22" y2="13" stroke="rgba(242,242,240,.75)" stroke-width="1.5"/></svg></button>
 </nav>
 <div class="mob-overlay" id="mob-overlay">
@@ -244,9 +261,9 @@
 
 <!-- PAGE HERO -->
 <section class="page-hero">
-  <div class="ph-tag">Allt du behöver — inget du inte behöver</div>
-  <h1 class="ph-h">Byggd för<br><em>betong.</em><br>Inte för allt.</h1>
-  <p class="ph-sub">Concra löser de tre problemen som kostar betongföretag mest: tid, pengar och kundupplevelse.</p>
+  <div class="ph-tag" data-i18n="prod_tag">Allt du behöver — inget du inte behöver</div>
+  <h1 class="ph-h" data-i18n-html="prod_h1">Byggd för<br><em>betong.</em><br>Inte för allt.</h1>
+  <p class="ph-sub" data-i18n="prod_sub">Concra löser de tre problemen som kostar betongföretag mest: tid, pengar och kundupplevelse.</p>
 </section>
 
 <!-- FEATURES -->
@@ -255,14 +272,14 @@
   <!-- 01 Realtidsspårning -->
   <div class="feat">
     <div class="feat-text">
-      <div class="feat-num">01 — Spårning</div>
-      <h2 class="feat-h">Vet var varje bil är. Nu.</h2>
-      <p class="feat-p">Live-karta med alla fordon, uppdaterad i realtid. Kunden ser sin leverans röra sig mot platsen. Du ser flottan — alltid.</p>
+      <div class="feat-num" data-i18n="feat1_num">01 — Spårning</div>
+      <h2 class="feat-h" data-i18n="feat1_h">Vet var varje bil är. Nu.</h2>
+      <p class="feat-p" data-i18n="feat1_p">Live-karta med alla fordon, uppdaterad i realtid. Kunden ser sin leverans röra sig mot platsen. Du ser flottan — alltid.</p>
       <ul class="feat-list">
-        <li>GPS i realtid</li>
-        <li>Automatisk ETA beräknad på rutten</li>
-        <li>Historik per leverans och fordon</li>
-        <li>Dedikerad 10" pekskärm i varje bil — alltid online, alltid på</li>
+        <li data-i18n="feat1_li1">GPS i realtid</li>
+        <li data-i18n="feat1_li2">Automatisk ETA beräknad på rutten</li>
+        <li data-i18n="feat1_li3">Historik per leverans och fordon</li>
+        <li data-i18n="feat1_li4">Dedikerad 10" pekskärm i varje bil — alltid online, alltid på</li>
       </ul>
     </div>
     <div class="feat-vis" style="padding:0; overflow:hidden;">
@@ -273,14 +290,14 @@
   <!-- 02 Automatisk fakturering -->
   <div class="feat rev">
     <div class="feat-text">
-      <div class="feat-num">02 — Fakturering</div>
-      <h2 class="feat-h">Fakturan skrivs när bilen lämnar.</h2>
-      <p class="feat-p">Leveransdata omvandlas automatiskt till en korrekt faktura i ert bokföringssystem. Inga manuella justeringar, inga glömda debiteringar.</p>
+      <div class="feat-num" data-i18n="feat2_num">02 — Fakturering</div>
+      <h2 class="feat-h" data-i18n="feat2_h">Fakturan skrivs när bilen lämnar.</h2>
+      <p class="feat-p" data-i18n="feat2_p">Leveransdata omvandlas automatiskt till en korrekt faktura i ert bokföringssystem. Inga manuella justeringar, inga glömda debiteringar.</p>
       <ul class="feat-list">
-        <li>Direktintegration med Fortnox, Visma och Kleer</li>
-        <li>Automatisk prissättning per zon och kund</li>
-        <li>CO₂-rapportering ingår</li>
-        <li>PDF-leveransspecifikation per order</li>
+        <li data-i18n="feat2_li1">Direktintegration med Fortnox, Visma och Kleer</li>
+        <li data-i18n="feat2_li2">Automatisk prissättning per zon och kund</li>
+        <li data-i18n="feat2_li3">CO₂-rapportering ingår</li>
+        <li data-i18n="feat2_li4">PDF-leveransspecifikation per order</li>
       </ul>
     </div>
     <div class="feat-vis" style="padding:0; overflow:hidden;">
@@ -291,15 +308,15 @@
   <!-- 03 Chaufförsvyn -->
   <div class="feat">
     <div class="feat-text">
-      <div class="feat-num">03 — Chaufför</div>
-      <h2 class="feat-h">Chauffören kör. Systemet sköter resten.</h2>
-      <p class="feat-p">Leveransdetaljer, navigation och statusuppdateringar i ett flöde. Varje steg loggas i realtid — kunden informeras automatiskt längs vägen.</p>
+      <div class="feat-num" data-i18n="feat3_num">03 — Chaufför</div>
+      <h2 class="feat-h" data-i18n="feat3_h">Chauffören kör. Systemet sköter resten.</h2>
+      <p class="feat-p" data-i18n="feat3_p">Leveransdetaljer, navigation och statusuppdateringar i ett flöde. Varje steg loggas i realtid — kunden informeras automatiskt längs vägen.</p>
       <ul class="feat-list">
-        <li>Leveransadress, kontakt och betonggiva direkt vid start</li>
-        <li>Inbyggd navigation mot leveransplatsen</li>
-        <li>Statusflöde: Lastar → På väg → Framme → Lossar → Klar</li>
-        <li>Väntetid registreras automatiskt — inga manuella anteckningar</li>
-        <li>SMS till kunden skickas i rätt steg utan att chauffören gör något</li>
+        <li data-i18n="feat3_li1">Leveransadress, kontakt och betonggiva direkt vid start</li>
+        <li data-i18n="feat3_li2">Inbyggd navigation mot leveransplatsen</li>
+        <li data-i18n="feat3_li3">Statusflöde: Lastar → På väg → Framme → Lossar → Klar</li>
+        <li data-i18n="feat3_li4">Väntetid registreras automatiskt — inga manuella anteckningar</li>
+        <li data-i18n="feat3_li5">SMS till kunden skickas i rätt steg utan att chauffören gör något</li>
       </ul>
     </div>
     <div class="feat-vis" style="padding:0; overflow:hidden;">
@@ -310,14 +327,14 @@
   <!-- 04 Rapportering -->
   <div class="feat rev">
     <div class="feat-text">
-      <div class="feat-num">04 — Analys</div>
-      <h2 class="feat-h">Siffror du faktiskt fattar beslut på.</h2>
-      <p class="feat-p">Månadsrapporter, leveranshistorik och CO₂-data genereras automatiskt. Exportera till Excel eller låt Concra skicka dem direkt.</p>
+      <div class="feat-num" data-i18n="feat4_num">04 — Analys</div>
+      <h2 class="feat-h" data-i18n="feat4_h">Siffror du faktiskt fattar beslut på.</h2>
+      <p class="feat-p" data-i18n="feat4_p">Månadsrapporter, leveranshistorik och CO₂-data genereras automatiskt. Exportera till Excel eller låt Concra skicka dem direkt.</p>
       <ul class="feat-list">
-        <li>Automatisk månadsrapport per organisation</li>
-        <li>CO₂-rapport per projekt och kund</li>
-        <li>CSV-export för Excel med ett klick</li>
-        <li>Automatiska insikter och beslutsstöd</li>
+        <li data-i18n="feat4_li1">Automatisk månadsrapport per organisation</li>
+        <li data-i18n="feat4_li2">CO₂-rapport per projekt och kund</li>
+        <li data-i18n="feat4_li3">CSV-export för Excel med ett klick</li>
+        <li data-i18n="feat4_li4">Automatiska insikter och beslutsstöd</li>
       </ul>
     </div>
     <div class="feat-vis" style="padding:0; overflow:hidden;">
@@ -327,41 +344,59 @@
 
 </div>
 
+<!-- HARDWARE -->
+<section class="hw-section">
+  <div class="hw-text">
+    <div class="hw-tag">Hårdvara</div>
+    <h2 class="hw-h">En enhet.<br>Alltid på.</h2>
+    <p class="hw-p">En dedikerad 10,1" pekskärm monteras i hytten på varje bil. Förinstallerad och redo — chauffören behöver inte göra något.</p>
+    <ul class="hw-specs">
+      <li class="hw-spec">Chauffören ser rätt jobb, rätt adress, rätt volym — direkt</li>
+      <li class="hw-spec">Skickar position och status automatiskt, hela dagen</li>
+      <li class="hw-spec">Håller igång även när motorn är av</li>
+      <li class="hw-spec">Ni ser allt i realtid — utan att ringa chauffören</li>
+    </ul>
+  </div>
+  <div class="hw-img-wrap">
+    <img src="/img/concra-hero-device.jpg" alt="Concra hårdvara — dedikerad enhet för betonglastbil">
+  </div>
+</section>
+
 <!-- HOW IT WORKS -->
 <section class="hiw">
-  <div class="hiw-ey">Så fungerar det</div>
-  <h2 class="hiw-h">Igång på en dag. Inte en vecka.</h2>
+  <div class="hiw-ey" data-i18n="hiw_tag">Så fungerar det</div>
+  <h2 class="hiw-h" data-i18n="hiw_h">Igång på en dag. Inte en vecka.</h2>
   <div class="steps">
     <div class="step">
       <div class="step-n">01</div>
-      <div class="step-h">Anslut</div>
-      <p class="step-p">Koppla ihop Concra med ert bokföringssystem och lägg in era fordon. Det tar 30 minuter.</p>
+      <div class="step-h" data-i18n="step1_h">Anslut</div>
+      <p class="step-p" data-i18n="step1_p">Koppla ihop Concra med ert bokföringssystem och lägg in era fordon. Det tar 30 minuter.</p>
     </div>
     <div class="step">
       <div class="step-n">02</div>
-      <div class="step-h">Konfigurera</div>
-      <p class="step-p">Sätt priszoner, artiklar och SMS-mallar. Allt anpassas efter hur ni jobbar — inte tvärtom.</p>
+      <div class="step-h" data-i18n="step2_h">Konfigurera</div>
+      <p class="step-p" data-i18n="step2_p">Sätt priszoner, artiklar och SMS-mallar. Allt anpassas efter hur ni jobbar — inte tvärtom.</p>
     </div>
     <div class="step">
       <div class="step-n">03</div>
-      <div class="step-h">Kör</div>
-      <p class="step-p">Chauffören öppnar appen. Kunden får SMS. Fakturan skapas. Ni ser allt på kartan i realtid.</p>
+      <div class="step-h" data-i18n="step3_h">Kör</div>
+      <p class="step-p" data-i18n="step3_p">Chauffören öppnar appen. Kunden får SMS. Fakturan skapas. Ni ser allt på kartan i realtid.</p>
     </div>
     <div class="step">
       <div class="step-n">04</div>
-      <div class="step-h">Optimera</div>
-      <p class="step-p">Månatliga insikter hjälper er hitta ineffektivitet och förbättra lönsamhet per rutt och kund.</p>
+      <div class="step-h" data-i18n="step4_h">Optimera</div>
+      <p class="step-p" data-i18n="step4_p">Månatliga insikter hjälper er hitta ineffektivitet och förbättra lönsamhet per rutt och kund.</p>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
 <section class="cta">
-  <div class="c-ey">Redo att testa?</div>
-  <h2 class="c-h">Se det live.</h2>
+  <div class="c-ey" data-i18n="prod_cta_tag">Redo att testa?</div>
+  <h2 class="c-h" data-i18n="prod_cta_h">Se det live.</h2>
   <div class="c-acts">
-    <a class="btn-w" href="/kontakt">Boka demo</a>
-    <a class="btn-o" href="/priser">Se priser</a>
+    <a class="btn-w" href="/kontakt" data-i18n="nav_cta">Boka demo</a>
+    <a class="btn-o" href="/priser" data-i18n="prod_cta_prices">Se priser</a>
   </div>
 </section>
 
@@ -371,14 +406,15 @@
     <span class="logo-word" style="color:rgba(255,255,255,0.35)">Concra</span>
   </a>
   <div class="f-links">
-    <a href="/produkt">Produkt</a>
-    <a href="/kalkylator">Kalkylator</a>
-    <a href="/betongklasser">Betongklasser</a>
-    <a href="/kontakt">Kontakt</a>
+    <a href="/produkt" data-i18n="footer_produkt">Produkt</a>
+    <a href="/kalkylator" data-i18n="footer_kalkylator">Kalkylator</a>
+    <a href="/betongklasser" data-i18n="footer_betongklasser">Betongklasser</a>
+    <a href="/kontakt" data-i18n="footer_kontakt">Kontakt</a>
   </div>
   <div class="f-r">© 2026 Concra</div>
 </footer>
 
-<script src="/js/ella.js"></script>
+<script src="/js/lang.js"></script>
+<!-- <script src="/js/ella.js"></script> -->
 </body>
 </html>
