@@ -163,8 +163,8 @@
     /* ── HARDWARE SECTION ── */
     .hw-section{padding:100px 52px;background:#070708;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
     .hw-text{}
-    .hw-tag{font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,200,80,.7);margin-bottom:28px;display:flex;align-items:center;gap:14px}
-    .hw-tag::before{content:'';display:block;width:32px;height:1px;background:rgba(255,200,80,.4)}
+    .hw-tag{font-size:11px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:28px;display:flex;align-items:center;gap:14px}
+    .hw-tag::before{content:'';display:block;width:32px;height:1px;background:rgba(255,255,255,.2)}
     .hw-h{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:200;font-size:clamp(32px,4vw,52px);letter-spacing:.04em;line-height:1.1;margin-bottom:24px;color:var(--white)}
     .hw-p{font-size:15px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.75;max-width:380px;margin-bottom:36px}
     .hw-specs{display:flex;flex-direction:column;gap:12px}
@@ -193,12 +193,12 @@
     /* ── AMBER THEME ── */
     :root{--amber:rgba(255,200,80,.9);--amber-dim:rgba(255,200,80,.18);--amber-faint:rgba(255,200,80,.05)}
 
-    /* Hero — subtle amber glow */
+    /* Hero */
     .page-hero{
-      background:radial-gradient(ellipse 70% 60% at 50% 100%,rgba(255,200,80,.05) 0%,transparent 65%),var(--black);
+      background:var(--black);
       position:relative;
     }
-    .page-hero::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--amber-dim),transparent)}
+    .page-hero::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
 
     /* Feature numbers → amber */
     .feat-num{color:var(--amber) !important}
@@ -210,17 +210,15 @@
     .feat-vis{transition:border-color .3s}
     .feat:hover .feat-vis{border-color:rgba(255,200,80,.12) !important}
 
-    /* How it works — amber step numbers */
+    /* How it works — step numbers */
     .step-n{
-      background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,rgba(255,200,80,.25) 100%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      color:rgba(255,255,255,.85);
     }
     /* HIW section tag line */
-    .hiw-ey::before{background:var(--amber-dim) !important}
+    .hiw-ey::before{background:rgba(255,255,255,.14) !important}
 
-    /* CTA glow */
+    /* CTA */
     .cta{position:relative;overflow:hidden}
-    .cta::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(ellipse,rgba(255,200,80,.06) 0%,transparent 65%);pointer-events:none}
     .c-h,.c-ey{position:relative;z-index:1}
     .c-acts{position:relative;z-index:1}
 

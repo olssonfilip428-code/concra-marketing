@@ -125,14 +125,13 @@
 
     /* ── AMBER THEME ── */
     :root{--amber:rgba(255,200,80,.9);--amber-dim:rgba(255,200,80,.18);--amber-faint:rgba(255,200,80,.05)}
-    .hero{background:radial-gradient(ellipse 60% 50% at 50% 100%,rgba(255,200,80,.04) 0%,transparent 65%),var(--bg)}
-    .hs-val{background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .sec-tag::before{background:var(--amber)!important;opacity:.6}
-    .mg-n{color:rgba(255,200,80,.06)!important}
-    .inc-check polyline{stroke:rgba(255,200,80,.55)!important}
+    .hero{background:var(--bg)}
+    .hs-val{color:var(--white)}
+    .sec-tag::before{background:rgba(255,255,255,.35)!important;opacity:.8}
+    .mg-n{color:rgba(255,255,255,.05)!important}
+    .inc-check polyline{stroke:rgba(255,255,255,.5)!important}
     .faq-q{color:var(--white);position:relative}
     .cta{position:relative;overflow:hidden}
-    .cta::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 60% at 50% 100%,rgba(255,200,80,.06) 0%,transparent 60%)}
 
     @media(max-width:900px){
       nav{padding:20px 24px}
@@ -324,9 +323,9 @@
         <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_days_month">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
         <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_month">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">120</span></div>
       </div>
-      <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
-        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
-        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">9 600 kr</div>
+      <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:28px">
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
+        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;color:#f2f2f0">9 600 kr</div>
       </div>
     </div>
 
@@ -339,9 +338,9 @@
         <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_days_month">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
         <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_month">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">480</span></div>
       </div>
-      <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
-        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
-        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">38 400 kr</div>
+      <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:28px">
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
+        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;color:#f2f2f0">38 400 kr</div>
       </div>
     </div>
 
@@ -354,9 +353,9 @@
         <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_days_month">Dagar / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">20</span></div>
         <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.4)" data-i18n="calc_loads_month">Lass / månad</span><span style="font-size:13px;font-weight:300;color:rgba(255,255,255,.72)">1 200</span></div>
       </div>
-      <div style="border-top:1px solid rgba(255,200,80,.12);padding-top:28px">
-        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,200,80,.38);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
-        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;background:linear-gradient(135deg,#fff 0%,rgba(255,200,80,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">96 000 kr</div>
+      <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:28px">
+        <div style="font-size:10px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px" data-i18n="calc_monthly">Månadskostnad</div>
+        <div style="font-weight:200;font-size:clamp(28px,3.5vw,44px);letter-spacing:.02em;color:#f2f2f0">96 000 kr</div>
       </div>
     </div>
 
