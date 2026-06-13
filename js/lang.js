@@ -16,7 +16,7 @@ const translations = {
 
     // Hero
     hero_tagline: 'Betongbranschen i realtid',
-    hero_sub: 'Kunden ser bilen på kartan. Fakturan skapar sig själv. Du slipper ringa runt — och missar aldrig en leverans igen.',
+    hero_sub: 'Kunden ser bilen på kartan. Fakturan skapar sig själv. Ni slipper ringa runt.',
     hero_btn_primary: 'Boka demo',
     hero_btn_ghost: 'Se hur det funkar',
     hero_scroll: 'Scrolla',
@@ -28,9 +28,9 @@ const translations = {
     prob1_h3: 'Ingen vet var bilen är',
     prob1_p: 'Disponenten gissar. Kunden ringer. Bilen är på väg men ingen kan bekräfta det — för ingen har systemet för att se det i realtid.',
     prob2_h3: 'Manuella processer kostar mer än ni tror',
-    prob2_p: 'Lassedlar förs in manuellt. Fakturor skickas fel eller försent. Tid slösas bort på administration som ett modernt system hanterar helt automatiskt — varje dag, varje leverans.',
+    prob2_p: 'Lassedlar förs in manuellt och fakturor skickas fel eller försent. Tid går åt till administration som ett modernt system sköter automatiskt.',
     prob3_h3: 'Kunden får inget besked',
-    prob3_p: 'Ingen notifiering. Inget SMS. Kunden ringer för att de inte vet. Du svarar för att du inte har något bättre alternativ. Varje gång.',
+    prob3_p: 'Ingen notifiering, inget SMS. Kunden ringer för att de inte vet var leveransen är — och ni har inget bättre sätt att svara.',
 
     // Story stepper labels
     step0_label: 'Order skapad',
@@ -89,8 +89,8 @@ const translations = {
     stat3_label: 'Automatisk fakturasynk',
 
     // CTA
-    cta_label: 'Redo att börja?',
-    cta_headline: 'Era konkurrenter<br>väntar fortfarande.',
+    cta_label: 'Nästa steg',
+    cta_headline: 'En demo<br>säger mer.',
     cta_sub: 'Boka en 30-minuters demo. Vi visar hela systemet live — inga säljargument, bara produkten. Låg ingångskostnad, ingen bindningstid.',
     cta_placeholder: 'Din e-postadress',
     cta_btn: 'Boka demo',
@@ -234,7 +234,7 @@ const translations = {
 
     // Hero
     hero_tagline: 'The concrete industry in real time',
-    hero_sub: 'The customer sees the truck on the map. Invoices create themselves. No more calling around — never miss a delivery again.',
+    hero_sub: 'The customer sees the truck on the map. Invoices create themselves. No more calling around.',
     hero_btn_primary: 'Book demo',
     hero_btn_ghost: 'See how it works',
     hero_scroll: 'Scroll',
@@ -246,9 +246,9 @@ const translations = {
     prob1_h3: 'No one knows where the truck is',
     prob1_p: 'The dispatcher guesses. The customer calls. The truck is on its way but no one can confirm it — because no one has the system to see it in real time.',
     prob2_h3: 'Manual processes cost more than you think',
-    prob2_p: 'Delivery notes are entered manually. Invoices are sent incorrectly or late. Time is wasted on administration that a modern system handles completely automatically — every day, every delivery.',
+    prob2_p: 'Delivery notes are entered manually and invoices go out wrong or late. Time goes to admin that a modern system handles automatically.',
     prob3_h3: 'The customer gets no update',
-    prob3_p: 'No notification. No SMS. The customer calls because they don\'t know. You answer because you have no better option. Every time.',
+    prob3_p: 'No notification, no SMS. The customer calls because they don\'t know where the delivery is — and you have no better way to answer.',
 
     // Story stepper labels
     step0_label: 'Order created',
@@ -307,8 +307,8 @@ const translations = {
     stat3_label: 'Automatic invoice sync',
 
     // CTA
-    cta_label: 'Ready to start?',
-    cta_headline: 'Your competitors<br>are still waiting.',
+    cta_label: 'Next step',
+    cta_headline: 'One demo<br>says more.',
     cta_sub: 'Book a 30-minute demo. We\'ll show you the full system live — no sales pitch, just the product. Low entry cost, no lock-in.',
     cta_placeholder: 'Your email address',
     cta_btn: 'Book demo',

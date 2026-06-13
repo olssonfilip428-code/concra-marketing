@@ -187,14 +187,14 @@ nav.scrolled {
 .hero-rule {
   height: 1px; width: 100%;
   transform-origin: left center; transform: scaleX(0);
-  background: linear-gradient(90deg, transparent 0%, rgba(255,200,80,0.3) 30%, rgba(255,210,100,0.7) 50%, rgba(255,200,80,0.3) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
 }
 
 /* Tagline */
 .hero-tagline {
   margin-top: 18px;
   font-size: 11px; font-weight: 300;
-  letter-spacing: 0.42em; text-transform: uppercase;
+  letter-spacing: 0.26em; text-transform: uppercase;
   color: var(--mid);
   opacity: 0; transform: translateY(8px);
 }
@@ -244,7 +244,6 @@ nav.scrolled {
 .scroll-line {
   width: 1px; height: 48px;
   background: linear-gradient(to bottom, var(--dim), transparent);
-  animation: scrollPulse 2s ease-in-out infinite;
 }
 @keyframes scrollPulse {
   0%, 100% { opacity: 0.3; transform: scaleY(1); }
@@ -270,12 +269,9 @@ nav.scrolled {
   color: var(--amber) !important;
 }
 
-/* Stat numbers — gradient text */
+/* Stat numbers — solid, no gradient */
 .stat-number {
-  background: linear-gradient(135deg, #fff 40%, rgba(255,200,80,0.7) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--white);
 }
 
 /* Step dots — accent on hover */
@@ -284,20 +280,10 @@ nav.scrolled {
   color: var(--amber) !important;
 }
 
-/* CTA section — dramatic glow */
+/* CTA section */
 #cta {
   position: relative;
   overflow: hidden;
-}
-#cta::before {
-  content: '';
-  position: absolute;
-  top: -40%; left: 50%;
-  transform: translateX(-50%);
-  width: 600px; height: 600px;
-  background: radial-gradient(ellipse, rgba(255,200,80,0.06) 0%, transparent 65%);
-  pointer-events: none;
-  z-index: 0;
 }
 #cta > * { position: relative; z-index: 1; }
 
@@ -325,7 +311,7 @@ nav.scrolled {
 .section-label::before {
   content: '·';
   margin-right: 10px;
-  color: var(--amber);
+  color: var(--dim);
   font-size: 14px;
 }
 
@@ -336,7 +322,7 @@ section {
 }
 .section-label {
   font-size: 10px; font-weight: 300;
-  letter-spacing: 0.4em; text-transform: uppercase;
+  letter-spacing: 0.28em; text-transform: uppercase;
   color: var(--dim); margin-bottom: 28px;
   opacity: 0;
 }
@@ -444,7 +430,7 @@ section {
   position: absolute;
   top: 0; left: 10%; right: 10%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--amber-dim), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
 }
 .stats-headline {
   font-size: clamp(24px, 3vw, 36px);
@@ -968,7 +954,7 @@ footer {
 
     <!-- Sub -->
     <p class="hero-sub" id="heroSub" data-i18n="hero_sub">
-      Kunden ser bilen på kartan. Fakturan skapar sig själv. Du slipper ringa runt — och missar aldrig en leverans igen.
+      Kunden ser bilen på kartan. Fakturan skapar sig själv. Ni slipper ringa runt.
     </p>
 
     <!-- Actions -->
@@ -1014,14 +1000,14 @@ footer {
       <span class="problem-number">02</span>
       <div class="problem-text">
         <h3 data-i18n="prob2_h3">Manuella processer kostar mer än ni tror</h3>
-        <p data-i18n="prob2_p">Lassedlar förs in manuellt. Fakturor skickas fel eller försent. Tid slösas bort på administration som ett modernt system hanterar helt automatiskt — varje dag, varje leverans.</p>
+        <p data-i18n="prob2_p">Lassedlar förs in manuellt och fakturor skickas fel eller försent. Tid går åt till administration som ett modernt system sköter automatiskt.</p>
       </div>
     </div>
     <div class="problem-statement" id="prob3">
       <span class="problem-number">03</span>
       <div class="problem-text">
         <h3 data-i18n="prob3_h3">Kunden får inget besked</h3>
-        <p data-i18n="prob3_p">Ingen notifiering. Inget SMS. Kunden ringer för att de inte vet. Du svarar för att du inte har något bättre alternativ. Varje gång.</p>
+        <p data-i18n="prob3_p">Ingen notifiering, inget SMS. Kunden ringer för att de inte vet var leveransen är — och ni har inget bättre sätt att svara.</p>
       </div>
     </div>
   </div>
@@ -1187,9 +1173,9 @@ footer {
 <!-- CTA -->
 <section id="cta">
   <div class="cta-inner">
-    <p class="section-label" id="ctaLabel" data-i18n="cta_label">Redo att börja?</p>
+    <p class="section-label" id="ctaLabel" data-i18n="cta_label">Nästa steg</p>
     <h2 class="cta-headline" id="ctaHeadline" data-i18n-html="cta_headline">
-      Era konkurrenter<br>väntar fortfarande.
+      En demo<br>säger mer.
     </h2>
     <p class="cta-sub" id="ctaSub" data-i18n="cta_sub">
       Boka en 30-minuters demo. Vi visar hela systemet live — inga säljargument, bara produkten. Låg ingångskostnad, ingen bindningstid.
